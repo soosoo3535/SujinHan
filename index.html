@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SujinHan — 3D Background Modeler</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <span class="nav-name">Han Sujin</span>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn active">Home</a>
+      <a href="about.html" class="nav-btn">About</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- 페이지 타이틀 -->
+    <section class="page-title">
+      <h1>Portfolio</h1>
+      <p class="subtitle">3D Background Modeling &amp; Environment Art</p>
+    </section>
+
+    <!-- 카테고리 그리드 -->
+    <section class="category-grid">
+
+      <!-- 카테고리 1 -->
+      <a href="works/fantasy-environment/index.html" class="category-card">
+        <div class="card-thumb">
+          <img src="images/thumb-fantasy.jpg" alt="Fantasy Environment" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label">View Works</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <h2 class="card-title">Fantasy Environment</h2>
+          <p class="card-count">12 works</p>
+        </div>
+      </a>
+
+      <!-- 카테고리 2 -->
+      <a href="works/sci-fi-environment/index.html" class="category-card">
+        <div class="card-thumb">
+          <img src="images/thumb-scifi.jpg" alt="Sci-Fi Environment" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label">View Works</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <h2 class="card-title">Sci-Fi Environment</h2>
+          <p class="card-count">8 works</p>
+        </div>
+      </a>
+
+      <!-- 카테고리 3 -->
+      <a href="works/realistic-environment/index.html" class="category-card">
+        <div class="card-thumb">
+          <img src="images/thumb-realistic.jpg" alt="Realistic Environment" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label">View Works</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <h2 class="card-title">Realistic Environment</h2>
+          <p class="card-count">10 works</p>
+        </div>
+      </a>
+
+      <!-- 카테고리 4 (추가 가능) -->
+      <a href="#" class="category-card placeholder-card">
+        <div class="card-thumb placeholder-thumb">
+          <span class="plus-icon">+</span>
+        </div>
+        <div class="card-info">
+          <h2 class="card-title">Coming Soon</h2>
+          <p class="card-count">—</p>
+        </div>
+      </a>
+
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Han Sujin. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
