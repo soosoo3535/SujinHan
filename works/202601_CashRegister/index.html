@@ -8,6 +8,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&display=swap" rel="stylesheet"/>
   <style>
     .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; }
+    @media (max-width: 768px) {
+      .main { padding-left: 16px !important; padding-right: 16px !important; }
+      .scroll-btns { left: 4px; }
+      .lb-nav-left { left: 4px; }
+      .lb-nav-right { right: 4px; }
+    }
     .tools-text { margin-top: 12px; font-family: 'Coustard', serif; font-size: 1.2rem; margin-bottom: 50px; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; }
     .scroll-btns { position: fixed; left: calc(200px - 80px); bottom: 60px; display: flex; flex-direction: column; gap: 10px; z-index: 50; }
     .scroll-btn { width: 40px; height: 40px; background: none; border: 1px solid #696c64; border-radius: 50%; color: #6B7280; font-size: 1rem; cursor: pointer; transition: color 0.2s, border-color 0.2s; display: flex; align-items: center; justify-content: center; }
