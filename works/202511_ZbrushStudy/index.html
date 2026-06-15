@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    .main { padding-left: 10px; padding-right: 10px; }
+    .main { padding-left: 16px !important; padding-right: 16px !important; max-width: 100% !important; }
     .zbrush-wrap {
       display: flex;
       flex-direction: column;
@@ -71,7 +71,7 @@
   </main>
 
   <!-- 라이트박스 -->
-  <div class="lightbox" id="lightbox" onclick="handleLightboxClick(event)">
+  <div class="lightbox" id="lightbox">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     <div class="lightbox-controls">
       <button class="lb-btn" onclick="zoom(-0.2)">－</button>
@@ -80,7 +80,7 @@
       <button class="lb-btn" onclick="resetZoom()">↺</button>
     </div>
     <div class="lightbox-img-wrap" id="lb-wrap">
-      <img id="lightbox-img" src="" alt=""/>
+      <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()"/>
     </div>
   </div>
 
@@ -109,9 +109,7 @@
       document.getElementById('lightbox').classList.remove('open');
     }
 
-    function handleLightboxClick(e) {
-      if (e.target === e.currentTarget) closeLightbox();
-    }
+    function handleLightboxClick(e) {}
 
     function zoom(delta) {
       currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
@@ -163,6 +161,13 @@
       if (!isDragging) return;
       isDragging = false;
       applyTransform();
+    });
+
+    // 라이트박스 외부 어디든 클릭하면 닫기
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (!e.target.closest('.lightbox-img-wrap') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lightbox-close')) {
+        closeLightbox();
+      }
     });
 
     // ESC 닫기
