@@ -75,6 +75,26 @@
       cursor: zoom-in;
       overflow: visible;
     }
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: 1px solid #696c64;
+      border-radius: 50%;
+      color: #6B7280;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .lb-nav:hover { color: #E8EAF0; border-color: #E8EAF0; }
+    .lb-nav-left { left: calc((200px - 40px) / 2); }
+    .lb-nav-right { right: calc((200px - 40px) / 2); }
     .zbrush-wrap .work-item img {
       width: 100%;
       height: auto;
@@ -152,6 +172,8 @@
   <!-- 라이트박스 -->
   <div class="lightbox" id="lightbox">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lb-nav lb-nav-left" onclick="prevImage()">＜</button>
+    <button class="lb-nav lb-nav-right" onclick="nextImage()">＞</button>
     <div class="lightbox-controls">
       <button class="lb-btn" onclick="zoom(-0.2)">－</button>
       <span class="zoom-label" id="zoom-label">100%</span>
@@ -168,90 +190,62 @@
   </footer>
 
   <script>
-    let currentScale = 1;
-    let translateX = 0;
-    let translateY = 0;
-    let isDragging = false;
-    let startX, startY;
+    // 전체 이미지 순서 목록
+    const allImages = [
+      '20260301_rock2-1.jpg','20260301_rock2-2.jpg','20260301_rock2-3.jpg','20260301_rock2-4.jpg',
+      '20260102_rock1-1.jpg','20260102_rock1-2.jpg','20260102_rock1-3.jpg',
+      '20260101_pillar1-1.jpg','20260101_pillar1-2.jpg',
+      '20251201_tile2-1.jpg','20251201_tile2-2.jpg','20251201_tile2-3.jpg','20251201_tile2-4.jpg',
+      '20251101_tile1-1.jpg','20251101_tile1-2.jpg','20251101_tile1-3.jpg','20251101_tile1-4.jpg'
+    ];
+    let currentIndex = 0;
+    let currentScale = 1, translateX = 0, translateY = 0, isDragging = false, startX, startY;
 
     function openLightbox(el) {
-      const src = el.querySelector('img').src;
+      const src = el.querySelector('img').getAttribute('src');
+      currentIndex = allImages.indexOf(src);
       document.getElementById('lightbox-img').src = src;
-      currentScale = 1;
-      translateX = 0;
-      translateY = 0;
+      currentScale = 1; translateX = 0; translateY = 0;
       applyTransform();
       document.getElementById('lightbox').classList.add('open');
     }
 
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('open');
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+      document.getElementById('lightbox-img').src = allImages[currentIndex];
+      currentScale = 1; translateX = 0; translateY = 0; applyTransform();
     }
 
-    function handleLightboxClick(e) {}
-
-    function zoom(delta) {
-      currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
-      applyTransform();
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % allImages.length;
+      document.getElementById('lightbox-img').src = allImages[currentIndex];
+      currentScale = 1; translateX = 0; translateY = 0; applyTransform();
     }
 
-    function resetZoom() {
-      currentScale = 1;
-      translateX = 0;
-      translateY = 0;
-      applyTransform();
-    }
-
+    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+    function zoom(delta) { currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3); applyTransform(); }
+    function resetZoom() { currentScale = 1; translateX = 0; translateY = 0; applyTransform(); }
     function applyTransform() {
       const img = document.getElementById('lightbox-img');
       img.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
       document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
-      // 확대 상태면 grab 커서, 아니면 기본
-      const wrap = document.getElementById('lb-wrap');
-      wrap.style.cursor = currentScale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default';
+      document.getElementById('lb-wrap').style.cursor = currentScale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default';
     }
 
-    // 휠 확대/축소
-    document.getElementById('lb-wrap').addEventListener('wheel', (e) => {
-      e.preventDefault();
-      zoom(e.deltaY < 0 ? 0.1 : -0.1);
-    }, { passive: false });
-
-    // 드래그로 이동
+    document.getElementById('lb-wrap').addEventListener('wheel', (e) => { e.preventDefault(); zoom(e.deltaY < 0 ? 0.1 : -0.1); }, { passive: false });
     const wrap = document.getElementById('lb-wrap');
+    wrap.addEventListener('mousedown', (e) => { if (currentScale <= 1) return; isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY; wrap.style.cursor = 'grabbing'; e.preventDefault(); });
+    window.addEventListener('mousemove', (e) => { if (!isDragging) return; translateX = e.clientX - startX; translateY = e.clientY - startY; applyTransform(); });
+    window.addEventListener('mouseup', () => { if (!isDragging) return; isDragging = false; applyTransform(); });
 
-    wrap.addEventListener('mousedown', (e) => {
-      if (currentScale <= 1) return;
-      isDragging = true;
-      startX = e.clientX - translateX;
-      startY = e.clientY - translateY;
-      wrap.style.cursor = 'grabbing';
-      e.preventDefault();
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      translateX = e.clientX - startX;
-      translateY = e.clientY - startY;
-      applyTransform();
-    });
-
-    window.addEventListener('mouseup', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      applyTransform();
-    });
-
-    // 라이트박스 외부 어디든 클릭하면 닫기
     document.getElementById('lightbox').addEventListener('click', (e) => {
-      if (!e.target.closest('.lightbox-img-wrap') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lightbox-close')) {
-        closeLightbox();
-      }
+      if (!e.target.closest('.lightbox-img-wrap') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lightbox-close') && !e.target.closest('.lb-nav')) closeLightbox();
     });
 
-    // ESC 닫기
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
     });
   </script>
 
