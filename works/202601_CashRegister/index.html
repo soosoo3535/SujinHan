@@ -5,7 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cash Register — SujinHan</title>
   <link rel="stylesheet" href="../../style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; }
+    .works-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .works-list .work-item {
+      width: 100%;
+      cursor: zoom-in;
+    }
+    .works-list .work-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <nav class="nav">
@@ -20,10 +37,19 @@
       <h1>Cash Register</h1>
       <p class="subtitle">2026.01</p>
     </section>
-    <section class="works-grid" id="works-grid"></section>
+    <section class="works-list" id="works-list"></section>
+
     <div class="lightbox" id="lightbox">
       <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-      <img id="lightbox-img" src="" alt=""/>
+      <div class="lightbox-controls">
+        <button class="lb-btn" onclick="zoom(-0.2)">－</button>
+        <span class="zoom-label" id="zoom-label">100%</span>
+        <button class="lb-btn" onclick="zoom(0.2)">＋</button>
+        <button class="lb-btn" onclick="resetZoom()">↺</button>
+      </div>
+      <div class="lightbox-img-wrap" id="lb-wrap">
+        <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()"/>
+      </div>
     </div>
   </main>
   <footer class="footer">
@@ -31,8 +57,9 @@
   </footer>
   <script>
     const images = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
-                    'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg'];
-    const grid = document.getElementById('works-grid');
+                    'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
+                    'work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
+    const list = document.getElementById('works-list');
     images.forEach(src => {
       const img = new Image();
       img.onload = () => {
@@ -40,20 +67,86 @@
         div.className = 'work-item';
         const i = document.createElement('img');
         i.src = src;
-        i.addEventListener('click', () => {
-          document.getElementById('lightbox-img').src = src;
-          document.getElementById('lightbox').classList.add('open');
-        });
+        i.addEventListener('click', () => openLightbox(src));
         div.appendChild(i);
-        grid.appendChild(div);
+        list.appendChild(div);
       };
       img.src = src;
     });
+
+    let currentScale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isDragging = false;
+    let startX, startY;
+
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      currentScale = 1;
+      translateX = 0;
+      translateY = 0;
+      applyTransform();
+      document.getElementById('lightbox').classList.add('open');
+    }
+
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('open');
     }
+
+    function zoom(delta) {
+      currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
+      applyTransform();
+    }
+
+    function resetZoom() {
+      currentScale = 1;
+      translateX = 0;
+      translateY = 0;
+      applyTransform();
+    }
+
+    function applyTransform() {
+      const img = document.getElementById('lightbox-img');
+      img.style.transform = 'scale(' + currentScale + ') translate(' + (translateX / currentScale) + 'px, ' + (translateY / currentScale) + 'px)';
+      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
+      const wrap = document.getElementById('lb-wrap');
+      wrap.style.cursor = currentScale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default';
+    }
+
+    document.getElementById('lb-wrap').addEventListener('wheel', (e) => {
+      e.preventDefault();
+      zoom(e.deltaY < 0 ? 0.1 : -0.1);
+    }, { passive: false });
+
+    const wrap = document.getElementById('lb-wrap');
+    wrap.addEventListener('mousedown', (e) => {
+      if (currentScale <= 1) return;
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      wrap.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      applyTransform();
+    });
+
     document.getElementById('lightbox').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) closeLightbox();
+      if (!e.target.closest('.lightbox-img-wrap') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lightbox-close')) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
     });
   </script>
 </body>
