@@ -18,7 +18,7 @@
     /* 왼쪽 프로필 */
     .about-left {
       flex-shrink: 0;
-      width: 280px;
+      width: 240px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -33,7 +33,7 @@
     }
     .about-name-en {
       font-family: 'Coustard', serif;
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 900;
       letter-spacing: 0.08em;
       color: #E8EAF0;
@@ -42,7 +42,7 @@
     }
     .about-name-kr {
       font-family: 'Coustard', serif;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 400;
       color: #E8EAF0;
       margin-bottom: 4px;
@@ -61,22 +61,11 @@
       gap: 48px;
       padding-top: 8px;
     }
-    .about-name-title {
-      font-family: 'Coustard', serif;
-      font-size: 2.6rem;
-      font-weight: 400;
-      color: #E8EAF0;
-      margin-bottom: 4px;
-    }
-    .about-role {
-      font-family: 'Coustard', serif;
-      font-size: 1rem;
-      color: #6B7280;
-      letter-spacing: 0.08em;
-    }
+
+    /* 각 섹션 행 */
     .about-section {
       display: flex;
-      gap: 48px;
+      gap: 0;
       align-items: flex-start;
     }
     .about-label {
@@ -86,7 +75,8 @@
       letter-spacing: 0.15em;
       color: #E8EAF0;
       text-transform: uppercase;
-      min-width: 100px;
+      width: 140px;
+      flex-shrink: 0;
       padding-top: 4px;
     }
     .about-content {
@@ -102,17 +92,11 @@
     }
     .about-content a:hover { color: #E8EAF0; }
 
-    /* 스킬 아이콘 */
-    .skills-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .skill-icon {
-      width: 52px;
-      height: 52px;
-      object-fit: contain;
-      border-radius: 8px;
+    /* 스킬 로고 이미지 */
+    .skill-logo {
+      max-width: 100%;
+      height: auto;
+      display: block;
     }
   </style>
 </head>
@@ -139,11 +123,6 @@
       <!-- 오른쪽: 상세 정보 -->
       <div class="about-right">
 
-        <div>
-          <h1 class="about-name-title">SuJin Han</h1>
-          <p class="about-role">3D Environment Artist</p>
-        </div>
-
         <div class="about-section">
           <span class="about-label">Contact</span>
           <div class="about-content">
@@ -154,19 +133,7 @@
         <div class="about-section">
           <span class="about-label">Skills</span>
           <div class="about-content">
-            <div class="skills-grid">
-              <!-- 스킬 아이콘 이미지를 images/ 폴더에 넣고 아래에 추가하세요 -->
-              <img src="images/icon-3dsmax.png" alt="3Ds Max" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-rizom.png" alt="Rizom UV" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-marmoset.png" alt="Marmoset" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-unreal.png" alt="Unreal Engine" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-zbrush.png" alt="Zbrush" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-knald.png" alt="Knald" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-photoshop.png" alt="Photoshop" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-substance-painter.png" alt="Substance Painter" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-substance-designer.png" alt="Substance Designer" class="skill-icon" onerror="this.style.display='none'"/>
-              <img src="images/icon-unity.png" alt="Unity" class="skill-icon" onerror="this.style.display='none'"/>
-            </div>
+            <img src="logo.png" alt="Skills" class="skill-logo"/>
           </div>
         </div>
 
