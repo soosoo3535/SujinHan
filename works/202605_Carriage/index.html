@@ -120,7 +120,8 @@
     const loadedSrcs = [];
     const list = document.getElementById('works-list');
 
-    imageSrcs.forEach(src => {
+    // 순서 보장: 먼저 순서대로 자리 잡고 로드되면 채움
+    imageSrcs.forEach((src, idx) => {
       const div = document.createElement('div');
       div.className = 'work-item';
       div.style.display = 'none';
@@ -128,8 +129,8 @@
       i.src = src;
       i.onload = () => {
         div.style.display = 'block';
-        loadedSrcs.push(src);
-        i.addEventListener('click', () => openLightbox(src));
+        loadedSrcs[idx] = src; // 인덱스 순서 유지
+        i.addEventListener('click', () => openLightbox(idx));
       };
       i.onerror = () => { div.remove(); };
       div.appendChild(i);
@@ -139,25 +140,29 @@
     let currentIndex = 0;
     let currentScale = 1, translateX = 0, translateY = 0, isDragging = false, startX, startY;
 
-    function openLightbox(src) {
-      currentIndex = loadedSrcs.indexOf(src);
-      document.getElementById('lightbox-img').src = src;
+    function openLightbox(idx) {
+      currentIndex = idx;
+      document.getElementById('lightbox-img').src = loadedSrcs[currentIndex];
       currentScale = 1; translateX = 0; translateY = 0;
       applyTransform();
       document.getElementById('lightbox').classList.add('open');
     }
 
     function prevImage() {
-      if (loadedSrcs.length === 0) return;
-      currentIndex = (currentIndex - 1 + loadedSrcs.length) % loadedSrcs.length;
+      const validSrcs = loadedSrcs.filter(Boolean);
+      if (validSrcs.length === 0) return;
+      do { currentIndex = (currentIndex - 1 + loadedSrcs.length) % loadedSrcs.length; }
+      while (!loadedSrcs[currentIndex]);
       document.getElementById('lightbox-img').src = loadedSrcs[currentIndex];
       currentScale = 1; translateX = 0; translateY = 0;
       applyTransform();
     }
 
     function nextImage() {
-      if (loadedSrcs.length === 0) return;
-      currentIndex = (currentIndex + 1) % loadedSrcs.length;
+      const validSrcs = loadedSrcs.filter(Boolean);
+      if (validSrcs.length === 0) return;
+      do { currentIndex = (currentIndex + 1) % loadedSrcs.length; }
+      while (!loadedSrcs[currentIndex]);
       document.getElementById('lightbox-img').src = loadedSrcs[currentIndex];
       currentScale = 1; translateX = 0; translateY = 0;
       applyTransform();
