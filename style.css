@@ -9,8 +9,8 @@
   --cyan-dim:  rgba(78,205,196,0.12);
   --text:      #E8EAF0;
   --muted:     #6B7280;
-  --font-display: 'Libre Baskerville', serif;
-  --font-body:    'Libre Baskerville', serif;
+  --font-display: 'Coustard', serif;
+  --font-body:    'Coustard', serif;
 }
 
 html { scroll-behavior: smooth; }
