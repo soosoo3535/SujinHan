@@ -86,7 +86,7 @@ a { text-decoration: none; color: inherit; }
 /* ─── PAGE TITLE ────────────────────────────────────────── */
 .page-title {
   margin-bottom: 0;
-  padding-bottom: 60px;
+  padding-bottom: 100px;
 }
 
 .page-title h1 {
