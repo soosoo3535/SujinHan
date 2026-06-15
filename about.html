@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=1024, initial-scale=0.5"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About — SujinHan</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&display=swap" rel="stylesheet"/>
@@ -100,6 +101,33 @@
       height: auto;
       display: block;
     }
+
+    @media (max-width: 768px) {
+      .about-wrap {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px;
+        gap: 40px;
+      }
+      .about-left {
+        width: 100%;
+      }
+      .about-right {
+        width: 100%;
+        max-width: 100%;
+      }
+      .about-content {
+        white-space: normal;
+        font-size: 0.9rem;
+      }
+      .about-label {
+        width: 100px;
+        font-size: 0.9rem;
+      }
+      .skill-logo {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -142,7 +170,7 @@
         <div class="about-section">
           <span class="about-label">Education</span>
           <div class="about-content">
-            2018. 2 ~ 2023. 8<br/>
+            2018. 3 ~ 2023. 8<br/>
             &nbsp;&nbsp;Sungkonghoe University (major : Digital Contents)<br/>
             &nbsp;&nbsp;성공회대학교 (전공 : 미디어콘텐츠융합자율학부 디지털콘텐츠)
           </div>
@@ -151,7 +179,7 @@
         <div class="about-section">
           <span class="about-label">Work</span>
           <div class="about-content">
-            2024. 2 ~ 2025. 5<br/>
+            2024. 3 ~ 2025. 5<br/>
             &nbsp;&nbsp;사단법인 대한의학회 경영지원팀
           </div>
         </div>
