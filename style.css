@@ -236,14 +236,12 @@ a { text-decoration: none; color: inherit; }
 }
 
 .work-item {
-  overflow: hidden;
   cursor: pointer;
 }
 
 .work-item img {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 
