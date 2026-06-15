@@ -437,11 +437,12 @@ a { text-decoration: none; color: inherit; }
 .footer {
   text-align: center;
   padding: 24px 48px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid #696c64;
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
+  font-family: var(--font-body);
 }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────── */
