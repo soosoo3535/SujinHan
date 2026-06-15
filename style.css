@@ -236,9 +236,6 @@ a { text-decoration: none; color: inherit; }
 }
 
 .work-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 3px;
   overflow: hidden;
   cursor: pointer;
 }
