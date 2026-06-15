@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; }
+    .main { padding-left: 250px !important; padding-right: 250px !important; max-width: 100% !important; }
     .zbrush-wrap {
       display: flex;
       flex-direction: column;
@@ -35,11 +35,15 @@
     .zbrush-wrap .work-item {
       width: 100%;
       cursor: zoom-in;
+      display: flex;
+      justify-content: center;
     }
     .zbrush-wrap .work-item img {
-      width: 100%;
+      max-width: 100%;
       height: auto;
       display: block;
+      object-fit: none;
+      width: auto;
     }
   </style>
 </head>
