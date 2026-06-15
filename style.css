@@ -80,8 +80,8 @@ a { text-decoration: none; color: inherit; }
 /* ─── MAIN ──────────────────────────────────────────────── */
 .main {
   flex: 1;
-  padding: 60px 48px 80px;
-  max-width: 1280px;
+  padding: 60px 200px 80px;
+  max-width: 100%;
   width: 100%;
   margin: 0 auto;
 }
@@ -143,7 +143,7 @@ a { text-decoration: none; color: inherit; }
 .card-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0) 30%, rgba(0,0,0,0.75) 100%);
+  background: rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
