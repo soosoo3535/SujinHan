@@ -9,6 +9,41 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; }
+    .tools-text {
+      margin-top: 12px;
+      font-family: 'Coustard', serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: #6B7280;
+    }
+    .scroll-btns {
+      position: fixed;
+      left: calc(200px - 80px);
+      bottom: 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 50;
+    }
+    .scroll-btn {
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: 1px solid #696c64;
+      border-radius: 50%;
+      color: #6B7280;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .scroll-btn:hover {
+      color: #E8EAF0;
+      border-color: #E8EAF0;
+    }
     .zbrush-wrap {
       display: flex;
       flex-direction: column;
@@ -61,7 +96,14 @@
       <a href="../../index.html" class="back-btn">← Back</a>
       <h1>Zbrush Study</h1>
       <p class="subtitle">2025.11 —</p>
+      <p class="tools-text">3Ds Max · Zbrush · Rizom UV · Substance Painter · Knald · Marmoset</p>
     </section>
+
+    <!-- 상단/하단 이동 버튼 -->
+    <div class="scroll-btns">
+      <button class="scroll-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+      <button class="scroll-btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="맨 아래로">↓</button>
+    </div>
 
     <!-- 새 작업물은 맨 위에 추가하세요. 날짜_이름-번호.jpg 형식 유지 -->
     <section class="zbrush-wrap">
