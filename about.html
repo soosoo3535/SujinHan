@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,61 +7,188 @@
   <title>About — SujinHan</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&display=swap" rel="stylesheet"/>
+  <style>
+    .about-wrap {
+      display: flex;
+      gap: 80px;
+      align-items: flex-start;
+      padding: 0 80px;
+    }
+
+    /* 왼쪽 프로필 */
+    .about-left {
+      flex-shrink: 0;
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .about-profile-img {
+      width: 240px;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 24px;
+    }
+    .about-name-en {
+      font-family: 'Coustard', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: #E8EAF0;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .about-name-kr {
+      font-family: 'Coustard', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #E8EAF0;
+      margin-bottom: 4px;
+    }
+    .about-birth {
+      font-family: 'Coustard', serif;
+      font-size: 0.9rem;
+      color: #6B7280;
+    }
+
+    /* 오른쪽 정보 */
+    .about-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      padding-top: 8px;
+    }
+    .about-name-title {
+      font-family: 'Coustard', serif;
+      font-size: 2.6rem;
+      font-weight: 400;
+      color: #E8EAF0;
+      margin-bottom: 4px;
+    }
+    .about-role {
+      font-family: 'Coustard', serif;
+      font-size: 1rem;
+      color: #6B7280;
+      letter-spacing: 0.08em;
+    }
+    .about-section {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+    .about-label {
+      font-family: 'Coustard', serif;
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: #E8EAF0;
+      text-transform: uppercase;
+      min-width: 100px;
+      padding-top: 4px;
+    }
+    .about-content {
+      flex: 1;
+      font-family: 'Coustard', serif;
+      font-size: 0.95rem;
+      color: #9CA3AF;
+      line-height: 1.9;
+    }
+    .about-content a {
+      color: #9CA3AF;
+      text-decoration: none;
+    }
+    .about-content a:hover { color: #E8EAF0; }
+
+    /* 스킬 아이콘 */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .skill-icon {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav class="nav">
-    <span class="nav-name">Han Sujin</span>
     <div class="nav-links">
       <a href="index.html" class="nav-btn">Home</a>
       <a href="about.html" class="nav-btn active">About</a>
     </div>
   </nav>
 
-  <!-- ABOUT MAIN -->
-  <main class="main about-main">
+  <main class="main">
+    <div class="about-wrap">
 
-    <section class="about-hero">
-      <div class="about-photo-wrap">
-        <img src="images/profile.jpg" alt="Han Sujin" class="about-photo" onerror="this.style.background='#1a1d2e'"/>
+      <!-- 왼쪽: 프로필 이미지 + 이름 -->
+      <div class="about-left">
+        <img src="profile.jpg" alt="SuJin Han" class="about-profile-img" onerror="this.style.background='#1E2340'"/>
+        <p class="about-name-en">SuJin Han</p>
+        <p class="about-name-kr">한수진</p>
+        <p class="about-birth">(1999. 9.)</p>
       </div>
-      <div class="about-text">
-        <h1 class="about-name">Han Sujin</h1>
-        <p class="about-role">3D Background Modeler</p>
-        <p class="about-bio">
-          환경 아트와 3D 배경 모델링을 전문으로 합니다.<br/>
-          게임과 영상 속 세계를 공간으로 구현하는 일을 좋아합니다.<br/><br/>
-          <!-- 자유롭게 수정하세요 -->
-          여기에 본인 소개를 추가하세요.
-        </p>
-      </div>
-    </section>
 
-    <!-- 사용 툴 -->
-    <section class="about-section">
-      <h2 class="section-heading">Tools</h2>
-      <div class="tools-list">
-        <span class="tool-tag">Maya</span>
-        <span class="tool-tag">Blender</span>
-        <span class="tool-tag">Unreal Engine</span>
-        <span class="tool-tag">Substance Painter</span>
-        <span class="tool-tag">ZBrush</span>
-        <span class="tool-tag">Photoshop</span>
-        <!-- 사용 툴 추가/삭제 가능 -->
-      </div>
-    </section>
+      <!-- 오른쪽: 상세 정보 -->
+      <div class="about-right">
 
-    <!-- 연락처 -->
-    <section class="about-section">
-      <h2 class="section-heading">Contact</h2>
-      <div class="contact-list">
-        <a href="mailto:your@email.com" class="contact-item">✉ your@email.com</a>
-        <a href="https://github.com/yourid" target="_blank" class="contact-item">⌥ GitHub</a>
-        <!-- 필요한 링크 추가 가능 -->
-      </div>
-    </section>
+        <div>
+          <h1 class="about-name-title">SuJin Han</h1>
+          <p class="about-role">3D Environment Artist</p>
+        </div>
 
+        <div class="about-section">
+          <span class="about-label">Contact</span>
+          <div class="about-content">
+            E-mail. <a href="mailto:susujin3535@gmail.com">susujin3535@gmail.com</a>
+          </div>
+        </div>
+
+        <div class="about-section">
+          <span class="about-label">Skills</span>
+          <div class="about-content">
+            <div class="skills-grid">
+              <!-- 스킬 아이콘 이미지를 images/ 폴더에 넣고 아래에 추가하세요 -->
+              <img src="images/icon-3dsmax.png" alt="3Ds Max" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-rizom.png" alt="Rizom UV" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-marmoset.png" alt="Marmoset" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-unreal.png" alt="Unreal Engine" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-zbrush.png" alt="Zbrush" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-knald.png" alt="Knald" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-photoshop.png" alt="Photoshop" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-substance-painter.png" alt="Substance Painter" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-substance-designer.png" alt="Substance Designer" class="skill-icon" onerror="this.style.display='none'"/>
+              <img src="images/icon-unity.png" alt="Unity" class="skill-icon" onerror="this.style.display='none'"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-section">
+          <span class="about-label">Education</span>
+          <div class="about-content">
+            2018. 2 ~ 2023. 8<br/>
+            &nbsp;&nbsp;Sungkonghoe University (major : Digital Contents)<br/>
+            &nbsp;&nbsp;성공회대학교 (전공 : 미디어콘텐츠융합자율학부 디지털콘텐츠)
+          </div>
+        </div>
+
+        <div class="about-section">
+          <span class="about-label">Work</span>
+          <div class="about-content">
+            2024. 2 ~ 2025. 5<br/>
+            &nbsp;&nbsp;사단법인 대한의학회 경영지원팀
+          </div>
+        </div>
+
+      </div>
+    </div>
   </main>
 
   <footer class="footer">
