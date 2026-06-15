@@ -296,7 +296,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #696c64;
+  background: rgba(105,108,100,0.85);
   border: 1px solid #696c64;
   border-radius: 4px;
   padding: 8px 16px;
@@ -306,7 +306,7 @@ a { text-decoration: none; color: inherit; }
 .lb-btn {
   background: none;
   border: none;
-  color: #696c64;
+  color: #ffffff;
   font-size: 1.1rem;
   cursor: pointer;
   padding: 2px 8px;
@@ -316,6 +316,15 @@ a { text-decoration: none; color: inherit; }
 .lb-btn:hover {
   background: var(--cyan-dim);
   color: var(--cyan);
+}
+
+.zoom-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  min-width: 40px;
+  text-align: center;
 }
 
 .zoom-label {
