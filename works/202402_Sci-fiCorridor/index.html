@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sci-fi Corridor — SujinHan</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-links">
+      <a href="../../index.html" class="nav-btn">Home</a>
+      <a href="../../about.html" class="nav-btn">About</a>
+    </div>
+  </nav>
+  <main class="main">
+    <section class="page-title works-title">
+      <a href="../../index.html" class="back-btn">← Back</a>
+      <h1>Sci-fi Corridor</h1>
+      <p class="subtitle">2024.02</p>
+    </section>
+    <section class="works-grid" id="works-grid"></section>
+    <div class="lightbox" id="lightbox">
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <img id="lightbox-img" src="" alt=""/>
+    </div>
+  </main>
+  <footer class="footer">
+    <p>© 2026 Han Sujin. All rights reserved.</p>
+  </footer>
+  <script>
+    const images = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
+                    'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg'];
+    const grid = document.getElementById('works-grid');
+    images.forEach(src => {
+      const img = new Image();
+      img.onload = () => {
+        const div = document.createElement('div');
+        div.className = 'work-item';
+        const i = document.createElement('img');
+        i.src = src;
+        i.addEventListener('click', () => {
+          document.getElementById('lightbox-img').src = src;
+          document.getElementById('lightbox').classList.add('open');
+        });
+        div.appendChild(i);
+        grid.appendChild(div);
+      };
+      img.src = src;
+    });
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeLightbox();
+    });
+  </script>
+</body>
+</html>

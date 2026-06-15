@@ -35,12 +35,11 @@ a { text-decoration: none; color: inherit; }
   z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0 48px;
   height: 64px;
   background: rgba(10,12,20,0.85);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
 }
 
 .nav-name {
@@ -75,7 +74,6 @@ a { text-decoration: none; color: inherit; }
 
 .nav-btn.active {
   color: var(--cyan);
-  border: 1px solid var(--cyan);
   background: var(--cyan-dim);
 }
 
@@ -90,8 +88,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ─── PAGE TITLE ────────────────────────────────────────── */
 .page-title {
-  margin-bottom: 52px;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
   padding-bottom: 32px;
 }
 
@@ -118,6 +115,8 @@ a { text-decoration: none; color: inherit; }
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 28px;
+  border-top: 1px solid var(--border);
+  padding-top: 48px;
 }
 
 .category-card {
