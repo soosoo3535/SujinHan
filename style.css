@@ -327,14 +327,6 @@ a { text-decoration: none; color: inherit; }
   text-align: center;
 }
 
-.zoom-label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  min-width: 40px;
-  text-align: center;
-}
 
 /* ─── ABOUT ─────────────────────────────────────────────── */
 .about-main { max-width: 900px; }
