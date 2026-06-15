@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -16,7 +17,7 @@
       width: 100%;
       border-radius: 3px;
       overflow: hidden;
-      cursor: pointer;
+      cursor: zoom-in;
     }
     .zbrush-grid .work-item img {
       width: 100%;
@@ -92,12 +93,18 @@
 
   <script>
     let currentScale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isDragging = false;
+    let startX, startY;
 
     function openLightbox(el) {
       const src = el.querySelector('img').src;
       document.getElementById('lightbox-img').src = src;
       currentScale = 1;
-      applyZoom();
+      translateX = 0;
+      translateY = 0;
+      applyTransform();
       document.getElementById('lightbox').classList.add('open');
     }
 
@@ -111,25 +118,57 @@
 
     function zoom(delta) {
       currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
-      applyZoom();
+      applyTransform();
     }
 
     function resetZoom() {
       currentScale = 1;
-      applyZoom();
+      translateX = 0;
+      translateY = 0;
+      applyTransform();
     }
 
-    function applyZoom() {
+    function applyTransform() {
       const img = document.getElementById('lightbox-img');
-      img.style.transform = 'scale(' + currentScale + ')';
+      img.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
       document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
+      // 확대 상태면 grab 커서, 아니면 기본
+      const wrap = document.getElementById('lb-wrap');
+      wrap.style.cursor = currentScale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default';
     }
 
+    // 휠 확대/축소
     document.getElementById('lb-wrap').addEventListener('wheel', (e) => {
       e.preventDefault();
       zoom(e.deltaY < 0 ? 0.1 : -0.1);
     }, { passive: false });
 
+    // 드래그로 이동
+    const wrap = document.getElementById('lb-wrap');
+
+    wrap.addEventListener('mousedown', (e) => {
+      if (currentScale <= 1) return;
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      wrap.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      applyTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      applyTransform();
+    });
+
+    // ESC 닫기
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeLightbox();
     });
