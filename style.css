@@ -296,7 +296,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(18,21,42,0.85);
+  background: #696c64;
   border: 1px solid #696c64;
   border-radius: 4px;
   padding: 8px 16px;
