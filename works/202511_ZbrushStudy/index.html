@@ -1,53 +1,77 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!-- saved from url=(0043)file:///C:/Users/lteai/Downloads/index.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zbrush Study — SujinHan</title>
-  <link rel="stylesheet" href="../../style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="file:///C:/Users/style.css">
+  <link href="./index_files/css2" rel="stylesheet">
+  <style>
+    .zbrush-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .zbrush-grid .work-item {
+      width: 100%;
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .zbrush-grid .work-item:hover {
+      opacity: 0.9;
+    }
+    .zbrush-grid .work-item img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: unset;
+      display: block;
+      object-fit: unset;
+    }
+  </style>
 </head>
 <body>
 
   <nav class="nav">
     <div class="nav-links">
-      <a href="../../index.html" class="nav-btn">Home</a>
-      <a href="../../about.html" class="nav-btn">About</a>
+      <a href="file:///C:/Users/index.html" class="nav-btn">Home</a>
+      <a href="file:///C:/Users/about.html" class="nav-btn">About</a>
     </div>
   </nav>
 
   <main class="main">
 
     <section class="page-title works-title">
-      <a href="../../index.html" class="back-btn">← Back</a>
+      <a href="file:///C:/Users/index.html" class="back-btn">← Back</a>
       <h1>Zbrush Study</h1>
       <p class="subtitle">2025.11 —</p>
     </section>
 
-    <section class="works-grid" id="works-grid">
+    <!-- 새 작업물은 맨 위에 추가하세요. 날짜_이름-번호.jpg 형식 유지 -->
+    <section class="zbrush-grid">
 
-      <!-- ★ 이미지 추가 방법 ★
-           새 작업물을 맨 위에 추가하려면 아래 블록을 맨 앞에 복붙하세요.
-           src에 파일명만 넣으면 돼요. 이름은 자유롭게!
-      -->
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260301_rock2-1.jpg" alt="rock2-1"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260301_rock2-2.jpg" alt="rock2-2"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260301_rock2-3.jpg" alt="rock2-3"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260301_rock2-4.jpg" alt="rock2-4"></div>
 
-      <div class="work-item" onclick="openLightbox(this)">
-        <img src="ZbrushStudy1-1.jpg" alt="Zbrush Study"/>
-      </div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260102_rock1-1.jpg" alt="rock1-1"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260102_rock1-2.jpg" alt="rock1-2"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260102_rock1-3.jpg" alt="rock1-3"></div>
 
-      <div class="work-item" onclick="openLightbox(this)">
-        <img src="ZbrushStudy1-2.jpg" alt="Zbrush Study"/>
-      </div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260101_pillar1-1.jpg" alt="pillar1-1"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20260101_pillar1-2.jpg" alt="pillar1-2"></div>
 
-      <div class="work-item" onclick="openLightbox(this)">
-        <img src="ZbrushStudy1-3.jpg" alt="Zbrush Study"/>
-      </div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20251201_tile2-1.jpg" alt="tile2-1"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20251201_tile2-2.jpg" alt="tile2-2"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20251201_tile2-3.jpg" alt="tile2-3"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20251201_tile2-4.jpg" alt="tile2-4"></div>
 
-      <!-- 새 이미지 추가 예시 (맨 앞에 붙여넣기)
-      <div class="work-item" onclick="openLightbox(this)">
-        <img src="20260615_새작업.jpg" alt="Zbrush Study"/>
-      </div>
-      -->
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20251101_tile1-1.jpg" alt="tile1-1"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20251101_tile1-2.jpg" alt="tile1-2"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20251101_tile1-3.jpg" alt="tile1-3"></div>
+      <div class="work-item" onclick="openLightbox(this)"><img src="file:///C:/Users/lteai/Downloads/20251101_tile1-4.jpg" alt="tile1-4"></div>
 
     </section>
   </main>
@@ -55,17 +79,14 @@
   <!-- 라이트박스 -->
   <div class="lightbox" id="lightbox" onclick="handleLightboxClick(event)">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-
-    <!-- 확대/축소 버튼 -->
     <div class="lightbox-controls">
       <button class="lb-btn" onclick="zoom(-0.2)">－</button>
       <span class="zoom-label" id="zoom-label">100%</span>
       <button class="lb-btn" onclick="zoom(0.2)">＋</button>
       <button class="lb-btn" onclick="resetZoom()">↺</button>
     </div>
-
     <div class="lightbox-img-wrap" id="lb-wrap">
-      <img id="lightbox-img" src="" alt=""/>
+      <img id="lightbox-img" src="file:///C:/Users/lteai/Downloads/index.html" alt="">
     </div>
   </div>
 
@@ -108,17 +129,16 @@
       document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
     }
 
-    // 마우스 휠로도 확대/축소
     document.getElementById('lb-wrap').addEventListener('wheel', (e) => {
       e.preventDefault();
       zoom(e.deltaY < 0 ? 0.1 : -0.1);
     }, { passive: false });
 
-    // 키보드 ESC로 닫기
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeLightbox();
     });
   </script>
 
-</body>
-</html>
+
+
+</body></html>
