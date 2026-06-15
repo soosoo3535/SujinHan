@@ -49,6 +49,7 @@
     </section>
     <div class="lightbox" id="lightbox">
       <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <div class="lb-toast" id="lb-toast">Scroll to zoom · Drag to pan</div>
       <button class="lb-nav lb-nav-left" onclick="prevImage()">＜</button>
       <button class="lb-nav lb-nav-right" onclick="nextImage()">＞</button>
       <div class="lightbox-controls">
@@ -75,7 +76,8 @@
       div.appendChild(i); list.appendChild(div);
     });
     let currentIndex = 0, currentScale = 1, translateX = 0, translateY = 0, isDragging = false, startX, startY;
-    function openLightbox(idx) { currentIndex = idx; document.getElementById('lightbox-img').src = loadedSrcs[idx]; currentScale = 1; translateX = 0; translateY = 0; applyTransform(); document.getElementById('lightbox').classList.add('open'); }
+    function openLightbox(idx) { currentIndex = idx; document.getElementById('lightbox-img').src = loadedSrcs[idx]; currentScale = 1; translateX = 0; translateY = 0; applyTransform(); document.getElementById('lightbox').classList.add('open');
+      showToast(); }
     function prevImage() { if (!loadedSrcs.filter(Boolean).length) return; do { currentIndex = (currentIndex - 1 + loadedSrcs.length) % loadedSrcs.length; } while (!loadedSrcs[currentIndex]); document.getElementById('lightbox-img').src = loadedSrcs[currentIndex]; currentScale = 1; translateX = 0; translateY = 0; applyTransform(); }
     function nextImage() { if (!loadedSrcs.filter(Boolean).length) return; do { currentIndex = (currentIndex + 1) % loadedSrcs.length; } while (!loadedSrcs[currentIndex]); document.getElementById('lightbox-img').src = loadedSrcs[currentIndex]; currentScale = 1; translateX = 0; translateY = 0; applyTransform(); }
     function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
@@ -93,6 +95,11 @@
     window.addEventListener('mousemove', (e) => { if (!isDragging) return; translateX = e.clientX - startX; translateY = e.clientY - startY; applyTransform(); });
     window.addEventListener('mouseup', () => { if (!isDragging) return; isDragging = false; applyTransform(); });
     document.getElementById('lightbox').addEventListener('click', (e) => { if (!e.target.closest('.lightbox-img-wrap') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lightbox-close') && !e.target.closest('.lb-nav')) closeLightbox(); });
+    function showToast() {
+      const t = document.getElementById('lb-toast');
+      t.classList.remove('hide');
+      setTimeout(() => t.classList.add('hide'), 2000);
+    }
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowRight') nextImage(); if (e.key === 'ArrowLeft') prevImage(); });
   </script>
 </body>

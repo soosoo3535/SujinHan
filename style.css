@@ -186,7 +186,27 @@ a { text-decoration: none; color: inherit; }
   color: var(--muted);
 }
 
-/* ─── VIDEO EMBED ────────────────────────────────────────── */
+/* ─── LIGHTBOX TOAST ─────────────────────────────────────── */
+.lb-toast {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(105,108,100,0.6);
+  border: 1px solid #696c64;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  padding: 8px 20px;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  z-index: 10;
+  white-space: nowrap;
+}
+.lb-toast.hide { opacity: 0; }
 .video-wrap {
   width: 100%;
   aspect-ratio: 16 / 9;

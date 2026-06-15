@@ -93,6 +93,7 @@
 
     <div class="lightbox" id="lightbox">
       <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <div class="lb-toast" id="lb-toast">Scroll to zoom · Drag to pan</div>
 
       <!-- 좌우 이미지 이동 버튼 -->
       <button class="lb-nav lb-nav-left" onclick="prevImage()">＜</button>
@@ -145,6 +146,7 @@
       currentScale = 1; translateX = 0; translateY = 0;
       applyTransform();
       document.getElementById('lightbox').classList.add('open');
+      showToast();
     }
 
     function prevImage() {
@@ -187,6 +189,11 @@
       if (!e.target.closest('.lightbox-img-wrap') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lightbox-close') && !e.target.closest('.lb-nav')) closeLightbox();
     });
 
+    function showToast() {
+      const t = document.getElementById('lb-toast');
+      t.classList.remove('hide');
+      setTimeout(() => t.classList.add('hide'), 2000);
+    }
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowRight') nextImage();
