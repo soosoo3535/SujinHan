@@ -91,7 +91,6 @@ a { text-decoration: none; color: inherit; }
   padding-top: 200px;
   margin-top: -200px;
 }
-
 .hero-video-wrap {
   position: absolute;
   top: 0;
@@ -127,7 +126,7 @@ a { text-decoration: none; color: inherit; }
 
 .hero-email {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-left: 50px;
   display: flex;
   align-items: center;
