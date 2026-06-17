@@ -11,30 +11,35 @@
     .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; padding-top: 100px !important; }
     .page-title { padding-bottom: 10px !important; margin-left: -10px; }
     @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } }
-
     .tools-text { margin-top: 12px; margin-bottom: 60px; font-family: 'Coustard', serif; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; padding-left: 40px; }
-
-    /* 고정 텍스트 */
     .fixed-info { position: fixed; left: 48px; bottom: 48px; z-index: 50; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
     .fixed-info.visible { opacity: 1; }
     .fixed-title { font-family: 'Coustard', serif; font-size: 2.3rem; font-weight: 400; color: #E8EAF0; letter-spacing: 0.04em; margin-bottom: 4px; }
     .fixed-date { font-family: 'Coustard', serif; font-size: 0.9rem; font-weight: 400; color: #6B7280; letter-spacing: 0.1em; margin-bottom: 2px; padding-left: 10px; }
     .fixed-tools { font-family: 'Coustard', serif; font-size: 1.0rem; font-weight: 400; color: #ffffff; letter-spacing: 0.08em; padding-left: 10px; }
-
-    /* zbrush 그룹 */
     .zbrush-wrap { display: flex; flex-direction: column; gap: 0; overflow: visible; }
     .zbrush-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 120px; overflow: visible; }
     .zbrush-group:last-child { margin-bottom: 0; }
     .group-title { font-family: 'Coustard', serif; font-size: 50px; font-weight: 400; letter-spacing: 0.06em; color: #E8EAF0; text-align: center; margin-bottom: 40px; }
     .zbrush-wrap .work-item { width: 100%; cursor: zoom-in; overflow: visible; }
     .zbrush-wrap .work-item img { width: 100%; height: auto; display: block; }
-
     /* 라이트박스 */
-    .lightbox { display: none; position: fixed; inset: 0; background: rgba(5,6,12,0.97); z-index: 999; align-items: center; justify-content: center; cursor: zoom-out; }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(5,6,12,0.97); z-index: 999; flex-direction: column; align-items: center; justify-content: space-between; }
     .lightbox.open { display: flex; }
     .lightbox-close { position: absolute; top: 20px; right: 28px; background: none; border: none; color: #6B7280; font-size: 1.5rem; cursor: pointer; z-index: 10; transition: color 0.2s; }
     .lightbox-close:hover { color: #E8EAF0; }
-    .lightbox-img-wrap img { max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; }
+    .lb-main { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 100px 0; cursor: zoom-in; overflow: hidden; }
+    .lb-main img { max-width: 90vw; max-height: calc(100vh - 200px - 120px); object-fit: contain; display: block; transform-origin: center center; transition: transform 0.2s ease; }
+    .lightbox-controls { display: flex; align-items: center; gap: 8px; background: rgba(105,108,100,0.6); border: 1px solid #696c64; border-radius: 4px; padding: 6px 13px; margin-bottom: 50px; flex-shrink: 0; }
+    .lightbox.zoomed .lightbox-controls { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%); margin-bottom: 0; z-index: 10; }
+    .lb-btn { background: none; border: none; color: #ffffff; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; border-radius: 2px; transition: background 0.2s; }
+    .lb-btn:hover { background: rgba(78,205,196,0.12); color: #4ECDC4; }
+    .zoom-label { font-size: 0.75rem; color: #ffffff; min-width: 40px; text-align: center; font-family: 'Coustard', serif; }
+    .lb-thumbs { display: flex; gap: 6px; padding: 8px 16px; align-items: center; justify-content: center; flex-shrink: 0; width: 100%; }
+    .lightbox.zoomed .lb-thumbs { position: absolute; bottom: 0; left: 0; right: 0; background: none; z-index: 9; }
+    .lb-thumb { flex-shrink: 0; width: 60px; height: 60px; object-fit: cover; cursor: pointer; border: 2px solid transparent; border-radius: 2px; opacity: 0.5; transition: opacity 0.2s, border-color 0.2s, transform 0.2s; }
+    .lb-thumb:hover { opacity: 0.8; }
+    .lb-thumb.active { border-color: #ffffff; opacity: 1; transform: scale(1.15); }
   </style>
 </head>
 <body>
@@ -95,25 +100,95 @@
     </section>
   </main>
 
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox" id="lightbox">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-    <div class="lightbox-img-wrap" id="lb-wrap">
+    <div class="lb-main" id="lb-main" onclick="closeLightbox()">
       <img id="lightbox-img" src="" alt=""/>
     </div>
+    <div class="lightbox-controls">
+      <button class="lb-btn" onclick="zoom(-0.2); event.stopPropagation()">－</button>
+      <span class="zoom-label" id="zoom-label">100%</span>
+      <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
+      <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
+    </div>
+    <div class="lb-thumbs" id="lb-thumbs"></div>
   </div>
 
   <footer class="footer"><p>© SujinHan. All Rights Reserved.</p></footer>
 
   <script>
+    // 모든 이미지 순서 목록
+    const allSrcs = [
+      '20260301_rock2-1.jpg','20260301_rock2-2.jpg','20260301_rock2-3.jpg','20260301_rock2-4.jpg',
+      '20260102_rock1-1.jpg','20260102_rock1-2.jpg','20260102_rock1-3.jpg',
+      '20260101_pillar1-1.jpg','20260101_pillar1-2.jpg',
+      '20251201_tile2-1.jpg','20251201_tile2-2.jpg','20251201_tile2-3.jpg','20251201_tile2-4.jpg',
+      '20251101_tile1-1.jpg','20251101_tile1-2.jpg','20251101_tile1-3.jpg','20251101_tile1-4.jpg'
+    ];
+    let currentIndex = 0, currentScale = 1.3, clickCount = 0;
+    let isDragging = false, startX, startY, translateX = 0, translateY = 0;
+    const lbMain = document.getElementById('lb-main');
+    const lbImg = document.getElementById('lightbox-img');
+    const thumbBar = document.getElementById('lb-thumbs');
+
     function openLightbox(el) {
       const src = el.querySelector('img').getAttribute('src');
-      document.getElementById('lightbox-img').src = src;
+      currentIndex = allSrcs.indexOf(src);
+      lbImg.src = src;
+      resetZoom();
+      updateThumbs();
       document.getElementById('lightbox').classList.add('open');
     }
-    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
-    // 600px 스크롤하면 고정 텍스트 표시
+    function selectImage(idx) {
+      currentIndex = idx;
+      lbImg.src = allSrcs[idx];
+      resetZoom();
+      updateThumbs();
+    }
+
+    function updateThumbs() {
+      const total = allSrcs.length;
+      const half = 4;
+      thumbBar.innerHTML = '';
+      for (let i = -half; i <= half; i++) {
+        const realPos = ((currentIndex + i) % total + total) % total;
+        const thumb = document.createElement('img');
+        thumb.src = allSrcs[realPos];
+        thumb.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+        thumb.addEventListener('click', (e) => { e.stopPropagation(); selectImage(realPos); });
+        thumbBar.appendChild(thumb);
+      }
+    }
+
+    function handleMainClick() { if (clickCount === 0) { currentScale = 1.95; clickCount = 1; applyZoom(); } }
+    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); resetZoom(); }
+    function zoom(delta) { currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3); applyZoom(); }
+    function resetZoom() { currentScale = 1.3; translateX = 0; translateY = 0; clickCount = 0; applyZoom(); }
+
+    function applyZoom() {
+      lbImg.style.transform = `scale(${currentScale}) translate(${translateX/currentScale}px,${translateY/currentScale}px)`;
+      document.getElementById('zoom-label').textContent = Math.round((currentScale/1.3)*100) + '%';
+      lbMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
+      document.getElementById('lightbox').classList.toggle('zoomed', currentScale > 1.3);
+    }
+
+    lbImg.addEventListener('click', (e) => { e.stopPropagation(); handleMainClick(); });
+    lbMain.addEventListener('wheel', (e) => { e.preventDefault(); zoom(e.deltaY < 0 ? 0.1 : -0.1); }, { passive: false });
+    lbMain.addEventListener('mousedown', (e) => { if (currentScale <= 1.3) return; isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY; lbMain.style.cursor = 'grabbing'; e.preventDefault(); });
+    window.addEventListener('mousemove', (e) => { if (!isDragging) return; translateX = e.clientX - startX; translateY = e.clientY - startY; applyZoom(); });
+    window.addEventListener('mouseup', () => { if (!isDragging) return; isDragging = false; applyZoom(); });
+
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (!e.target.closest('.lb-main') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lb-thumbs') && !e.target.closest('.lightbox-close')) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') selectImage((currentIndex + 1) % allSrcs.length);
+      if (e.key === 'ArrowLeft') selectImage((currentIndex - 1 + allSrcs.length) % allSrcs.length);
+    });
+
     const fixedInfo = document.getElementById('fixed-info');
     window.addEventListener('scroll', () => { fixedInfo.classList.toggle('visible', window.scrollY >= 600); });
   </script>
