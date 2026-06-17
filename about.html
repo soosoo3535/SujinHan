@@ -156,7 +156,8 @@
         <div class="about-section">
           <span class="about-label">Contact</span>
           <div class="about-content">
-            E-mail. <a href="mailto:susujin3535@gmail.com" style="color:#ffffff;">susujin3535@gmail.com</a>
+            E-mail. <span id="email-text" onclick="copyEmail(event)" style="color:#ffffff; cursor:pointer;">susujin3535@gmail.com</span>
+            <div id="copy-tooltip" style="position:fixed; display:none; background:rgba(105,108,100,0.9); color:#ffffff; font-family:'Coustard',serif; font-size:0.85rem; padding:6px 12px; border-radius:4px; pointer-events:none; z-index:9999; white-space:nowrap;">클립보드에 복사되었습니다.</div>
           </div>
         </div>
 
@@ -192,5 +193,15 @@
     <p>© SujinHan. All Rights Reserved.</p>
   </footer>
 
+  <script>
+    function copyEmail(e) {
+      navigator.clipboard.writeText('susujin3535@gmail.com');
+      const tooltip = document.getElementById('copy-tooltip');
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 12) + 'px';
+      tooltip.style.top = (e.clientY + 12) + 'px';
+      setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
+    }
+  </script>
 </body>
 </html>
