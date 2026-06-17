@@ -15,14 +15,11 @@
     .works-list { display: flex; flex-direction: column; gap: 20px; }
     .works-list .work-item { width: 100%; cursor: zoom-in; }
     .works-list .work-item img { width: 100%; height: auto; display: block; }
-
-    /* 고정 텍스트 */
     .fixed-info { position: fixed; left: 48px; bottom: 48px; z-index: 50; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
     .fixed-info.visible { opacity: 1; }
     .fixed-title { font-family: 'Coustard', serif; font-size: 2.3rem; font-weight: 400; color: #E8EAF0; letter-spacing: 0.04em; margin-bottom: 4px; }
     .fixed-date { font-family: 'Coustard', serif; font-size: 0.9rem; font-weight: 400; color: #6B7280; letter-spacing: 0.1em; margin-bottom: 2px; padding-left: 10px; }
     .fixed-tools { font-family: 'Coustard', serif; font-size: 1.0rem; font-weight: 400; color: #ffffff; letter-spacing: 0.08em; padding-left: 10px; }
-
     /* 라이트박스 */
     .lightbox { display: none; position: fixed; inset: 0; background: rgba(5,6,12,0.97); z-index: 999; flex-direction: column; align-items: center; justify-content: space-between; }
     .lightbox.open { display: flex; }
@@ -31,10 +28,12 @@
     .lb-main { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 100px 0; cursor: zoom-in; overflow: hidden; }
     .lb-main img { max-width: 90vw; max-height: calc(100vh - 200px - 120px); object-fit: contain; display: block; transform-origin: center center; transition: transform 0.2s ease; }
     .lightbox-controls { display: flex; align-items: center; gap: 8px; background: rgba(105,108,100,0.6); border: 1px solid #696c64; border-radius: 4px; padding: 6px 13px; margin-bottom: 50px; flex-shrink: 0; }
+    .lightbox.zoomed .lightbox-controls { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%); margin-bottom: 0; z-index: 10; }
     .lb-btn { background: none; border: none; color: #ffffff; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; border-radius: 2px; transition: background 0.2s; }
     .lb-btn:hover { background: rgba(78,205,196,0.12); color: #4ECDC4; }
     .zoom-label { font-size: 0.75rem; color: #ffffff; min-width: 40px; text-align: center; font-family: 'Coustard', serif; }
-    .lb-thumbs { display: flex; gap: 6px; padding: 8px 16px; overflow: hidden; width: 100%; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(5,6,12,0.97); }
+    .lb-thumbs { display: flex; gap: 6px; padding: 8px 16px; align-items: center; justify-content: center; flex-shrink: 0; width: 100%; }
+    .lightbox.zoomed .lb-thumbs { position: absolute; bottom: 0; left: 0; right: 0; background: none; z-index: 9; }
     .lb-thumb { flex-shrink: 0; width: 60px; height: 60px; object-fit: cover; cursor: pointer; border: 2px solid transparent; border-radius: 2px; opacity: 0.5; transition: opacity 0.2s, border-color 0.2s, transform 0.2s; }
     .lb-thumb:hover { opacity: 0.8; }
     .lb-thumb.active { border-color: #ffffff; opacity: 1; transform: scale(1.15); }
@@ -55,15 +54,12 @@
       <p class="tools-text" style="padding-left: 40px;">3Ds Max · Rizom UV · Substance Painter · Marmoset</p>
       <img src="childroom-icon.png" alt="Child Room icons" class="work-icon" onerror="this.style.display='none'"/>
     </section>
-
     <div class="fixed-info" id="fixed-info">
       <p class="fixed-title">Child Room</p>
       <p class="fixed-date">2024.02</p>
       <p class="fixed-tools">3Ds Max · Rizom UV · Substance Painter · Marmoset</p>
     </div>
-
     <section class="works-list" id="works-list"></section>
-
     <div class="lightbox" id="lightbox">
       <button class="lightbox-close" onclick="closeLightbox()">✕</button>
       <div class="lb-main" id="lb-main" onclick="closeLightbox()">
@@ -80,91 +76,64 @@
   </main>
   <footer class="footer"><p>© SujinHan. All Rights Reserved.</p></footer>
   <script>
-    const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
-                       'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
-                       'work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
+    const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg','work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg','work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
     const loadedSrcs = [];
     const list = document.getElementById('works-list');
     const thumbBar = document.getElementById('lb-thumbs');
-
     imageSrcs.forEach((src, idx) => {
       const div = document.createElement('div'); div.className = 'work-item'; div.style.display = 'none';
       const i = document.createElement('img'); i.src = src;
       i.onload = () => {
         div.style.display = 'block'; loadedSrcs[idx] = src;
         i.addEventListener('click', () => openLightbox(idx));
-        const thumb = document.createElement('img');
-        thumb.src = src; thumb.className = 'lb-thumb'; thumb.dataset.idx = idx;
+        const thumb = document.createElement('img'); thumb.src = src; thumb.className = 'lb-thumb'; thumb.dataset.idx = idx;
         thumb.addEventListener('click', (e) => { e.stopPropagation(); selectImage(idx); });
-        const thumbs = thumbBar.querySelectorAll('.lb-thumb');
-        let inserted = false;
+        const thumbs = thumbBar.querySelectorAll('.lb-thumb'); let inserted = false;
         for (let t of thumbs) { if (parseInt(t.dataset.idx) > idx) { thumbBar.insertBefore(thumb, t); inserted = true; break; } }
         if (!inserted) thumbBar.appendChild(thumb);
       };
-      i.onerror = () => { div.remove(); };
-      div.appendChild(i); list.appendChild(div);
+      i.onerror = () => { div.remove(); }; div.appendChild(i); list.appendChild(div);
     });
-
-    let currentIndex = 0, currentScale = 1.3, translateX = 0, translateY = 0, isDragging = false, startX, startY, clickCount = 0;
-
+    let currentIndex = 0, currentScale = 1.3, clickCount = 0;
     function openLightbox(idx) { selectImage(idx); document.getElementById('lightbox').classList.add('open'); }
-
-    function selectImage(idx) {
-      currentIndex = idx;
-      document.getElementById('lightbox-img').src = loadedSrcs[idx];
-      resetZoom();
-      updateThumbs();
-    }
-
+    function selectImage(idx) { currentIndex = idx; document.getElementById('lightbox-img').src = loadedSrcs[idx]; resetZoom(); updateThumbs(); }
     function updateThumbs() {
       const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
       const total = validIdxs.length; if (total === 0) return;
-      const pos = validIdxs.indexOf(currentIndex);
-      const half = 4;
+      const pos = validIdxs.indexOf(currentIndex); const half = 4;
       thumbBar.innerHTML = '';
       for (let i = -half; i <= half; i++) {
-        const realPos = ((pos + i) % total + total) % total;
-        const realIdx = validIdxs[realPos];
-        const thumb = document.createElement('img');
-        thumb.src = loadedSrcs[realIdx]; thumb.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+        const realPos = ((pos+i)%total+total)%total; const realIdx = validIdxs[realPos];
+        const thumb = document.createElement('img'); thumb.src = loadedSrcs[realIdx]; thumb.className = 'lb-thumb'+(i===0?' active':'');
         thumb.addEventListener('click', (e) => { e.stopPropagation(); selectImage(realIdx); });
         thumbBar.appendChild(thumb);
       }
     }
-
-    function handleMainClick() { if (clickCount === 0) { currentScale = 1.95; clickCount = 1; applyZoom(); } }
+    function handleMainClick() { if (clickCount===0) { currentScale=1.95; clickCount=1; applyZoom(); } }
     function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); resetZoom(); }
-    function zoom(delta) { currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3); applyZoom(); }
-    function resetZoom() { currentScale = 1.3; translateX = 0; translateY = 0; clickCount = 0; applyZoom(); }
+    function zoom(delta) { currentScale=Math.min(Math.max(currentScale+delta,0.4),3); applyZoom(); }
+    function resetZoom() { currentScale=1.3; translateX=0; translateY=0; clickCount=0; applyZoom(); }
+    let isDragging=false, startX, startY, translateX=0, translateY=0;
+    const lbMain=document.getElementById('lb-main'); const lbImg=document.getElementById('lightbox-img');
     function applyZoom() {
-      lbImg.style.transform = 'scale(' + currentScale + ') translate(' + (translateX / currentScale) + 'px, ' + (translateY / currentScale) + 'px)';
-      document.getElementById('zoom-label').textContent = Math.round((currentScale / 1.3) * 100) + '%';
-      lbMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
+      lbImg.style.transform='scale('+currentScale+') translate('+(translateX/currentScale)+'px,'+(translateY/currentScale)+'px)';
+      document.getElementById('zoom-label').textContent=Math.round((currentScale/1.3)*100)+'%';
+      lbMain.style.cursor=currentScale>=2.6?'zoom-out':(isDragging?'grabbing':'zoom-in');
+      document.getElementById('lightbox').classList.toggle('zoomed', currentScale>1.3);
     }
-
-    const lbImg = document.getElementById('lightbox-img');
-    const lbMain = document.getElementById('lb-main');
-
     lbImg.addEventListener('click', (e) => { e.stopPropagation(); handleMainClick(); });
-    lbMain.addEventListener('wheel', (e) => { e.preventDefault(); zoom(e.deltaY < 0 ? 0.1 : -0.1); }, { passive: false });
-    lbMain.addEventListener('mousedown', (e) => { if (currentScale <= 1.3) return; isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY; lbMain.style.cursor = 'grabbing'; e.preventDefault(); });
-    window.addEventListener('mousemove', (e) => { if (!isDragging) return; translateX = e.clientX - startX; translateY = e.clientY - startY; applyZoom(); });
-    window.addEventListener('mouseup', () => { if (!isDragging) return; isDragging = false; applyZoom(); });
-
-    document.getElementById('lightbox').addEventListener('click', (e) => {
-      if (!e.target.closest('.lb-main') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lb-thumbs') && !e.target.closest('.lightbox-close')) closeLightbox();
-    });
-
-    // 600px 스크롤하면 고정 텍스트 표시
-    const fixedInfo = document.getElementById('fixed-info');
-    window.addEventListener('scroll', () => { fixedInfo.classList.toggle('visible', window.scrollY >= 600); });
-
+    lbMain.addEventListener('wheel', (e) => { e.preventDefault(); zoom(e.deltaY<0?0.1:-0.1); }, {passive:false});
+    lbMain.addEventListener('mousedown', (e) => { if(currentScale<=1.3)return; isDragging=true; startX=e.clientX-translateX; startY=e.clientY-translateY; lbMain.style.cursor='grabbing'; e.preventDefault(); });
+    window.addEventListener('mousemove', (e) => { if(!isDragging)return; translateX=e.clientX-startX; translateY=e.clientY-startY; applyZoom(); });
+    window.addEventListener('mouseup', () => { if(!isDragging)return; isDragging=false; applyZoom(); });
+    document.getElementById('lightbox').addEventListener('click', (e) => { if(!e.target.closest('.lb-main')&&!e.target.closest('.lightbox-controls')&&!e.target.closest('.lb-thumbs')&&!e.target.closest('.lightbox-close'))closeLightbox(); });
+    const fixedInfo=document.getElementById('fixed-info');
+    window.addEventListener('scroll', () => { fixedInfo.classList.toggle('visible', window.scrollY>=600); });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLightbox();
-      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
-      const pos = validIdxs.indexOf(currentIndex);
-      if (e.key === 'ArrowRight') selectImage(validIdxs[(pos + 1) % validIdxs.length]);
-      if (e.key === 'ArrowLeft') selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
+      const validIdxs=loadedSrcs.map((s,i)=>s?i:-1).filter(i=>i>=0); const pos=validIdxs.indexOf(currentIndex);
+      if(e.key==='Escape')closeLightbox();
+      if(e.key==='ArrowRight')selectImage(validIdxs[(pos+1)%validIdxs.length]);
+      if(e.key==='ArrowLeft')selectImage(validIdxs[(pos-1+validIdxs.length)%validIdxs.length]);
     });
   </script>
 </body>
