@@ -210,10 +210,12 @@ a { text-decoration: none; color: inherit; }
 }
 
 .card-icon {
-  max-width: 60%;
-  height: auto;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  height: 80px;
+  width: auto;
   display: block;
-  margin-top: 8px;
 }
 
 /* placeholder card */
