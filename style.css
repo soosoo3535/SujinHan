@@ -125,6 +125,27 @@ a { text-decoration: none; color: inherit; }
   padding-left: 50px;
 }
 
+.hero-email {
+  position: relative;
+  z-index: 1;
+  padding-left: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.hero-email span {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+
+.hero-email:hover span { color: #ffffff; }
+
 .page-title h1 {
   font-family: var(--font-display);
   font-size: 2.6rem;

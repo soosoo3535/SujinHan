@@ -27,6 +27,11 @@
       </div>
       <h1>Sujin Han</h1>
       <p class="subtitle">3D Environment Artist</p>
+      <div class="hero-email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        <span id="hero-email" onclick="copyHeroEmail(event)">susujin3535@gmail.com</span>
+      </div>
+      <div id="hero-copy-tooltip" style="position:fixed; display:none; background:rgba(105,108,100,0.9); color:#ffffff; font-family:'Coustard',serif; font-size:0.85rem; padding:6px 12px; border-radius:4px; pointer-events:none; z-index:9999; white-space:nowrap;">클립보드에 복사되었습니다.</div>
     </section>
 
     <section class="category-grid">
@@ -155,6 +160,15 @@
     document.getElementById('hero-video').querySelector('source').src = videos[idx];
     document.getElementById('hero-video').load();
     sessionStorage.setItem(key, (idx + 1) % videos.length);
+
+    function copyHeroEmail(e) {
+      navigator.clipboard.writeText('susujin3535@gmail.com');
+      const tooltip = document.getElementById('hero-copy-tooltip');
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 12) + 'px';
+      tooltip.style.top = (e.clientY + 12) + 'px';
+      setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
+    }
   </script>
 
 </body>
