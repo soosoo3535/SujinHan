@@ -47,17 +47,18 @@
 
     /* 메인 이미지 영역 */
     .lb-main {
-      flex: 1;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      width: 100%;
       cursor: zoom-in;
     }
     .lb-main img {
       max-width: 90vw;
-      max-height: 72vh;
+      max-height: 80vh;
       object-fit: contain;
       display: block;
       transform-origin: center center;
@@ -222,16 +223,12 @@
     let clickCount = 0;
 
     function handleMainClick() {
-      clickCount++;
-      if (clickCount === 1) {
+      if (clickCount === 0) {
         currentScale = 1.95;
-      } else if (clickCount === 2) {
-        currentScale = 2.6;
-      } else {
-        currentScale = 1.3;
-        clickCount = 0;
+        clickCount = 1;
+        applyZoom();
       }
-      applyZoom();
+      // 이미 확대된 상태에서 클릭 → 아무 효과 없음
     }
 
     function closeLightbox() {
