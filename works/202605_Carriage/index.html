@@ -175,13 +175,23 @@
         loadedSrcs[idx] = src;
         i.addEventListener('click', () => openLightbox(idx));
 
-        // 썸네일 추가
+        // 썸네일 순서 고정 (idx 순서대로)
         const thumb = document.createElement('img');
         thumb.src = src;
         thumb.className = 'lb-thumb';
         thumb.dataset.idx = idx;
         thumb.addEventListener('click', (e) => { e.stopPropagation(); selectImage(idx); });
-        thumbBar.appendChild(thumb);
+        // idx 순서대로 삽입
+        const thumbs = thumbBar.querySelectorAll('.lb-thumb');
+        let inserted = false;
+        for (let t of thumbs) {
+          if (parseInt(t.dataset.idx) > idx) {
+            thumbBar.insertBefore(thumb, t);
+            inserted = true;
+            break;
+          }
+        }
+        if (!inserted) thumbBar.appendChild(thumb);
       };
       i.onerror = () => { div.remove(); };
       div.appendChild(i);
@@ -189,7 +199,7 @@
     });
 
     let currentIndex = 0;
-    let currentScale = 1;
+    let currentScale = 1.3;
 
     function openLightbox(idx) {
       selectImage(idx);
@@ -214,11 +224,11 @@
     function handleMainClick() {
       clickCount++;
       if (clickCount === 1) {
-        currentScale = 1.5;
+        currentScale = 1.95;
       } else if (clickCount === 2) {
-        currentScale = 2.0;
+        currentScale = 2.6;
       } else {
-        currentScale = 1;
+        currentScale = 1.3;
         clickCount = 0;
       }
       applyZoom();
@@ -235,15 +245,17 @@
     }
 
     function resetZoom() {
-      currentScale = 1;
+      currentScale = 1.3;
+      translateX = 0;
+      translateY = 0;
       clickCount = 0;
       applyZoom();
     }
 
     function applyZoom() {
-      document.getElementById('lightbox-img').style.transform = `scale(${currentScale})`;
-      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
-      document.getElementById('lb-main').style.cursor = currentScale >= 3 ? 'zoom-out' : 'zoom-in';
+      lbImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
+      document.getElementById('zoom-label').textContent = Math.round((currentScale / 1.3) * 100) + '%';
+      lbMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
     }
 
     // 스크롤 줌인/줌아웃
@@ -252,15 +264,43 @@
       zoom(e.deltaY < 0 ? 0.1 : -0.1);
     }, { passive: false });
 
+    // 드래그로 이동
+    let isDragging = false, startX, startY, translateX = 0, translateY = 0;
+    const lbMain = document.getElementById('lb-main');
+    const lbImg = document.getElementById('lightbox-img');
+
+    lbMain.addEventListener('mousedown', (e) => {
+      if (currentScale <= 1.3) return;
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      lbMain.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      applyZoom();
+    });
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      lbMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : 'zoom-in';
+    });
+
     // 이미지 외 여백 클릭시 닫기
     document.getElementById('lightbox').addEventListener('click', (e) => {
       if (!e.target.closest('.lb-main') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lb-thumbs') && !e.target.closest('.lightbox-close')) closeLightbox();
     });
 
     document.addEventListener('keydown', (e) => {
+      const valid = loadedSrcs.filter(Boolean);
+      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
+      const pos = validIdxs.indexOf(currentIndex);
       if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowRight') selectImage((currentIndex + 1) % loadedSrcs.filter(Boolean).length);
-      if (e.key === 'ArrowLeft') selectImage((currentIndex - 1 + loadedSrcs.filter(Boolean).length) % loadedSrcs.filter(Boolean).length);
+      if (e.key === 'ArrowRight') selectImage(validIdxs[(pos + 1) % validIdxs.length]);
+      if (e.key === 'ArrowLeft') selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
     });
   </script>
 </body>
