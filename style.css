@@ -211,11 +211,11 @@ a { text-decoration: none; color: inherit; }
 
 .card-icon {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  height: 40px !important;
+  bottom: 15px;
+  right: 15px;
+  height: 50px !important;
   width: auto !important;
-  max-height: 40px;
+  max-height: 50px;
   display: block;
   object-fit: contain;
 }
