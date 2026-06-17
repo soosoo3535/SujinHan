@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,109 +8,36 @@
   <link rel="stylesheet" href="../../style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&display=swap" rel="stylesheet"/>
   <style>
-    .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; }
-    @media (max-width: 768px) {
-      .main { padding-left: 16px !important; padding-right: 16px !important; }
-      .scroll-btns { left: 4px; }
-      .lb-nav-left { left: 4px; }
-      .lb-nav-right { right: 4px; }
-    }
-    .tools-text {
-      margin-top: 12px;
-      margin-bottom: 60px;
-      font-family: 'Coustard', serif;
-      font-size: 1.2rem;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      color: #6B7280;
-    }
-    .scroll-btns {
-      position: fixed;
-      left: calc(200px - 80px);
-      bottom: 60px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 50;
-    }
-    .scroll-btn {
-      width: 40px;
-      height: 40px;
-      background: none;
-      border: 1px solid #696c64;
-      border-radius: 50%;
-      color: #6B7280;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .scroll-btn:hover {
-      color: #E8EAF0;
-      border-color: #E8EAF0;
-    }
-    .zbrush-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      overflow: visible;
-    }
-    .zbrush-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 120px;
-      overflow: visible;
-    }
-    .zbrush-group:last-child {
-      margin-bottom: 0;
-    }
-    .group-title {
-      font-family: 'Coustard', serif;
-      font-size: 50px;
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      color: #E8EAF0;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .zbrush-wrap .work-item {
-      width: 100%;
-      cursor: zoom-in;
-      overflow: visible;
-    }
-    .lb-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
-      background: none;
-      border: 1px solid #696c64;
-      border-radius: 50%;
-      color: #6B7280;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-    .lb-nav:hover { color: #E8EAF0; border-color: #E8EAF0; }
-    .lb-nav-left { left: calc((200px - 40px) / 2); }
-    .lb-nav-right { right: calc((200px - 40px) / 2); }
-    .zbrush-wrap .work-item img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; padding-top: 100px !important; }
+    .page-title { padding-bottom: 10px !important; margin-left: -10px; }
+    @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } }
+
+    .tools-text { margin-top: 12px; margin-bottom: 60px; font-family: 'Coustard', serif; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; padding-left: 40px; }
+
+    /* 고정 텍스트 */
+    .fixed-info { position: fixed; left: 48px; bottom: 48px; z-index: 50; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+    .fixed-info.visible { opacity: 1; }
+    .fixed-title { font-family: 'Coustard', serif; font-size: 2.3rem; font-weight: 400; color: #E8EAF0; letter-spacing: 0.04em; margin-bottom: 4px; }
+    .fixed-date { font-family: 'Coustard', serif; font-size: 0.9rem; font-weight: 400; color: #6B7280; letter-spacing: 0.1em; margin-bottom: 2px; padding-left: 10px; }
+    .fixed-tools { font-family: 'Coustard', serif; font-size: 1.0rem; font-weight: 400; color: #ffffff; letter-spacing: 0.08em; padding-left: 10px; }
+
+    /* zbrush 그룹 */
+    .zbrush-wrap { display: flex; flex-direction: column; gap: 0; overflow: visible; }
+    .zbrush-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 120px; overflow: visible; }
+    .zbrush-group:last-child { margin-bottom: 0; }
+    .group-title { font-family: 'Coustard', serif; font-size: 50px; font-weight: 400; letter-spacing: 0.06em; color: #E8EAF0; text-align: center; margin-bottom: 40px; }
+    .zbrush-wrap .work-item { width: 100%; cursor: zoom-in; overflow: visible; }
+    .zbrush-wrap .work-item img { width: 100%; height: auto; display: block; }
+
+    /* 라이트박스 */
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(5,6,12,0.97); z-index: 999; align-items: center; justify-content: center; cursor: zoom-out; }
+    .lightbox.open { display: flex; }
+    .lightbox-close { position: absolute; top: 20px; right: 28px; background: none; border: none; color: #6B7280; font-size: 1.5rem; cursor: pointer; z-index: 10; transition: color 0.2s; }
+    .lightbox-close:hover { color: #E8EAF0; }
+    .lightbox-img-wrap img { max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; }
   </style>
 </head>
 <body>
-
   <nav class="nav">
     <div class="nav-links">
       <a href="../../index.html" class="nav-btn">Home</a>
@@ -118,23 +46,20 @@
   </nav>
 
   <main class="main">
-
     <section class="page-title works-title">
       <a href="../../index.html" class="back-btn">← Back</a>
       <h1>Zbrush Study</h1>
-      <p class="subtitle">2025.11 —</p>
+      <p class="subtitle" style="margin-left: -5px;">2025.11 —</p>
       <p class="tools-text">3Ds Max · Zbrush · Rizom UV · Substance Painter · Knald · Marmoset</p>
     </section>
 
-    <!-- 상단/하단 이동 버튼 -->
-    <div class="scroll-btns">
-      <button class="scroll-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">∧</button>
-      <button class="scroll-btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="맨 아래로">∨</button>
+    <div class="fixed-info" id="fixed-info">
+      <p class="fixed-title">Zbrush Study</p>
+      <p class="fixed-date">2025.11 —</p>
+      <p class="fixed-tools">3Ds Max · Zbrush · Rizom UV · Substance Painter · Knald · Marmoset</p>
     </div>
 
-    <!-- 새 작업물은 맨 위에 추가하세요. 날짜_이름-번호.jpg 형식 유지 -->
     <section class="zbrush-wrap">
-
       <div class="zbrush-group">
         <p class="group-title">Rock 2</p>
         <div class="work-item" onclick="openLightbox(this)"><img src="20260301_rock2-1.jpg" alt="rock2-1"/></div>
@@ -142,20 +67,17 @@
         <div class="work-item" onclick="openLightbox(this)"><img src="20260301_rock2-3.jpg" alt="rock2-3"/></div>
         <div class="work-item" onclick="openLightbox(this)"><img src="20260301_rock2-4.jpg" alt="rock2-4"/></div>
       </div>
-
       <div class="zbrush-group">
         <p class="group-title">Rock 1</p>
         <div class="work-item" onclick="openLightbox(this)"><img src="20260102_rock1-1.jpg" alt="rock1-1"/></div>
         <div class="work-item" onclick="openLightbox(this)"><img src="20260102_rock1-2.jpg" alt="rock1-2"/></div>
         <div class="work-item" onclick="openLightbox(this)"><img src="20260102_rock1-3.jpg" alt="rock1-3"/></div>
       </div>
-
       <div class="zbrush-group">
         <p class="group-title">Pillar</p>
         <div class="work-item" onclick="openLightbox(this)"><img src="20260101_pillar1-1.jpg" alt="pillar1-1"/></div>
         <div class="work-item" onclick="openLightbox(this)"><img src="20260101_pillar1-2.jpg" alt="pillar1-2"/></div>
       </div>
-
       <div class="zbrush-group">
         <p class="group-title">Tile 2</p>
         <div class="work-item" onclick="openLightbox(this)"><img src="20251201_tile2-1.jpg" alt="tile2-1"/></div>
@@ -163,7 +85,6 @@
         <div class="work-item" onclick="openLightbox(this)"><img src="20251201_tile2-3.jpg" alt="tile2-3"/></div>
         <div class="work-item" onclick="openLightbox(this)"><img src="20251201_tile2-4.jpg" alt="tile2-4"/></div>
       </div>
-
       <div class="zbrush-group">
         <p class="group-title">Tile 1</p>
         <div class="work-item" onclick="openLightbox(this)"><img src="20251101_tile1-1.jpg" alt="tile1-1"/></div>
@@ -171,97 +92,30 @@
         <div class="work-item" onclick="openLightbox(this)"><img src="20251101_tile1-3.jpg" alt="tile1-3"/></div>
         <div class="work-item" onclick="openLightbox(this)"><img src="20251101_tile1-4.jpg" alt="tile1-4"/></div>
       </div>
-
     </section>
   </main>
 
-  <!-- 라이트박스 -->
-  <div class="lightbox" id="lightbox">
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-    <div class="lb-toast" id="lb-toast">Scroll to zoom · Drag to pan</div>
-    <button class="lb-nav lb-nav-left" onclick="prevImage()">＜</button>
-    <button class="lb-nav lb-nav-right" onclick="nextImage()">＞</button>
-    <div class="lightbox-controls">
-      <button class="lb-btn" onclick="zoom(-0.2)">－</button>
-      <span class="zoom-label" id="zoom-label">100%</span>
-      <button class="lb-btn" onclick="zoom(0.2)">＋</button>
-      <button class="lb-btn" onclick="resetZoom()">↺</button>
-    </div>
     <div class="lightbox-img-wrap" id="lb-wrap">
-      <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()"/>
+      <img id="lightbox-img" src="" alt=""/>
     </div>
   </div>
 
-  <footer class="footer">
-    <p>© SujinHan. All Rights Reserved.</p>
-  </footer>
+  <footer class="footer"><p>© SujinHan. All Rights Reserved.</p></footer>
 
   <script>
-    // 전체 이미지 순서 목록
-    const allImages = [
-      '20260301_rock2-1.jpg','20260301_rock2-2.jpg','20260301_rock2-3.jpg','20260301_rock2-4.jpg',
-      '20260102_rock1-1.jpg','20260102_rock1-2.jpg','20260102_rock1-3.jpg',
-      '20260101_pillar1-1.jpg','20260101_pillar1-2.jpg',
-      '20251201_tile2-1.jpg','20251201_tile2-2.jpg','20251201_tile2-3.jpg','20251201_tile2-4.jpg',
-      '20251101_tile1-1.jpg','20251101_tile1-2.jpg','20251101_tile1-3.jpg','20251101_tile1-4.jpg'
-    ];
-    let currentIndex = 0;
-    let currentScale = 1, translateX = 0, translateY = 0, isDragging = false, startX, startY;
-
     function openLightbox(el) {
       const src = el.querySelector('img').getAttribute('src');
-      currentIndex = allImages.indexOf(src);
       document.getElementById('lightbox-img').src = src;
-      currentScale = 1; translateX = 0; translateY = 0;
-      applyTransform();
       document.getElementById('lightbox').classList.add('open');
-      showToast();
     }
-
-    function prevImage() {
-      currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
-      document.getElementById('lightbox-img').src = allImages[currentIndex];
-      currentScale = 1; translateX = 0; translateY = 0; applyTransform();
-    }
-
-    function nextImage() {
-      currentIndex = (currentIndex + 1) % allImages.length;
-      document.getElementById('lightbox-img').src = allImages[currentIndex];
-      currentScale = 1; translateX = 0; translateY = 0; applyTransform();
-    }
-
     function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
-    function zoom(delta) { currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3); applyTransform(); }
-    function resetZoom() { currentScale = 1; translateX = 0; translateY = 0; applyTransform(); }
-    function applyTransform() {
-      const img = document.getElementById('lightbox-img');
-      img.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
-      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
-      document.getElementById('lb-wrap').style.cursor = currentScale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default';
-    }
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
-    document.getElementById('lb-wrap').addEventListener('wheel', (e) => { e.preventDefault(); zoom(e.deltaY < 0 ? 0.1 : -0.1); }, { passive: false });
-    const wrap = document.getElementById('lb-wrap');
-    wrap.addEventListener('mousedown', (e) => { if (currentScale <= 1) return; isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY; wrap.style.cursor = 'grabbing'; e.preventDefault(); });
-    window.addEventListener('mousemove', (e) => { if (!isDragging) return; translateX = e.clientX - startX; translateY = e.clientY - startY; applyTransform(); });
-    window.addEventListener('mouseup', () => { if (!isDragging) return; isDragging = false; applyTransform(); });
-
-    document.getElementById('lightbox').addEventListener('click', (e) => {
-      if (!e.target.closest('.lightbox-img-wrap') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lightbox-close') && !e.target.closest('.lb-nav')) closeLightbox();
-    });
-
-    function showToast() {
-      const t = document.getElementById('lb-toast');
-      t.classList.remove('hide');
-      setTimeout(() => t.classList.add('hide'), 2000);
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowRight') nextImage();
-      if (e.key === 'ArrowLeft') prevImage();
-    });
+    // 600px 스크롤하면 고정 텍스트 표시
+    const fixedInfo = document.getElementById('fixed-info');
+    window.addEventListener('scroll', () => { fixedInfo.classList.toggle('visible', window.scrollY >= 600); });
   </script>
-
 </body>
 </html>
