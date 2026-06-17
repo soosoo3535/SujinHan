@@ -139,7 +139,7 @@
       <button class="lightbox-close" onclick="closeLightbox()">✕</button>
 
       <!-- 메인 이미지 -->
-      <div class="lb-main" id="lb-main" onclick="handleMainClick()">
+      <div class="lb-main" id="lb-main" onclick="closeLightbox()">
         <img id="lightbox-img" src="" alt=""/>
       </div>
 
@@ -306,6 +306,12 @@
     // 이미지 외 여백 클릭시 닫기
     document.getElementById('lightbox').addEventListener('click', (e) => {
       if (!e.target.closest('.lb-main') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lb-thumbs') && !e.target.closest('.lightbox-close')) closeLightbox();
+    });
+
+    // 이미지 클릭시만 확대
+    document.getElementById('lightbox-img').addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleMainClick();
     });
 
     document.addEventListener('keydown', (e) => {
