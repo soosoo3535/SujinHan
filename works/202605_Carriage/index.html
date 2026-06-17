@@ -25,7 +25,7 @@
     .fixed-info.visible { opacity: 1; }
     .fixed-title {
       font-family: 'Coustard', serif;
-      font-size: 1.4rem;
+      font-size: 2.1rem;
       font-weight: 400;
       color: #E8EAF0;
       letter-spacing: 0.04em;
@@ -33,7 +33,7 @@
     }
     .fixed-date {
       font-family: 'Coustard', serif;
-      font-size: 0.85rem;
+      font-size: 1.275rem;
       font-weight: 400;
       color: #6B7280;
       letter-spacing: 0.15em;
@@ -341,22 +341,15 @@
       handleMainClick();
     });
 
-    // 첫 번째 이미지가 화면에 들어오면 고정 텍스트 표시
+    // 600px 스크롤하면 고정 텍스트 표시
     const fixedInfo = document.getElementById('fixed-info');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        fixedInfo.classList.toggle('visible', entry.isIntersecting);
-      });
-    }, { threshold: 0.1 });
-
-    const listObserver = new MutationObserver(() => {
-      const firstItem = document.querySelector('.work-item');
-      if (firstItem) {
-        observer.observe(firstItem);
-        listObserver.disconnect();
+    window.addEventListener('scroll', () => {
+      if (window.scrollY >= 600) {
+        fixedInfo.classList.add('visible');
+      } else {
+        fixedInfo.classList.remove('visible');
       }
     });
-    listObserver.observe(document.getElementById('works-list'), { childList: true });
 
     document.addEventListener('keydown', (e) => {
       const valid = loadedSrcs.filter(Boolean);
