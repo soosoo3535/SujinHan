@@ -13,9 +13,32 @@
     @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } .scroll-btns { left: 4px; } }
     .tools-text { margin-top: 12px; font-family: 'Coustard', serif; font-size: 1.2rem; margin-bottom: 8px; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; margin-left: 5px; }
     .work-icon { display: block; max-width: 25%; height: auto; margin-bottom: 10px; margin-left: 5px; }
-    .scroll-btns { position: fixed; left: calc(200px - 80px); bottom: 60px; display: flex; flex-direction: column; gap: 10px; z-index: 50; }
-    .scroll-btn { width: 40px; height: 40px; background: none; border: 1px solid #696c64; border-radius: 50%; color: #6B7280; font-size: 1rem; cursor: pointer; transition: color 0.2s, border-color 0.2s; display: flex; align-items: center; justify-content: center; }
-    .scroll-btn:hover { color: #E8EAF0; border-color: #E8EAF0; }
+    .fixed-info {
+      position: fixed;
+      left: 48px;
+      bottom: 48px;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .fixed-info.visible { opacity: 1; }
+    .fixed-title {
+      font-family: 'Coustard', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: #E8EAF0;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .fixed-date {
+      font-family: 'Coustard', serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #6B7280;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
     .works-list { display: flex; flex-direction: column; gap: 20px; }
     .works-list .work-item { width: 100%; cursor: zoom-in; }
     .works-list .work-item img { width: 100%; height: auto; display: block; }
@@ -130,9 +153,10 @@
       <img src="carriage-icon.png" alt="Carriage icons" class="work-icon" style="margin-left: 40px; max-width: 35%; margin-bottom: 60px;" onerror="this.style.display='none'"/>
     </section>
 
-    <div class="scroll-btns">
-      <button class="scroll-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">∧</button>
-      <button class="scroll-btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">∨</button>
+    <!-- 고정 텍스트 -->
+    <div class="fixed-info" id="fixed-info">
+      <p class="fixed-title">Carriage</p>
+      <p class="fixed-date">2026.05</p>
     </div>
 
     <section class="works-list" id="works-list"></section>
@@ -316,6 +340,23 @@
       e.stopPropagation();
       handleMainClick();
     });
+
+    // 첫 번째 이미지가 화면에 들어오면 고정 텍스트 표시
+    const fixedInfo = document.getElementById('fixed-info');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        fixedInfo.classList.toggle('visible', entry.isIntersecting);
+      });
+    }, { threshold: 0.1 });
+
+    const listObserver = new MutationObserver(() => {
+      const firstItem = document.querySelector('.work-item');
+      if (firstItem) {
+        observer.observe(firstItem);
+        listObserver.disconnect();
+      }
+    });
+    listObserver.observe(document.getElementById('works-list'), { childList: true });
 
     document.addEventListener('keydown', (e) => {
       const valid = loadedSrcs.filter(Boolean);
