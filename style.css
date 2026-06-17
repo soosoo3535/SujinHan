@@ -137,7 +137,7 @@ a { text-decoration: none; color: inherit; }
 
 .hero-email span {
   font-family: var(--font-body);
-  font-size: 1.1rem;
+  font-size: 1.0rem;
   color: rgba(255,255,255,0.7);
   letter-spacing: 0.08em;
   transition: color 0.2s;
