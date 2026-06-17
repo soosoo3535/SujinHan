@@ -19,7 +19,6 @@
   <main class="main">
 
     <section class="page-title">
-      <!-- 배경 영상 -->
       <div class="hero-video-wrap">
         <video id="hero-video" autoplay muted loop playsinline>
           <source src="workani1.mp4" type="video/mp4"/>
@@ -32,14 +31,13 @@
 
     <section class="category-grid">
 
-      <!-- 날짜 역순 (최신 → 오래된 순) -->
-
       <a href="works/202606_HandDrill2/index.html" class="category-card">
         <div class="card-thumb">
           <img src="works/202606_HandDrill2/thumb.jpg" alt="Hand Drill 2" onerror="this.style.display='none'"/>
           <div class="card-overlay">
             <span class="card-label-title">Hand Drill 2</span>
             <span class="card-label-date">2026.06</span>
+            <img src="works/202606_HandDrill2/handdrill2-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -50,6 +48,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Carriage</span>
             <span class="card-label-date">2026.05</span>
+            <img src="works/202605_Carriage/carriage-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -60,6 +59,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Hand Drill</span>
             <span class="card-label-date">2026.03</span>
+            <img src="works/202603_HandDrill/handdrill-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -70,6 +70,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Fireplace</span>
             <span class="card-label-date">2026.01</span>
+            <img src="works/202601_Fireplace/fireplace-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -80,6 +81,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Cash Register</span>
             <span class="card-label-date">2026.01</span>
+            <img src="works/202601_CashRegister/cashregister-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -90,6 +92,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Zbrush Study</span>
             <span class="card-label-date">2025.11</span>
+            <img src="works/202511_ZbrushStudy/zbrushstudy-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -100,6 +103,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Child Room</span>
             <span class="card-label-date">2024.02</span>
+            <img src="works/202402_zChildRoom/childroom-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -110,6 +114,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Sci-fi Corridor</span>
             <span class="card-label-date">2024.02</span>
+            <img src="works/202402_Sci-fiCorridor/scifi-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -120,6 +125,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Substance Designer</span>
             <span class="card-label-date">2023.12</span>
+            <img src="works/202312_Substance_Designer/substance-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -130,6 +136,7 @@
           <div class="card-overlay">
             <span class="card-label-title">Tavern</span>
             <span class="card-label-date">2023.11</span>
+            <img src="works/202311_Tavern/tavern-icon.png" class="card-icon" onerror="this.style.display='none'"/>
           </div>
         </div>
       </a>
@@ -142,7 +149,6 @@
   </footer>
 
   <script>
-    // 영상 목록 - 파일 추가시 여기에 추가하세요
     const videos = ['workani1.mp4', 'workani2.mp4', 'workani3.mp4'];
     const key = 'heroVideoIndex';
     let idx = parseInt(sessionStorage.getItem(key) || '0');
