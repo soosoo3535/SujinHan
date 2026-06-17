@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -12,8 +11,6 @@
     @media (max-width: 768px) {
       .main { padding-left: 16px !important; padding-right: 16px !important; }
       .scroll-btns { left: 4px; }
-      .lb-nav-left { left: 4px; }
-      .lb-nav-right { right: 4px; }
     }
     .tools-text {
       margin-top: 12px;
@@ -52,28 +49,37 @@
     .works-list .work-item { width: 100%; cursor: zoom-in; }
     .works-list .work-item img { width: 100%; height: auto; display: block; }
 
-    /* 라이트박스 좌우 버튼 */
-    .lb-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
-      background: none;
-      border: 1px solid #696c64;
-      border-radius: 50%;
-      color: #6B7280;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-      display: flex;
+    /* 심플 라이트박스 */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,6,12,0.95);
+      z-index: 999;
       align-items: center;
       justify-content: center;
+      cursor: zoom-out;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-img-wrap img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      display: block;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 28px;
+      background: none;
+      border: none;
+      color: #6B7280;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.2s;
       z-index: 10;
     }
-    .lb-nav:hover { color: #E8EAF0; border-color: #E8EAF0; }
-    .lb-nav-left { left: calc((200px - 40px) / 2); }
-    .lb-nav-right { right: calc((200px - 40px) / 2); }
+    .lightbox-close:hover { color: #E8EAF0; }
   </style>
 </head>
 <body>
@@ -98,22 +104,10 @@
 
     <section class="works-list" id="works-list"></section>
 
-    <div class="lightbox" id="lightbox">
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
       <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-      <div class="lb-toast" id="lb-toast">Scroll to zoom · Drag to pan</div>
-
-      <!-- 좌우 이미지 이동 버튼 -->
-      <button class="lb-nav lb-nav-left" onclick="prevImage()">＜</button>
-      <button class="lb-nav lb-nav-right" onclick="nextImage()">＞</button>
-
-      <div class="lightbox-controls">
-        <button class="lb-btn" onclick="zoom(-0.2)">－</button>
-        <span class="zoom-label" id="zoom-label">100%</span>
-        <button class="lb-btn" onclick="zoom(0.2)">＋</button>
-        <button class="lb-btn" onclick="resetZoom()">↺</button>
-      </div>
-      <div class="lightbox-img-wrap" id="lb-wrap">
-        <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()"/>
+      <div class="lightbox-img-wrap">
+        <img id="lightbox-img" src="" alt=""/>
       </div>
     </div>
   </main>
@@ -124,10 +118,7 @@
     const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
                        'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
                        'work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
-    const loadedSrcs = [];
     const list = document.getElementById('works-list');
-
-    // 순서 보장: 먼저 순서대로 자리 잡고 로드되면 채움
     imageSrcs.forEach((src, idx) => {
       const div = document.createElement('div');
       div.className = 'work-item';
@@ -136,75 +127,22 @@
       i.src = src;
       i.onload = () => {
         div.style.display = 'block';
-        loadedSrcs[idx] = src; // 인덱스 순서 유지
-        i.addEventListener('click', () => openLightbox(idx));
+        i.addEventListener('click', () => openLightbox(src));
       };
       i.onerror = () => { div.remove(); };
       div.appendChild(i);
       list.appendChild(div);
     });
 
-    let currentIndex = 0;
-    let currentScale = 1, translateX = 0, translateY = 0, isDragging = false, startX, startY;
-
-    function openLightbox(idx) {
-      currentIndex = idx;
-      document.getElementById('lightbox-img').src = loadedSrcs[currentIndex];
-      currentScale = 1; translateX = 0; translateY = 0;
-      applyTransform();
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
       document.getElementById('lightbox').classList.add('open');
-      showToast();
     }
-
-    function prevImage() {
-      const validSrcs = loadedSrcs.filter(Boolean);
-      if (validSrcs.length === 0) return;
-      do { currentIndex = (currentIndex - 1 + loadedSrcs.length) % loadedSrcs.length; }
-      while (!loadedSrcs[currentIndex]);
-      document.getElementById('lightbox-img').src = loadedSrcs[currentIndex];
-      currentScale = 1; translateX = 0; translateY = 0;
-      applyTransform();
-    }
-
-    function nextImage() {
-      const validSrcs = loadedSrcs.filter(Boolean);
-      if (validSrcs.length === 0) return;
-      do { currentIndex = (currentIndex + 1) % loadedSrcs.length; }
-      while (!loadedSrcs[currentIndex]);
-      document.getElementById('lightbox-img').src = loadedSrcs[currentIndex];
-      currentScale = 1; translateX = 0; translateY = 0;
-      applyTransform();
-    }
-
-    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
-    function zoom(delta) { currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3); applyTransform(); }
-    function resetZoom() { currentScale = 1; translateX = 0; translateY = 0; applyTransform(); }
-    function applyTransform() {
-      const img = document.getElementById('lightbox-img');
-      img.style.transform = 'scale(' + currentScale + ') translate(' + (translateX / currentScale) + 'px, ' + (translateY / currentScale) + 'px)';
-      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
-      document.getElementById('lb-wrap').style.cursor = currentScale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default';
-    }
-
-    document.getElementById('lb-wrap').addEventListener('wheel', (e) => { e.preventDefault(); zoom(e.deltaY < 0 ? 0.1 : -0.1); }, { passive: false });
-    const wrap = document.getElementById('lb-wrap');
-    wrap.addEventListener('mousedown', (e) => { if (currentScale <= 1) return; isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY; e.preventDefault(); });
-    window.addEventListener('mousemove', (e) => { if (!isDragging) return; translateX = e.clientX - startX; translateY = e.clientY - startY; applyTransform(); });
-    window.addEventListener('mouseup', () => { if (!isDragging) return; isDragging = false; applyTransform(); });
-
-    document.getElementById('lightbox').addEventListener('click', (e) => {
-      if (!e.target.closest('.lightbox-img-wrap') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lightbox-close') && !e.target.closest('.lb-nav')) closeLightbox();
-    });
-
-    function showToast() {
-      const t = document.getElementById('lb-toast');
-      t.classList.remove('hide');
-      setTimeout(() => t.classList.add('hide'), 2000);
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
     }
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowRight') nextImage();
-      if (e.key === 'ArrowLeft') prevImage();
     });
   </script>
 </body>
