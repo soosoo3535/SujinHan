@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,65 +9,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&display=swap" rel="stylesheet"/>
   <style>
     .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; }
-    @media (max-width: 768px) {
-      .main { padding-left: 16px !important; padding-right: 16px !important; }
-      .scroll-btns { left: 4px; }
-    }
-    .tools-text {
-      margin-top: 12px;
-      font-family: 'Coustard', serif;
-      font-size: 1.2rem;
-      margin-bottom: 50px;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      color: #6B7280;
-    }
-    .scroll-btns {
-      position: fixed;
-      left: calc(200px - 80px);
-      bottom: 60px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 50;
-    }
-    .scroll-btn {
-      width: 40px;
-      height: 40px;
-      background: none;
-      border: 1px solid #696c64;
-      border-radius: 50%;
-      color: #6B7280;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } .scroll-btns { left: 4px; } }
+    .tools-text { margin-top: 12px; font-family: 'Coustard', serif; font-size: 1.2rem; margin-bottom: 50px; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; }
+    .scroll-btns { position: fixed; left: calc(200px - 80px); bottom: 60px; display: flex; flex-direction: column; gap: 10px; z-index: 50; }
+    .scroll-btn { width: 40px; height: 40px; background: none; border: 1px solid #696c64; border-radius: 50%; color: #6B7280; font-size: 1rem; cursor: pointer; transition: color 0.2s, border-color 0.2s; display: flex; align-items: center; justify-content: center; }
     .scroll-btn:hover { color: #E8EAF0; border-color: #E8EAF0; }
     .works-list { display: flex; flex-direction: column; gap: 5px; }
     .works-list .work-item { width: 100%; cursor: zoom-in; }
     .works-list .work-item img { width: 100%; height: auto; display: block; }
 
-    /* 심플 라이트박스 */
+    /* 라이트박스 */
     .lightbox {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(5,6,12,0.95);
+      background: rgba(5,6,12,0.97);
       z-index: 999;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      cursor: zoom-out;
     }
     .lightbox.open { display: flex; }
-    .lightbox-img-wrap img {
-      max-width: 90vw;
-      max-height: 90vh;
-      object-fit: contain;
-      display: block;
-    }
+
     .lightbox-close {
       position: absolute;
       top: 20px;
@@ -76,10 +40,74 @@
       color: #6B7280;
       font-size: 1.5rem;
       cursor: pointer;
-      transition: color 0.2s;
       z-index: 10;
+      transition: color 0.2s;
     }
     .lightbox-close:hover { color: #E8EAF0; }
+
+    /* 메인 이미지 영역 */
+    .lb-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      width: 100%;
+      cursor: zoom-in;
+    }
+    .lb-main img {
+      max-width: 90vw;
+      max-height: 72vh;
+      object-fit: contain;
+      display: block;
+      transform-origin: center center;
+      transition: transform 0.2s ease;
+    }
+
+    /* 도구모음 */
+    .lightbox-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(105,108,100,0.6);
+      border: 1px solid #696c64;
+      border-radius: 4px;
+      padding: 8px 16px;
+      margin: 8px 0;
+    }
+    .lb-btn { background: none; border: none; color: #ffffff; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; border-radius: 2px; transition: background 0.2s; }
+    .lb-btn:hover { background: rgba(78,205,196,0.12); color: #4ECDC4; }
+    .zoom-label { font-size: 0.75rem; color: #ffffff; min-width: 40px; text-align: center; font-family: 'Coustard', serif; }
+
+    /* 썸네일 바 */
+    .lb-thumbs {
+      display: flex;
+      gap: 6px;
+      padding: 8px 16px;
+      overflow-x: auto;
+      max-width: 90vw;
+      align-items: center;
+    }
+    .lb-thumbs::-webkit-scrollbar { height: 3px; }
+    .lb-thumbs::-webkit-scrollbar-thumb { background: #696c64; border-radius: 2px; }
+
+    .lb-thumb {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 2px;
+      opacity: 0.5;
+      transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .lb-thumb:hover { opacity: 0.8; }
+    .lb-thumb.active {
+      border-color: #ffffff;
+      opacity: 1;
+      transform: scale(1.15);
+    }
   </style>
 </head>
 <body>
@@ -104,11 +132,25 @@
 
     <section class="works-list" id="works-list"></section>
 
-    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <!-- 라이트박스 -->
+    <div class="lightbox" id="lightbox">
       <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-      <div class="lightbox-img-wrap">
+
+      <!-- 메인 이미지 -->
+      <div class="lb-main" id="lb-main" onclick="handleMainClick()">
         <img id="lightbox-img" src="" alt=""/>
       </div>
+
+      <!-- 도구모음 -->
+      <div class="lightbox-controls">
+        <button class="lb-btn" onclick="zoom(-0.2); event.stopPropagation()">－</button>
+        <span class="zoom-label" id="zoom-label">100%</span>
+        <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
+        <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
+      </div>
+
+      <!-- 썸네일 바 -->
+      <div class="lb-thumbs" id="lb-thumbs"></div>
     </div>
   </main>
   <footer class="footer">
@@ -118,7 +160,10 @@
     const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
                        'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
                        'work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
+    const loadedSrcs = [];
     const list = document.getElementById('works-list');
+    const thumbBar = document.getElementById('lb-thumbs');
+
     imageSrcs.forEach((src, idx) => {
       const div = document.createElement('div');
       div.className = 'work-item';
@@ -127,22 +172,95 @@
       i.src = src;
       i.onload = () => {
         div.style.display = 'block';
-        i.addEventListener('click', () => openLightbox(src));
+        loadedSrcs[idx] = src;
+        i.addEventListener('click', () => openLightbox(idx));
+
+        // 썸네일 추가
+        const thumb = document.createElement('img');
+        thumb.src = src;
+        thumb.className = 'lb-thumb';
+        thumb.dataset.idx = idx;
+        thumb.addEventListener('click', (e) => { e.stopPropagation(); selectImage(idx); });
+        thumbBar.appendChild(thumb);
       };
       i.onerror = () => { div.remove(); };
       div.appendChild(i);
       list.appendChild(div);
     });
 
-    function openLightbox(src) {
-      document.getElementById('lightbox-img').src = src;
+    let currentIndex = 0;
+    let currentScale = 1;
+
+    function openLightbox(idx) {
+      selectImage(idx);
       document.getElementById('lightbox').classList.add('open');
     }
+
+    function selectImage(idx) {
+      currentIndex = idx;
+      document.getElementById('lightbox-img').src = loadedSrcs[idx];
+      resetZoom();
+      // 썸네일 활성화
+      document.querySelectorAll('.lb-thumb').forEach(t => {
+        t.classList.toggle('active', parseInt(t.dataset.idx) === idx);
+      });
+      // 활성 썸네일 스크롤
+      const activeThumb = thumbBar.querySelector('.lb-thumb.active');
+      if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    let clickCount = 0;
+
+    function handleMainClick() {
+      clickCount++;
+      if (clickCount === 1) {
+        currentScale = 1.5;
+      } else if (clickCount === 2) {
+        currentScale = 2.0;
+      } else {
+        currentScale = 1;
+        clickCount = 0;
+      }
+      applyZoom();
+    }
+
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('open');
+      resetZoom();
     }
+
+    function zoom(delta) {
+      currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
+      applyZoom();
+    }
+
+    function resetZoom() {
+      currentScale = 1;
+      clickCount = 0;
+      applyZoom();
+    }
+
+    function applyZoom() {
+      document.getElementById('lightbox-img').style.transform = `scale(${currentScale})`;
+      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
+      document.getElementById('lb-main').style.cursor = currentScale >= 3 ? 'zoom-out' : 'zoom-in';
+    }
+
+    // 스크롤 줌인/줌아웃
+    document.getElementById('lb-main').addEventListener('wheel', (e) => {
+      e.preventDefault();
+      zoom(e.deltaY < 0 ? 0.1 : -0.1);
+    }, { passive: false });
+
+    // 이미지 외 여백 클릭시 닫기
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (!e.target.closest('.lb-main') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lb-thumbs') && !e.target.closest('.lightbox-close')) closeLightbox();
+    });
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') selectImage((currentIndex + 1) % loadedSrcs.filter(Boolean).length);
+      if (e.key === 'ArrowLeft') selectImage((currentIndex - 1 + loadedSrcs.filter(Boolean).length) % loadedSrcs.filter(Boolean).length);
     });
   </script>
 </body>
