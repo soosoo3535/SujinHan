@@ -19,6 +19,13 @@
   <main class="main">
 
     <section class="page-title">
+      <!-- 배경 영상 -->
+      <div class="hero-video-wrap">
+        <video id="hero-video" autoplay muted loop playsinline>
+          <source src="workani1.mp4" type="video/mp4"/>
+        </video>
+        <div class="hero-gradient"></div>
+      </div>
       <h1>Sujin Han</h1>
       <p class="subtitle">3D Environment Artist</p>
     </section>
@@ -133,6 +140,16 @@
   <footer class="footer">
     <p>© SujinHan. All Rights Reserved.</p>
   </footer>
+
+  <script>
+    // 영상 목록 - 파일 추가시 여기에 추가하세요
+    const videos = ['workani1.mp4', 'workani2.mp4', 'workani3.mp4'];
+    const key = 'heroVideoIndex';
+    let idx = parseInt(sessionStorage.getItem(key) || '0');
+    document.getElementById('hero-video').querySelector('source').src = videos[idx];
+    document.getElementById('hero-video').load();
+    sessionStorage.setItem(key, (idx + 1) % videos.length);
+  </script>
 
 </body>
 </html>
