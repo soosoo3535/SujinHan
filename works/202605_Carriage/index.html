@@ -74,7 +74,8 @@
       border: 1px solid #696c64;
       border-radius: 4px;
       padding: 8px 16px;
-      margin: 8px 0;
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }
     .lb-btn { background: none; border: none; color: #ffffff; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; border-radius: 2px; transition: background 0.2s; }
     .lb-btn:hover { background: rgba(78,205,196,0.12); color: #4ECDC4; }
@@ -85,12 +86,12 @@
       display: flex;
       gap: 6px;
       padding: 8px 16px;
-      overflow-x: auto;
-      max-width: 90vw;
+      overflow: hidden;
+      width: 100%;
       align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
-    .lb-thumbs::-webkit-scrollbar { height: 3px; }
-    .lb-thumbs::-webkit-scrollbar-thumb { background: #696c64; border-radius: 2px; }
 
     .lb-thumb {
       flex-shrink: 0;
@@ -205,19 +206,35 @@
     function openLightbox(idx) {
       selectImage(idx);
       document.getElementById('lightbox').classList.add('open');
-    }
-
-    function selectImage(idx) {
+    }    function selectImage(idx) {
       currentIndex = idx;
       document.getElementById('lightbox-img').src = loadedSrcs[idx];
       resetZoom();
-      // 썸네일 활성화
-      document.querySelectorAll('.lb-thumb').forEach(t => {
-        t.classList.toggle('active', parseInt(t.dataset.idx) === idx);
-      });
-      // 활성 썸네일 스크롤
-      const activeThumb = thumbBar.querySelector('.lb-thumb.active');
-      if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      updateThumbs();
+    }
+
+    function updateThumbs() {
+      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
+      const total = validIdxs.length;
+      if (total === 0) return;
+
+      const pos = validIdxs.indexOf(currentIndex);
+      const visible = 7; // 보여줄 썸네일 수 (홀수)
+      const half = Math.floor(visible / 2);
+
+      thumbBar.innerHTML = '';
+      for (let i = -half; i <= half; i++) {
+        const realPos = ((pos + i) % total + total) % total;
+        const realIdx = validIdxs[realPos];
+        const thumb = document.createElement('img');
+        thumb.src = loadedSrcs[realIdx];
+        thumb.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+        thumb.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectImage(realIdx);
+        });
+        thumbBar.appendChild(thumb);
+      }
     }
 
     let clickCount = 0;
