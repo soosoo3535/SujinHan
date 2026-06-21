@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -165,27 +166,34 @@
                        'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
                        'work11.jpg','work12.jpg'];
     const loadedSrcs = [];
-    let pendingCount = imageSrcs.length;
 
     const galleryImg = document.getElementById('gallery-img');
     const galleryMain = document.getElementById('gallery-main');
     const galleryThumbs = document.getElementById('gallery-thumbs');
 
-    imageSrcs.forEach((src, idx) => {
-      const probe = new Image();
-      probe.onload = () => { loadedSrcs[idx] = src; settle(); };
-      probe.onerror = () => { settle(); };
-      probe.src = src;
-    });
+    function loadOne(idx) {
+      return new Promise((resolve) => {
+        const probe = new Image();
+        probe.onload = () => { loadedSrcs[idx] = imageSrcs[idx]; resolve(); };
+        probe.onerror = () => { resolve(); };
+        probe.src = imageSrcs[idx];
+      });
+    }
 
-    function settle() {
-      pendingCount--;
-      if (pendingCount === 0) {
-        const validIdxs = loadedSrcs.map((s, i) => s ? i : -1).filter(i => i >= 0);
-        if (validIdxs.length === 0) return;
-        selectImage(validIdxs[0]);
+    async function startLoading() {
+      // 1번 이미지를 먼저 단독으로 받아서(대역폭 경쟁 없이) 바로 화면에 띄움
+      await loadOne(0);
+      const firstValid = loadedSrcs.findIndex(s => s);
+      if (firstValid >= 0) selectImage(firstValid);
+
+      // 나머지는 이어서 순서대로 받으면서 썸네일을 하나씩 채움
+      for (let i = 0; i < imageSrcs.length; i++) {
+        if (loadedSrcs[i]) continue;
+        await loadOne(i);
+        updateThumbs();
       }
     }
+    startLoading();
 
     let currentIndex = 0;
     let currentScale = 1.0;
