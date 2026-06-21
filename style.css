@@ -192,6 +192,11 @@ a { text-decoration: none; color: inherit; }
   object-fit: cover;
   object-position: center;
   display: block;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .card-thumb img {
+  transform: scale(1.05);
 }
 
 .card-overlay {
