@@ -164,9 +164,8 @@ a { text-decoration: none; color: inherit; }
 
 /* ─── CATEGORY GRID (HOME) ──────────────────────────────── */
 .category-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  column-count: 3;
+  column-gap: 16px;
   border-top: 1px solid #696c64;
   padding-top: 48px;
 }
@@ -174,12 +173,14 @@ a { text-decoration: none; color: inherit; }
 .category-card {
   display: block;
   cursor: pointer;
+  break-inside: avoid;
+  margin-bottom: 16px;
 }
 
 .card-thumb {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   background: var(--surface);
   overflow: hidden;
   border-radius: 3px;
@@ -533,7 +534,7 @@ a { text-decoration: none; color: inherit; }
   .nav { padding: 0 20px; }
   .main { padding: 40px 20px 60px; }
   .about-hero { flex-direction: column; gap: 28px; }
-  .category-grid { grid-template-columns: 1fr; }
+  .category-grid { column-count: 1; }
   .works-grid { grid-template-columns: 1fr; }
 }
 
