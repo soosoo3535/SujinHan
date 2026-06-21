@@ -10,7 +10,7 @@
   <style>
     .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; padding-top: 100px !important; }
     .page-title { padding-bottom: 10px !important; margin-left: -10px; }
-    @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } .scroll-btns { left: 4px; } }
+    @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } }
     .tools-text { margin-top: 12px; font-family: 'Coustard', serif; font-size: 1.2rem; margin-bottom: 8px; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; margin-left: 5px; }
     .work-icon { display: block; max-width: 25%; height: auto; margin-bottom: 10px; margin-left: 5px; }
     .fixed-info {
@@ -48,60 +48,29 @@
       letter-spacing: 0.08em;
       padding-left: 10px;
     }
+
+    /* 인라인 갤러리 */
     .inline-gallery { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 10px; }
-    .gallery-main { width: 100%; display: flex; justify-content: center; align-items: center; cursor: zoom-in; }
-    .gallery-main img { max-width: 100%; max-height: 75vh; width: auto; height: auto; object-fit: contain; display: block; }
-    .gallery-thumbs { display: flex; gap: 8px; padding: 12px 0 0; flex-wrap: wrap; justify-content: center; }
 
-    /* 라이트박스 */
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(5,6,12,0.97);
-      z-index: 999;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .lightbox.open { display: flex; }
-
-    .lightbox-close {
-      position: absolute;
-      top: 20px;
-      right: 28px;
-      background: none;
-      border: none;
-      color: #6B7280;
-      font-size: 1.5rem;
-      cursor: pointer;
-      z-index: 10;
-      transition: color 0.2s;
-    }
-    .lightbox-close:hover { color: #E8EAF0; }
-
-    /* 메인 이미지 영역 */
-    .lb-main {
-      flex: 1;
+    .gallery-main {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      padding: 100px 0;
       cursor: zoom-in;
       overflow: hidden;
     }
-    .lb-main img {
-      max-width: 90vw;
-      max-height: calc(100vh - 200px - 120px);
+    .gallery-main img {
+      max-width: 100%;
+      max-height: 75vh;
       object-fit: contain;
       display: block;
       transform-origin: center center;
       transition: transform 0.2s ease;
     }
 
-    /* 도구모음 */
-    .lightbox-controls {
+    /* 도구모음 (썸네일바 위) */
+    .gallery-controls {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -109,41 +78,19 @@
       border: 1px solid #696c64;
       border-radius: 4px;
       padding: 6px 13px;
-      margin-bottom: 50px;
-      flex-shrink: 0;
-      transition: position 0.2s;
-    }
-    .lightbox.zoomed .lightbox-controls {
-      position: absolute;
-      bottom: 90px;
-      left: 50%;
-      transform: translateX(-50%);
-      margin-bottom: 0;
-      z-index: 10;
     }
     .lb-btn { background: none; border: none; color: #ffffff; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; border-radius: 2px; transition: background 0.2s; }
     .lb-btn:hover { background: rgba(78,205,196,0.12); color: #4ECDC4; }
     .zoom-label { font-size: 0.75rem; color: #ffffff; min-width: 40px; text-align: center; font-family: 'Coustard', serif; }
 
-    /* 썸네일 바 */
-    .lb-thumbs {
+    /* 썸네일바 (현재 이미지 중앙, 양옆 4개씩, 무한순환) */
+    .gallery-thumbs {
       display: flex;
       gap: 6px;
       padding: 8px 16px;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      width: 100%;
     }
-    .lightbox.zoomed .lb-thumbs {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: none;
-      z-index: 9;
-    }
-
     .lb-thumb {
       flex-shrink: 0;
       width: 60px;
@@ -187,34 +134,21 @@
       <p class="fixed-tools">3Ds Max · Zbrush · Rizom UV · Marmoset · Substance Painter · Unreal Engine</p>
     </div>
 
-    <!-- 인라인 갤러리: 메인 이미지 + 썸네일바 -->
+    <!-- 인라인 갤러리: 메인 이미지(확대/드래그) + 도구모음 + 썸네일바 -->
     <section class="inline-gallery" id="inline-gallery">
       <div class="gallery-main" id="gallery-main">
         <img id="gallery-img" src="" alt=""/>
       </div>
+
+      <div class="gallery-controls">
+        <button class="lb-btn" onclick="zoom(-0.2)">－</button>
+        <span class="zoom-label" id="zoom-label">100%</span>
+        <button class="lb-btn" onclick="zoom(0.2)">＋</button>
+        <button class="lb-btn" onclick="resetZoom()">↺</button>
+      </div>
+
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
     </section>
-
-    <!-- 라이트박스 -->
-    <div class="lightbox" id="lightbox">
-      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-
-      <!-- 메인 이미지 -->
-      <div class="lb-main" id="lb-main" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" alt=""/>
-      </div>
-
-      <!-- 도구모음 -->
-      <div class="lightbox-controls">
-        <button class="lb-btn" onclick="zoom(-0.2); event.stopPropagation()">－</button>
-        <span class="zoom-label" id="zoom-label">100%</span>
-        <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
-        <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
-      </div>
-
-      <!-- 썸네일 바 -->
-      <div class="lb-thumbs" id="lb-thumbs"></div>
-    </div>
   </main>
   <footer class="footer">
     <p>© SujinHan. All Rights Reserved.</p>
@@ -225,7 +159,7 @@
                        'work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
     const loadedSrcs = [];
     let pendingCount = imageSrcs.length;
-    const thumbBar = document.getElementById('lb-thumbs');
+
     const galleryImg = document.getElementById('gallery-img');
     const galleryMain = document.getElementById('gallery-main');
     const galleryThumbs = document.getElementById('gallery-thumbs');
@@ -239,93 +173,63 @@
 
     function settle() {
       pendingCount--;
-      if (pendingCount === 0) initGallery();
-    }
-
-    function initGallery() {
-      const validIdxs = loadedSrcs.map((s, i) => s ? i : -1).filter(i => i >= 0);
-      if (validIdxs.length === 0) return;
-      validIdxs.forEach(idx => {
-        const thumb = document.createElement('img');
-        thumb.src = loadedSrcs[idx];
-        thumb.className = 'lb-thumb';
-        thumb.dataset.idx = idx;
-        thumb.addEventListener('click', () => selectImage(idx));
-        galleryThumbs.appendChild(thumb);
-      });
-      selectImage(validIdxs[0]);
+      if (pendingCount === 0) {
+        const validIdxs = loadedSrcs.map((s, i) => s ? i : -1).filter(i => i >= 0);
+        if (validIdxs.length === 0) return;
+        selectImage(validIdxs[0]);
+      }
     }
 
     let currentIndex = 0;
     let currentScale = 1.3;
-
-    function openLightbox(idx) {
-      selectImage(idx);
-      document.getElementById('lightbox').classList.add('open');
-    }
+    let clickCount = 0;
 
     function selectImage(idx) {
       currentIndex = idx;
       galleryImg.src = loadedSrcs[idx];
-      galleryThumbs.querySelectorAll('.lb-thumb').forEach(t => {
-        t.classList.toggle('active', parseInt(t.dataset.idx) === idx);
-      });
-      if (document.getElementById('lightbox').classList.contains('open')) {
-        document.getElementById('lightbox-img').src = loadedSrcs[idx];
-        resetZoom();
-        updateThumbs();
-      }
+      resetZoom();
+      updateThumbs();
     }
 
-    galleryMain.addEventListener('click', () => openLightbox(currentIndex));
-
+    // 썸네일바: 현재 이미지가 항상 중앙, 양옆 4개씩, 무한 순환
     function updateThumbs() {
       const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
       const total = validIdxs.length;
       if (total === 0) return;
 
       const pos = validIdxs.indexOf(currentIndex);
-      const visible = 9; // 보여줄 썸네일 수 (홀수)
+      const visible = 9; // 양옆 4개 + 현재 1개
       const half = Math.floor(visible / 2);
 
-      thumbBar.innerHTML = '';
+      galleryThumbs.innerHTML = '';
       for (let i = -half; i <= half; i++) {
         const realPos = ((pos + i) % total + total) % total;
         const realIdx = validIdxs[realPos];
         const thumb = document.createElement('img');
         thumb.src = loadedSrcs[realIdx];
         thumb.className = 'lb-thumb' + (i === 0 ? ' active' : '');
-        thumb.addEventListener('click', (e) => {
-          e.stopPropagation();
-          selectImage(realIdx);
-        });
-        thumbBar.appendChild(thumb);
+        thumb.addEventListener('click', () => selectImage(realIdx));
+        galleryThumbs.appendChild(thumb);
       }
     }
 
-    let clickCount = 0;
-
     function handleMainClick() {
       if (clickCount === 0) {
-        currentScale = 1.95;
+        currentScale = 1.95; // 150%
         clickCount = 1;
         applyZoom();
       }
       // 이미 확대된 상태에서 클릭 → 아무 효과 없음
     }
 
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('open');
-      resetZoom();
-    }
-
     function zoom(delta) {
       currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
+      if (currentScale > 1.3) clickCount = 1;
       applyZoom();
     }
 
     function resetZoom() {
-      currentScale = 1.3;
+      currentScale = 1.3; // 100%
       translateX = 0;
       translateY = 0;
       clickCount = 0;
@@ -333,29 +237,26 @@
     }
 
     function applyZoom() {
-      lbImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
+      galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
       document.getElementById('zoom-label').textContent = Math.round((currentScale / 1.3) * 100) + '%';
-      lbMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
-      document.getElementById('lightbox').classList.toggle('zoomed', currentScale > 1.3);
+      galleryMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
     }
 
-    // 스크롤 줌인/줌아웃
-    document.getElementById('lb-main').addEventListener('wheel', (e) => {
+    // 스크롤 줌인/줌아웃 (이미지 박스 안에서만)
+    galleryMain.addEventListener('wheel', (e) => {
       e.preventDefault();
       zoom(e.deltaY < 0 ? 0.1 : -0.1);
     }, { passive: false });
 
-    // 드래그로 이동
+    // 드래그로 이동 (확대된 상태에서만)
     let isDragging = false, startX, startY, translateX = 0, translateY = 0;
-    const lbMain = document.getElementById('lb-main');
-    const lbImg = document.getElementById('lightbox-img');
 
-    lbMain.addEventListener('mousedown', (e) => {
+    galleryMain.addEventListener('mousedown', (e) => {
       if (currentScale <= 1.3) return;
       isDragging = true;
       startX = e.clientX - translateX;
       startY = e.clientY - translateY;
-      lbMain.style.cursor = 'grabbing';
+      galleryMain.style.cursor = 'grabbing';
       e.preventDefault();
     });
     window.addEventListener('mousemove', (e) => {
@@ -367,17 +268,12 @@
     window.addEventListener('mouseup', () => {
       if (!isDragging) return;
       isDragging = false;
-      lbMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : 'zoom-in';
+      galleryMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : 'zoom-in';
     });
 
-    // 이미지 외 여백 클릭시 닫기
-    document.getElementById('lightbox').addEventListener('click', (e) => {
-      if (!e.target.closest('.lb-main') && !e.target.closest('.lightbox-controls') && !e.target.closest('.lb-thumbs') && !e.target.closest('.lightbox-close')) closeLightbox();
-    });
-
-    // 이미지 클릭시만 확대
-    document.getElementById('lightbox-img').addEventListener('click', (e) => {
-      e.stopPropagation();
+    // 이미지 박스 클릭시 확대(클릭 1회 = 150%)
+    galleryMain.addEventListener('click', (e) => {
+      if (isDragging) return;
       handleMainClick();
     });
 
@@ -392,10 +288,9 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      const valid = loadedSrcs.filter(Boolean);
       const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
+      if (validIdxs.length === 0) return;
       const pos = validIdxs.indexOf(currentIndex);
-      if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowRight') selectImage(validIdxs[(pos + 1) % validIdxs.length]);
       if (e.key === 'ArrowLeft') selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
     });
