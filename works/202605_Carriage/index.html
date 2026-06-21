@@ -250,12 +250,6 @@
       galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
     }
 
-    // 스크롤 줌인/줌아웃 (이미지 박스 안에서만)
-    galleryMain.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      zoom(e.deltaY < 0 ? 0.1 : -0.1);
-    }, { passive: false });
-
     // 드래그로 이동 (확대된 상태에서만)
     let isDragging = false, startX, startY, translateX = 0, translateY = 0;
 
@@ -288,7 +282,7 @@
     // 600px 스크롤하면 고정 텍스트 표시
     const fixedInfo = document.getElementById('fixed-info');
     window.addEventListener('scroll', () => {
-      if (window.scrollY >= 500) {
+      if (window.scrollY >= 450) {
         fixedInfo.classList.add('visible');
       } else {
         fixedInfo.classList.remove('visible');
