@@ -23,6 +23,37 @@
       color: var(--muted);
     }
     .hero-tools.first-line { margin-top: 2.6em; }
+    .featured-section { border-top: 1px solid #696c64; padding-top: 48px; margin-top: 48px; }
+    .featured-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .featured-grid a {
+      display: block;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 3px;
+      background: var(--surface);
+    }
+    .featured-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .featured-grid a:hover img { transform: scale(1.05); }
+    @media (max-width: 768px) { .featured-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -170,6 +201,11 @@
       </a>
 
     </section>
+
+    <section class="featured-section" id="substance-featured">
+      <h2 class="featured-title">Substance Designer</h2>
+      <div class="featured-grid" id="substance-featured-grid"></div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -192,6 +228,40 @@
       tooltip.style.top = (e.clientY + 12) + 'px';
       setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
     }
+
+    // Substance Designer 폴더 이미지를 그리드로 표시
+    (function () {
+      const basePath = 'works/202312_Substance_Designer/';
+      const candidates = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
+                           'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
+                           'work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
+      const grid = document.getElementById('substance-featured-grid');
+      const found = [];
+      let pending = candidates.length;
+
+      candidates.forEach((file, idx) => {
+        const probe = new Image();
+        probe.onload = () => { found[idx] = file; settle(); };
+        probe.onerror = () => { settle(); };
+        probe.src = basePath + file;
+      });
+
+      function settle() {
+        pending--;
+        if (pending === 0) {
+          found.forEach(file => {
+            if (!file) return;
+            const a = document.createElement('a');
+            a.href = basePath + 'index.html';
+            const img = document.createElement('img');
+            img.src = basePath + file;
+            img.alt = 'Substance Designer';
+            a.appendChild(img);
+            grid.appendChild(a);
+          });
+        }
+      }
+    })();
   </script>
 
 </body>
