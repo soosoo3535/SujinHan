@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -182,7 +181,15 @@
       if (pendingCount === 0) {
         const validIdxs = loadedSrcs.map((s, i) => s ? i : -1).filter(i => i >= 0);
         if (validIdxs.length === 0) return;
-        selectImage(validIdxs[0]);
+        // 홈에서 특정 이미지를 클릭해 들어온 경우, 그 이미지로 바로 열기
+        const params = new URLSearchParams(window.location.search);
+        const requestedFile = params.get('img');
+        const requestedIdx = requestedFile ? imageSrcs.indexOf(requestedFile) : -1;
+        if (requestedIdx >= 0 && loadedSrcs[requestedIdx]) {
+          selectImage(requestedIdx);
+        } else {
+          selectImage(validIdxs[0]);
+        }
       }
     }
 
