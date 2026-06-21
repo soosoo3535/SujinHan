@@ -165,7 +165,7 @@ a { text-decoration: none; color: inherit; }
 /* ─── CATEGORY GRID (HOME) ──────────────────────────────── */
 .category-grid {
   column-count: 3;
-  column-gap: 25px;
+  column-gap: 20px;
   border-top: 1px solid #696c64;
   padding-top: 48px;
 }
