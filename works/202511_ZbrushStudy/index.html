@@ -156,13 +156,13 @@
   <footer class="footer"><p>© SujinHan. All Rights Reserved.</p></footer>
 
   <script>
-    // 그룹별 이미지 목록 (그룹마다 독립된 갤러리)
+    // 그룹별 이미지 목록 + 날짜/툴 정보 (그룹마다 독립된 갤러리 + 스크롤시 고정텍스트도 그룹별로 전환)
     const groups = [
-      { title: 'Rock 2', images: ['20260301_rock2-1.jpg','20260301_rock2-2.jpg','20260301_rock2-3.jpg','20260301_rock2-4.jpg'] },
-      { title: 'Rock 1', images: ['20260102_rock1-1.jpg','20260102_rock1-2.jpg','20260102_rock1-3.jpg'] },
-      { title: 'Pillar', images: ['20260101_pillar1-1.jpg','20260101_pillar1-2.jpg'] },
-      { title: 'Tile 2', images: ['20251201_tile2-1.jpg','20251201_tile2-2.jpg','20251201_tile2-3.jpg','20251201_tile2-4.jpg'] },
-      { title: 'Tile 1', images: ['20251101_tile1-1.jpg','20251101_tile1-2.jpg','20251101_tile1-3.jpg','20251101_tile1-4.jpg'] }
+      { title: 'Rock 2', date: '2026.03', tools: '3Ds Max · Zbrush · Rizom UV · Substance Painter · Marmoset', images: ['20260301_rock2-1.jpg','20260301_rock2-2.jpg','20260301_rock2-3.jpg','20260301_rock2-4.jpg'] },
+      { title: 'Rock 1', date: '2026.01', tools: '3Ds Max · Zbrush · Rizom UV · Substance Painter · Marmoset', images: ['20260102_rock1-1.jpg','20260102_rock1-2.jpg','20260102_rock1-3.jpg'] },
+      { title: 'Pillar', date: '2026.01', tools: '3Ds Max · Zbrush · Rizom UV · Substance Painter · Marmoset', images: ['20260101_pillar1-1.jpg','20260101_pillar1-2.jpg'] },
+      { title: 'Tile 2', date: '2025.12', tools: '3Ds Max · Zbrush · Rizom UV · Substance Painter · Marmoset', images: ['20251201_tile2-1.jpg','20251201_tile2-2.jpg','20251201_tile2-3.jpg','20251201_tile2-4.jpg'] },
+      { title: 'Tile 1', date: '2025.11', tools: '3Ds Max · Zbrush · Rizom UV · Knald · Marmoset', images: ['20251101_tile1-1.jpg','20251101_tile1-2.jpg','20251101_tile1-3.jpg','20251101_tile1-4.jpg'] }
     ];
 
     const wrap = document.getElementById('zbrush-wrap');
@@ -170,6 +170,9 @@
     groups.forEach(group => {
       const section = document.createElement('section');
       section.className = 'zbrush-group';
+      section.dataset.title = group.title;
+      section.dataset.date = group.date;
+      section.dataset.tools = group.tools;
       section.innerHTML = `
         <p class="group-title">${group.title}</p>
         <div class="inline-gallery">
@@ -284,15 +287,35 @@
       selectImage(0);
     }
 
-    // 400px 스크롤하면 고정 텍스트 표시
+    // 스크롤 위치에 따라 현재 보이는 그룹의 제목/날짜/툴로 고정 텍스트 전환
     const fixedInfo = document.getElementById('fixed-info');
+    const fixedTitleEl = fixedInfo.querySelector('.fixed-title');
+    const fixedDateEl = fixedInfo.querySelector('.fixed-date');
+    const fixedToolsEl = fixedInfo.querySelector('.fixed-tools');
+    const groupSections = Array.from(document.querySelectorAll('.zbrush-group'));
+
+    function updateActiveGroupText() {
+      let active = groupSections[0];
+      for (const sec of groupSections) {
+        if (sec.getBoundingClientRect().top <= window.innerHeight * 0.5) {
+          active = sec;
+        }
+      }
+      fixedTitleEl.textContent = active.dataset.title;
+      fixedDateEl.textContent = active.dataset.date;
+      fixedToolsEl.textContent = active.dataset.tools;
+    }
+
+    // 400px 스크롤하면 고정 텍스트 표시
     window.addEventListener('scroll', () => {
       if (window.scrollY >= 400) {
         fixedInfo.classList.add('visible');
       } else {
         fixedInfo.classList.remove('visible');
       }
+      updateActiveGroupText();
     });
+    updateActiveGroupText();
   </script>
 </body>
 </html>
