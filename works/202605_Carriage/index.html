@@ -53,6 +53,7 @@
     .inline-gallery { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 10px; }
 
     .gallery-main {
+      position: relative;
       width: 100%;
       display: flex;
       align-items: center;
@@ -62,15 +63,20 @@
     }
     .gallery-main img {
       max-width: 100%;
-      max-height: 75vh;
+      max-height: 82vh;
       object-fit: contain;
       display: block;
       transform-origin: center center;
       transition: transform 0.2s ease;
     }
 
-    /* 도구모음 (썸네일바 위) */
+    /* 도구모음: 이미지 위에 레이어로 겹쳐서 표시 */
     .gallery-controls {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -138,13 +144,12 @@
     <section class="inline-gallery" id="inline-gallery">
       <div class="gallery-main" id="gallery-main">
         <img id="gallery-img" src="" alt=""/>
-      </div>
-
-      <div class="gallery-controls">
-        <button class="lb-btn" onclick="zoom(-0.2)">－</button>
-        <span class="zoom-label" id="zoom-label">100%</span>
-        <button class="lb-btn" onclick="zoom(0.2)">＋</button>
-        <button class="lb-btn" onclick="resetZoom()">↺</button>
+        <div class="gallery-controls">
+          <button class="lb-btn" onclick="zoom(-0.2); event.stopPropagation()">－</button>
+          <span class="zoom-label" id="zoom-label">100%</span>
+          <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
+          <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
+        </div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -181,7 +186,7 @@
     }
 
     let currentIndex = 0;
-    let currentScale = 1.3;
+    let currentScale = 1.0;
     let clickCount = 0;
 
     function selectImage(idx) {
@@ -215,7 +220,7 @@
 
     function handleMainClick() {
       if (clickCount === 0) {
-        currentScale = 1.95; // 150%
+        currentScale = 1.5; // 150%
         clickCount = 1;
         applyZoom();
       }
@@ -224,12 +229,12 @@
 
     function zoom(delta) {
       currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
-      if (currentScale > 1.3) clickCount = 1;
+      if (currentScale > 1.0) clickCount = 1;
       applyZoom();
     }
 
     function resetZoom() {
-      currentScale = 1.3; // 100%
+      currentScale = 1.0; // 100% = 안 잘리는 원본 크기
       translateX = 0;
       translateY = 0;
       clickCount = 0;
@@ -238,8 +243,8 @@
 
     function applyZoom() {
       galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
-      document.getElementById('zoom-label').textContent = Math.round((currentScale / 1.3) * 100) + '%';
-      galleryMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
+      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
+      galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
     }
 
     // 스크롤 줌인/줌아웃 (이미지 박스 안에서만)
@@ -252,7 +257,7 @@
     let isDragging = false, startX, startY, translateX = 0, translateY = 0;
 
     galleryMain.addEventListener('mousedown', (e) => {
-      if (currentScale <= 1.3) return;
+      if (currentScale <= 1.0) return;
       isDragging = true;
       startX = e.clientX - translateX;
       startY = e.clientY - translateY;
@@ -268,7 +273,7 @@
     window.addEventListener('mouseup', () => {
       if (!isDragging) return;
       isDragging = false;
-      galleryMain.style.cursor = currentScale >= 2.6 ? 'zoom-out' : 'zoom-in';
+      galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : 'zoom-in';
     });
 
     // 이미지 박스 클릭시 확대(클릭 1회 = 150%)
