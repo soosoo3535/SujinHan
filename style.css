@@ -165,7 +165,7 @@ a { text-decoration: none; color: inherit; }
 /* ─── CATEGORY GRID (HOME) ──────────────────────────────── */
 .category-grid {
   column-count: 3;
-  column-gap: 20px;
+  column-gap: 16px;
   border-top: 1px solid #696c64;
   padding-top: 48px;
 }
@@ -174,7 +174,7 @@ a { text-decoration: none; color: inherit; }
   display: block;
   cursor: pointer;
   break-inside: avoid;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .card-thumb {
