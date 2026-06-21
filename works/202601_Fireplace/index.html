@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -12,31 +13,125 @@
     @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } }
     .tools-text { margin-top: 12px; font-family: 'Coustard', serif; font-size: 1.2rem; margin-bottom: 8px; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; margin-left: 5px; }
     .work-icon { display: block; max-width: 25%; height: auto; margin-bottom: 10px; margin-left: 5px; }
-    .works-list { display: flex; flex-direction: column; gap: 20px; }
-    .works-list .work-item { width: 100%; cursor: zoom-in; }
-    .works-list .work-item img { width: 100%; height: auto; display: block; }
-    .fixed-info { position: fixed; left: 48px; bottom: 48px; z-index: 50; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+    .fixed-info {
+      position: fixed;
+      left: 48px;
+      bottom: 48px;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
     .fixed-info.visible { opacity: 1; }
-    .fixed-title { font-family: 'Coustard', serif; font-size: 2.3rem; font-weight: 400; color: #E8EAF0; letter-spacing: 0.04em; margin-bottom: 4px; }
-    .fixed-date { font-family: 'Coustard', serif; font-size: 0.9rem; font-weight: 400; color: #6B7280; letter-spacing: 0.1em; margin-bottom: 2px; padding-left: 10px; }
-    .fixed-tools { font-family: 'Coustard', serif; font-size: 1.0rem; font-weight: 400; color: #ffffff; letter-spacing: 0.08em; padding-left: 10px; }
-    /* 라이트박스 */
-    .lightbox { display: none; position: fixed; inset: 0; background: rgba(5,6,12,0.97); z-index: 999; flex-direction: column; align-items: center; justify-content: space-between; }
-    .lightbox.open { display: flex; }
-    .lightbox-close { position: absolute; top: 20px; right: 28px; background: none; border: none; color: #6B7280; font-size: 1.5rem; cursor: pointer; z-index: 10; transition: color 0.2s; }
-    .lightbox-close:hover { color: #E8EAF0; }
-    .lb-main { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 100px 0; cursor: zoom-in; overflow: hidden; }
-    .lb-main img { max-width: 90vw; max-height: calc(100vh - 200px - 120px); object-fit: contain; display: block; transform-origin: center center; transition: transform 0.2s ease; }
-    .lightbox-controls { display: flex; align-items: center; gap: 8px; background: rgba(105,108,100,0.6); border: 1px solid #696c64; border-radius: 4px; padding: 6px 13px; margin-bottom: 50px; flex-shrink: 0; }
-    .lightbox.zoomed .lightbox-controls { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%); margin-bottom: 0; z-index: 10; }
+    .fixed-title {
+      font-family: 'Coustard', serif;
+      font-size: 2.3rem;
+      font-weight: 400;
+      color: #E8EAF0;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .fixed-date {
+      font-family: 'Coustard', serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #6B7280;
+      letter-spacing: 0.1em;
+      margin-bottom: 2px;
+      padding-left: 10px;
+    }
+    .fixed-tools {
+      font-family: 'Coustard', serif;
+      font-size: 1.0rem;
+      font-weight: 400;
+      color: #ffffff;
+      letter-spacing: 0.08em;
+      padding-left: 10px;
+    }
+
+    /* 인라인 갤러리: 이미지/영상(좌) + 세로 썸네일바(우) */
+    .inline-gallery { display: flex; flex-direction: row; align-items: stretch; gap: 16px; margin-top: 10px; }
+
+    .gallery-main {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-in;
+      overflow: hidden;
+    }
+    .gallery-main img {
+      max-width: 100%;
+      max-height: 82vh;
+      object-fit: contain;
+      display: block;
+      transform-origin: center center;
+      transition: transform 0.2s ease;
+    }
+    .gallery-video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 82vh;
+      border: none;
+      display: none;
+    }
+
+    /* 도구모음: 이미지 위에 레이어로 겹쳐서 표시 (영상 슬라이드에서는 숨김) */
+    .gallery-controls {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(105,108,100,0.6);
+      border: 1px solid #696c64;
+      border-radius: 4px;
+      padding: 6px 13px;
+    }
     .lb-btn { background: none; border: none; color: #ffffff; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; border-radius: 2px; transition: background 0.2s; }
     .lb-btn:hover { background: rgba(78,205,196,0.12); color: #4ECDC4; }
     .zoom-label { font-size: 0.75rem; color: #ffffff; min-width: 40px; text-align: center; font-family: 'Coustard', serif; }
-    .lb-thumbs { display: flex; gap: 6px; padding: 8px 16px; align-items: center; justify-content: center; flex-shrink: 0; width: 100%; }
-    .lightbox.zoomed .lb-thumbs { position: absolute; bottom: 0; left: 0; right: 0; background: none; z-index: 9; }
-    .lb-thumb { flex-shrink: 0; width: 60px; height: 60px; object-fit: cover; cursor: pointer; border: 2px solid transparent; border-radius: 2px; opacity: 0.5; transition: opacity 0.2s, border-color 0.2s, transform 0.2s; }
+
+    /* 세로 썸네일바 (현재 슬라이드가 중앙, 위=이전 / 아래=다음, 무한순환) */
+    .gallery-thumbs {
+      width: 70px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-thumb {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 2px;
+      opacity: 0.5;
+      transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 1.1rem;
+      text-shadow: 0 0 4px rgba(0,0,0,0.8);
+    }
     .lb-thumb:hover { opacity: 0.8; }
-    .lb-thumb.active { border-color: #ffffff; opacity: 1; transform: scale(1.15); }
+    .lb-thumb.active {
+      border-color: #ffffff;
+      opacity: 1;
+      transform: scale(1.15);
+    }
   </style>
 </head>
 <body>
@@ -54,86 +149,195 @@
       <p class="tools-text" style="padding-left: 40px;">3Ds Max · Rizom UV · Marmoset · Substance Painter · Unreal Engine</p>
       <img src="fireplace-icon.png" alt="Fireplace icons" class="work-icon" style="margin-left: 40px; height: 70px; width: auto; margin-bottom: 60px;" onerror="this.style.display='none'"/>
     </section>
+
+    <!-- 고정 텍스트 -->
     <div class="fixed-info" id="fixed-info">
       <p class="fixed-title">Fireplace</p>
       <p class="fixed-date">2026.01</p>
       <p class="fixed-tools">3Ds Max · Rizom UV · Marmoset · Substance Painter · Unreal Engine</p>
     </div>
-    <section class="works-list" id="works-list"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/mU4W1XIKK20?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></section>
-    <div class="lightbox" id="lightbox">
-      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-      <div class="lb-main" id="lb-main" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" alt=""/>
+
+    <!-- 인라인 갤러리: 메인(이미지 확대/드래그 또는 영상) + 도구모음 + 썸네일바 -->
+    <section class="inline-gallery" id="inline-gallery">
+      <div class="gallery-main" id="gallery-main">
+        <img id="gallery-img" src="" alt=""/>
+        <iframe id="gallery-video" class="gallery-video" src="" title="Fireplace video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+        <div class="gallery-controls" id="gallery-controls">
+          <button class="lb-btn" onclick="zoom(-0.2); event.stopPropagation()">－</button>
+          <span class="zoom-label" id="zoom-label">100%</span>
+          <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
+          <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
+        </div>
       </div>
-      <div class="lightbox-controls">
-        <button class="lb-btn" onclick="zoom(-0.2); event.stopPropagation()">－</button>
-        <span class="zoom-label" id="zoom-label">100%</span>
-        <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
-        <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
-      </div>
-      <div class="lb-thumbs" id="lb-thumbs"></div>
-    </div>
+
+      <div class="gallery-thumbs" id="gallery-thumbs"></div>
+    </section>
   </main>
-  <footer class="footer"><p>© SujinHan. All Rights Reserved.</p></footer>
+  <footer class="footer">
+    <p>© SujinHan. All Rights Reserved.</p>
+  </footer>
   <script>
-    const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg','work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg','work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
+    // 영상은 슬라이드 맨 앞에 위치 (페이지 진입시 바로 재생)
+    const VIDEO_ID = 'mU4W1XIKK20';
+
+    const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
+                       'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
+                       'work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
     const loadedSrcs = [];
-    const list = document.getElementById('works-list');
-    const thumbBar = document.getElementById('lb-thumbs');
+    let pendingCount = imageSrcs.length;
+    let slides = [{ type: 'video', id: VIDEO_ID }]; // 영상이 항상 0번 슬라이드
+
+    const galleryImg = document.getElementById('gallery-img');
+    const galleryVideo = document.getElementById('gallery-video');
+    const galleryMain = document.getElementById('gallery-main');
+    const galleryThumbs = document.getElementById('gallery-thumbs');
+    const galleryControls = document.getElementById('gallery-controls');
+
     imageSrcs.forEach((src, idx) => {
-      const div = document.createElement('div'); div.className = 'work-item'; div.style.display = 'none';
-      const i = document.createElement('img'); i.src = src;
-      i.onload = () => {
-        div.style.display = 'block'; loadedSrcs[idx] = src;
-        i.addEventListener('click', () => openLightbox(idx));
-        const thumb = document.createElement('img'); thumb.src = src; thumb.className = 'lb-thumb'; thumb.dataset.idx = idx;
-        thumb.addEventListener('click', (e) => { e.stopPropagation(); selectImage(idx); });
-        const thumbs = thumbBar.querySelectorAll('.lb-thumb'); let inserted = false;
-        for (let t of thumbs) { if (parseInt(t.dataset.idx) > idx) { thumbBar.insertBefore(thumb, t); inserted = true; break; } }
-        if (!inserted) thumbBar.appendChild(thumb);
-      };
-      i.onerror = () => { div.remove(); }; div.appendChild(i); list.appendChild(div);
+      const probe = new Image();
+      probe.onload = () => { loadedSrcs[idx] = src; settle(); };
+      probe.onerror = () => { settle(); };
+      probe.src = src;
     });
-    let currentIndex = 0, currentScale = 1.3, clickCount = 0;
-    function openLightbox(idx) { selectImage(idx); document.getElementById('lightbox').classList.add('open'); }
-    function selectImage(idx) { currentIndex = idx; document.getElementById('lightbox-img').src = loadedSrcs[idx]; resetZoom(); updateThumbs(); }
-    function updateThumbs() {
-      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
-      const total = validIdxs.length; if (total === 0) return;
-      const pos = validIdxs.indexOf(currentIndex); const half = 4;
-      thumbBar.innerHTML = '';
-      for (let i = -half; i <= half; i++) {
-        const realPos = ((pos+i)%total+total)%total; const realIdx = validIdxs[realPos];
-        const thumb = document.createElement('img'); thumb.src = loadedSrcs[realIdx]; thumb.className = 'lb-thumb'+(i===0?' active':'');
-        thumb.addEventListener('click', (e) => { e.stopPropagation(); selectImage(realIdx); });
-        thumbBar.appendChild(thumb);
+
+    function settle() {
+      pendingCount--;
+      if (pendingCount === 0) {
+        imageSrcs.forEach((src, idx) => {
+          if (loadedSrcs[idx]) slides.push({ type: 'image', src: loadedSrcs[idx] });
+        });
+        selectSlide(0); // 영상부터 자동 재생
       }
     }
-    function handleMainClick() { if (clickCount===0) { currentScale=1.95; clickCount=1; applyZoom(); } }
-    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); resetZoom(); }
-    function zoom(delta) { currentScale=Math.min(Math.max(currentScale+delta,0.4),3); applyZoom(); }
-    function resetZoom() { currentScale=1.3; translateX=0; translateY=0; clickCount=0; applyZoom(); }
-    let isDragging=false, startX, startY, translateX=0, translateY=0;
-    const lbMain=document.getElementById('lb-main'); const lbImg=document.getElementById('lightbox-img');
-    function applyZoom() {
-      lbImg.style.transform='scale('+currentScale+') translate('+(translateX/currentScale)+'px,'+(translateY/currentScale)+'px)';
-      document.getElementById('zoom-label').textContent=Math.round((currentScale/1.3)*100)+'%';
-      lbMain.style.cursor=currentScale>=2.6?'zoom-out':(isDragging?'grabbing':'zoom-in');
-      document.getElementById('lightbox').classList.toggle('zoomed', currentScale>1.3);
+
+    let currentIndex = 0;
+    let currentScale = 1.0;
+    let clickCount = 0;
+
+    function selectSlide(idx) {
+      currentIndex = idx;
+      const slide = slides[idx];
+
+      if (slide.type === 'video') {
+        galleryImg.style.display = 'none';
+        galleryControls.style.display = 'none';
+        galleryMain.style.cursor = 'default';
+        galleryVideo.style.display = 'block';
+        galleryVideo.src = `https://www.youtube.com/embed/${slide.id}?rel=0&modestbranding=1&autoplay=1&mute=1`;
+      } else {
+        galleryVideo.style.display = 'none';
+        galleryVideo.src = ''; // 다른 슬라이드로 넘어가면 영상 정지
+        galleryImg.style.display = 'block';
+        galleryControls.style.display = 'flex';
+        galleryImg.src = slide.src;
+        resetZoom();
+      }
+      updateThumbs();
     }
-    lbImg.addEventListener('click', (e) => { e.stopPropagation(); handleMainClick(); });
-    lbMain.addEventListener('wheel', (e) => { e.preventDefault(); zoom(e.deltaY<0?0.1:-0.1); }, {passive:false});
-    lbMain.addEventListener('mousedown', (e) => { if(currentScale<=1.3)return; isDragging=true; startX=e.clientX-translateX; startY=e.clientY-translateY; lbMain.style.cursor='grabbing'; e.preventDefault(); });
-    window.addEventListener('mousemove', (e) => { if(!isDragging)return; translateX=e.clientX-startX; translateY=e.clientY-startY; applyZoom(); });
-    window.addEventListener('mouseup', () => { if(!isDragging)return; isDragging=false; applyZoom(); });
-    document.getElementById('lightbox').addEventListener('click', (e) => { if(!e.target.closest('.lb-main')&&!e.target.closest('.lightbox-controls')&&!e.target.closest('.lb-thumbs')&&!e.target.closest('.lightbox-close'))closeLightbox(); });
-    const fixedInfo=document.getElementById('fixed-info');
-    window.addEventListener('scroll', () => { fixedInfo.classList.toggle('visible', window.scrollY>=600); });
+
+    // 썸네일바: 현재 슬라이드가 항상 중앙, 양옆 4개씩, 무한 순환
+    function updateThumbs() {
+      const total = slides.length;
+      if (total === 0) return;
+
+      const visible = 9; // 양옆 4개 + 현재 1개
+      const half = Math.floor(visible / 2);
+
+      galleryThumbs.innerHTML = '';
+      for (let i = -half; i <= half; i++) {
+        const realPos = ((currentIndex + i) % total + total) % total;
+        const slide = slides[realPos];
+        const thumb = document.createElement(slide.type === 'video' ? 'div' : 'img');
+        thumb.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+        if (slide.type === 'video') {
+          thumb.style.backgroundImage = `url(https://img.youtube.com/vi/${slide.id}/hqdefault.jpg)`;
+          thumb.textContent = '▶';
+        } else {
+          thumb.src = slide.src;
+        }
+        thumb.addEventListener('click', () => selectSlide(realPos));
+        galleryThumbs.appendChild(thumb);
+      }
+    }
+
+    function handleMainClick() {
+      if (slides[currentIndex].type !== 'image') return;
+      if (clickCount === 0) {
+        currentScale = 1.5; // 150%
+        clickCount = 1;
+        applyZoom();
+      }
+      // 이미 확대된 상태에서 클릭 → 아무 효과 없음
+    }
+
+    function zoom(delta) {
+      if (slides[currentIndex].type !== 'image') return;
+      currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
+      if (currentScale > 1.0) clickCount = 1;
+      applyZoom();
+    }
+
+    function resetZoom() {
+      currentScale = 1.0; // 100% = 안 잘리는 원본 크기
+      translateX = 0;
+      translateY = 0;
+      clickCount = 0;
+      applyZoom();
+    }
+
+    function applyZoom() {
+      galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
+      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
+      galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
+    }
+
+    // 드래그로 이동 (확대된 이미지 슬라이드에서만)
+    let isDragging = false, startX, startY, translateX = 0, translateY = 0;
+
+    galleryMain.addEventListener('mousedown', (e) => {
+      if (slides[currentIndex].type !== 'image' || currentScale <= 1.0) return;
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      galleryMain.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      applyZoom();
+    });
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : 'zoom-in';
+    });
+
+    // 이미지 슬라이드 클릭시 확대(클릭 1회 = 150%)
+    galleryMain.addEventListener('click', (e) => {
+      if (isDragging) return;
+      handleMainClick();
+    });
+
+    // 400px 스크롤하면 고정 텍스트 표시
+    const fixedInfo = document.getElementById('fixed-info');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY >= 400) {
+        fixedInfo.classList.add('visible');
+      } else {
+        fixedInfo.classList.remove('visible');
+      }
+    });
+
     document.addEventListener('keydown', (e) => {
-      const validIdxs=loadedSrcs.map((s,i)=>s?i:-1).filter(i=>i>=0); const pos=validIdxs.indexOf(currentIndex);
-      if(e.key==='Escape')closeLightbox();
-      if(e.key==='ArrowRight')selectImage(validIdxs[(pos+1)%validIdxs.length]);
-      if(e.key==='ArrowLeft')selectImage(validIdxs[(pos-1+validIdxs.length)%validIdxs.length]);
+      const total = slides.length;
+      if (total === 0) return;
+      if (e.key === 'ArrowRight') selectSlide((currentIndex + 1) % total);
+      if (e.key === 'ArrowLeft') selectSlide((currentIndex - 1 + total) % total);
     });
   </script>
 </body>
