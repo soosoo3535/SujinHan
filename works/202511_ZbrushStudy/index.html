@@ -311,6 +311,15 @@
       container.querySelector('.zoom-in-btn').addEventListener('click', (e) => { e.stopPropagation(); zoom(0.2); });
       container.querySelector('.zoom-reset-btn').addEventListener('click', (e) => { e.stopPropagation(); resetZoom(); });
 
+      // 썸네일바에서 휠 → 이미지 이전/다음 전환
+      galleryThumbs.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const total = images.length;
+        if (total === 0) return;
+        if (e.deltaY > 0) selectImage((currentIndex + 1) % total);
+        else selectImage((currentIndex - 1 + total) % total);
+      }, { passive: false });
+
       selectImage(0);
     }
 

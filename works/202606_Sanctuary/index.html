@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -316,6 +317,16 @@
       if (e.key === 'ArrowRight') selectImage(validIdxs[(pos + 1) % validIdxs.length]);
       if (e.key === 'ArrowLeft') selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
     });
+
+    // 썸네일바에서 휠 → 이미지 이전/다음 전환
+    galleryThumbs.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
+      if (validIdxs.length === 0) return;
+      const pos = validIdxs.indexOf(currentIndex);
+      if (e.deltaY > 0) selectImage(validIdxs[(pos + 1) % validIdxs.length]);
+      else selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
+    }, { passive: false });
   </script>
 </body>
 </html>

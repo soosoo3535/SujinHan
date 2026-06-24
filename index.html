@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -249,7 +248,7 @@
       if (!marquee) return;
 
       let paused = false;
-      let isDown = false, startX = 0, startScroll = 0;
+      let isDown = false, startX = 0, startScroll = 0, dragMoved = false;
 
       // 자동 스크롤 (이미지 로드 후 halfW가 생기면 루프)
       let lastTime = null;
@@ -272,6 +271,7 @@
       marquee.addEventListener('mousedown', (e) => {
         isDown = true;
         paused = true;
+        dragMoved = false;
         startX = e.clientX;
         startScroll = marquee.scrollLeft;
         marquee.classList.add('dragging');
@@ -280,6 +280,7 @@
       window.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         const dx = e.clientX - startX;
+        if (Math.abs(dx) > 5) dragMoved = true;
         marquee.scrollLeft = startScroll - dx;
       });
       window.addEventListener('mouseup', () => {
@@ -288,6 +289,14 @@
         paused = false;
         marquee.classList.remove('dragging');
       });
+
+      // 드래그였으면 링크 클릭 차단
+      marquee.addEventListener('click', (e) => {
+        if (dragMoved) {
+          e.preventDefault();
+          dragMoved = false;
+        }
+      }, true);
     })();
 
     function copyHeroEmail(e) {

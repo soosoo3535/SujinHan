@@ -369,6 +369,15 @@
       if (e.key === 'ArrowRight') selectSlide((currentIndex + 1) % total);
       if (e.key === 'ArrowLeft') selectSlide((currentIndex - 1 + total) % total);
     });
+
+    // 썸네일바에서 휠 → 이미지/영상 이전/다음 전환
+    galleryThumbs.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const total = slides.length;
+      if (total === 0) return;
+      if (e.deltaY > 0) selectSlide((currentIndex + 1) % total);
+      else selectSlide((currentIndex - 1 + total) % total);
+    }, { passive: false });
   </script>
 </body>
 </html>
