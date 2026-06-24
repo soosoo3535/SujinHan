@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -281,7 +282,13 @@
         if (!isDown) return;
         const dx = e.clientX - startX;
         if (Math.abs(dx) > 5) dragMoved = true;
-        marquee.scrollLeft = startScroll - dx;
+        const halfW = marquee.scrollWidth / 2;
+        let newScroll = startScroll - dx;
+        if (halfW > 0) {
+          if (newScroll < 0) newScroll += halfW;
+          if (newScroll >= halfW) newScroll -= halfW;
+        }
+        marquee.scrollLeft = newScroll;
       });
       window.addEventListener('mouseup', () => {
         if (!isDown) return;
