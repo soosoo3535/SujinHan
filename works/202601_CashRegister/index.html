@@ -138,6 +138,24 @@
       opacity: 1;
       transform: scale(1.15);
     }
+    /* 좌우 카테고리 이동 버튼 */
+    .page-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.3);
+      font-size: 3rem;
+      cursor: pointer;
+      padding: 18px 24px;
+      transition: color 0.2s;
+      font-family: 'Coustard', serif;
+    }
+    .page-nav:hover { color: rgba(255,255,255,0.9); }
+    .page-nav-prev { left: 18px; }
+    .page-nav-next { right: 18px; }
   </style>
 </head>
 <body>
@@ -297,15 +315,16 @@
     function applyZoom() {
       galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
       document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
-      galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
+      galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
     }
 
     // 드래그로 이동 (확대된 이미지 슬라이드에서만)
-    let isDragging = false, startX, startY, translateX = 0, translateY = 0;
+    let isDragging = false, dragMoved = false, startX, startY, translateX = 0, translateY = 0;
 
     galleryMain.addEventListener('mousedown', (e) => {
       if (slides[currentIndex].type !== 'image' || currentScale <= 1.0) return;
       isDragging = true;
+      dragMoved = false;
       startX = e.clientX - translateX;
       startY = e.clientY - translateY;
       galleryMain.style.cursor = 'grabbing';
@@ -313,6 +332,9 @@
     });
     window.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
+      const dx = e.clientX - (startX + translateX);
+      const dy = e.clientY - (startY + translateY);
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragMoved = true;
       translateX = e.clientX - startX;
       translateY = e.clientY - startY;
       applyZoom();
@@ -325,7 +347,7 @@
 
     // 이미지 슬라이드 클릭시 확대(클릭 1회 = 150%)
     galleryMain.addEventListener('click', (e) => {
-      if (isDragging) return;
+      if (dragMoved) { dragMoved = false; return; }
       handleMainClick();
     });
 

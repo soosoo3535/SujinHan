@@ -129,6 +129,24 @@
       opacity: 1;
       transform: scale(1.15);
     }
+    /* 좌우 카테고리 이동 버튼 */
+    .page-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.3);
+      font-size: 3rem;
+      cursor: pointer;
+      padding: 18px 24px;
+      transition: color 0.2s;
+      font-family: 'Coustard', serif;
+    }
+    .page-nav:hover { color: rgba(255,255,255,0.9); }
+    .page-nav-prev { left: 18px; }
+    .page-nav-next { right: 18px; }
   </style>
 </head>
 <body>
@@ -208,7 +226,7 @@
       let currentIndex = 0;
       let currentScale = 1.0;
       let clickCount = 0;
-      let isDragging = false, startX, startY, translateX = 0, translateY = 0;
+      let isDragging = false, dragMoved = false, startX, startY, translateX = 0, translateY = 0;
 
       function selectImage(idx) {
         currentIndex = idx;
@@ -257,7 +275,7 @@
       function applyZoom() {
         galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
         zoomLabel.textContent = Math.round(currentScale * 100) + '%';
-        galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
+        galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
       }
 
       // 드래그로 이동 (확대된 상태에서만)
