@@ -574,25 +574,28 @@ a { text-decoration: none; color: inherit; }
   .featured-title { font-size: 1.4rem; }
 
   /* 상세페이지 */
-  .page-nav { top: calc(50% + 10px); font-size: 2rem; padding: 10px 14px; }
+  /* < > 버튼: 좌우 끝, 고정 텍스트 블록 세로 중앙에 맞춤 */
+  .page-nav { top: auto; bottom: calc(12px + 45px); font-size: 2rem; padding: 10px 14px; transform: none; }
   .page-nav-prev { left: 4px; }
   .page-nav-next { right: 4px; }
-  .inline-gallery { flex-direction: row !important; }
+
+  /* 갤러리: 이미지 위, 썸네일바 아래 가로로 */
+  .inline-gallery { flex-direction: column !important; }
   .gallery-thumbs {
-    width: 50px !important;
+    width: 100% !important;
     flex-shrink: 0;
-    flex-direction: column !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    height: 60vw;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    height: 70px;
     justify-content: flex-start !important;
     -webkit-overflow-scrolling: touch;
+    margin-bottom: 40px;
+    padding-bottom: 0;
   }
-  .lb-thumb { width: 44px !important; height: 44px !important; }
+  .lb-thumb { width: 60px !important; height: 60px !important; }
   .gallery-main img { max-height: 60vw; }
   .gallery-video { max-height: 56vw; }
-  .inline-gallery { padding-bottom: calc(var(--thumb-bottom, 0px) * 2); }
-  .gallery-thumbs { padding-bottom: 32px; }
 
   /* 고정 텍스트 0.7배 */
   .fixed-info { left: 12px; bottom: 12px; transform: scale(0.7); transform-origin: bottom left; }
