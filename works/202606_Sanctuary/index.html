@@ -230,7 +230,7 @@
       if (total === 0) return;
 
       const pos = validIdxs.indexOf(currentIndex);
-      const visible = 9;
+      const visible = window.innerWidth <= 768 ? 7 : 9;
       const half = Math.floor(visible / 2);
 
       galleryThumbs.innerHTML = '';

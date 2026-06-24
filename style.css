@@ -591,6 +591,8 @@ a { text-decoration: none; color: inherit; }
   .lb-thumb { width: 44px !important; height: 44px !important; }
   .gallery-main img { max-height: 60vw; }
   .gallery-video { max-height: 56vw; }
+  .inline-gallery { padding-bottom: calc(var(--thumb-bottom, 0px) * 2); }
+  .gallery-thumbs { padding-bottom: 32px; }
 
   /* 고정 텍스트 0.7배 */
   .fixed-info { left: 12px; bottom: 12px; transform: scale(0.7); transform-origin: bottom left; }

@@ -231,7 +231,7 @@
       if (total === 0) return;
 
       const pos = validIdxs.indexOf(currentIndex);
-      const visible = 9; // 양옆 4개 + 현재 1개
+      const visible = window.innerWidth <= 768 ? 7 : 9; // 모바일: 양옆 3개, 데스크톱: 양옆 4개
       const half = Math.floor(visible / 2);
 
       galleryThumbs.innerHTML = '';
