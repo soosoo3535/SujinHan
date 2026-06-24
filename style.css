@@ -544,20 +544,37 @@ a { text-decoration: none; color: inherit; }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav { padding: 0 20px; }
-  .main { padding: 40px 20px 60px; }
+  .nav { padding: 0 16px; }
+
+  /* 메인 컨테이너 모바일 꽉차게 */
+  .main { padding: 0 10px 60px !important; }
+
+  /* 히어로 영역 */
+  .page-title {
+    margin-top: 0 !important;
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+    width: calc(100% + 20px) !important;
+  }
+  .page-title h1 { font-size: 1.8rem; padding-left: 16px; }
+  .page-title .subtitle { padding-left: 16px; }
+  .hero-tools { padding-left: 16px; font-size: 0.8rem; }
+  .hero-tools.first-line { margin-top: 1em; }
+
+  /* 카드 그리드 */
   .about-hero { flex-direction: column; gap: 28px; }
   .category-grid { column-count: 1; }
+  .category-card[style] { height: auto !important; aspect-ratio: 4/3; }
   .works-grid { grid-template-columns: 1fr; }
 
-  /* 상세페이지 패딩 축소 */
-  .main { padding-left: 16px !important; padding-right: 16px !important; padding-top: 60px !important; }
-  .page-title h1 { font-size: 1.8rem; }
+  /* featured (Substance Designer) */
+  .featured-section { padding-top: 32px; margin-top: 32px; }
+  .featured-title { font-size: 1.4rem; }
 
-  /* 좌우 카테고리 이동 버튼 숨김 (모바일에선 공간 부족) */
+  /* 상세페이지 */
   .page-nav { display: none; }
-
-  /* 갤러리: 세로 배치로 전환 */
   .inline-gallery { flex-direction: column !important; }
   .gallery-thumbs {
     width: 100% !important;
@@ -566,20 +583,24 @@ a { text-decoration: none; color: inherit; }
     justify-content: flex-start !important;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 4px 0;
   }
   .gallery-main img { max-height: 60vw; }
   .gallery-video { max-height: 56vw; }
 
-  /* About 패딩 */
-  .about-wrap { padding: 0 20px !important; gap: 40px !important; }
+  /* About */
+  .about-wrap { flex-direction: column; padding: 0 10px !important; gap: 40px !important; }
   .about-left { width: 100% !important; }
+  .about-right { width: 100% !important; max-width: 100% !important; }
+  .about-content { white-space: normal; font-size: 0.9rem; }
+  .about-label { width: 100px; font-size: 0.9rem; }
+  .skill-logo { max-width: 100%; }
 
-  /* fixed-info 크기 */
-  .fixed-title { font-size: 1.4rem; }
-  .fixed-date, .fixed-tools { font-size: 0.8rem; }
+  /* 고정 텍스트 */
+  .fixed-info { left: 16px; bottom: 16px; }
+  .fixed-title { font-size: 1.2rem; }
+  .fixed-date, .fixed-tools { font-size: 0.75rem; }
 
-  /* ZbrushStudy 그룹 제목 */
+  /* ZbrushStudy */
   .group-title { font-size: 24px !important; }
   .zbrush-group { margin-bottom: 60px !important; }
 }
