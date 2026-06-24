@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -247,6 +246,9 @@
         thumb.addEventListener('click', () => selectImage(realIdx));
         galleryThumbs.appendChild(thumb);
       }
+      // 선택된 썸네일을 가운데로 스크롤
+      const activeThumb = galleryThumbs.querySelector('.lb-thumb.active');
+      if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function handleMainClick() {
