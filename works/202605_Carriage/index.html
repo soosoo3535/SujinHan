@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -123,9 +124,29 @@
       opacity: 1;
       transform: scale(1.15);
     }
+    /* 좌우 카테고리 이동 버튼 */
+    .page-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.3);
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 12px 16px;
+      transition: color 0.2s;
+      font-family: 'Coustard', serif;
+    }
+    .page-nav:hover { color: rgba(255,255,255,0.9); }
+    .page-nav-prev { left: 12px; }
+    .page-nav-next { right: 12px; }
   </style>
 </head>
 <body>
+  <button class="page-nav page-nav-prev" onclick="location.href='../202606_HandDrill2/index.html'">‹</button>
+  <button class="page-nav page-nav-next" onclick="location.href='../202603_HandDrill/index.html'">›</button>
   <nav class="nav">
     <div class="nav-links">
       <a href="../../index.html" class="nav-btn">Home</a>
@@ -229,12 +250,13 @@
     }
 
     function handleMainClick() {
-      if (clickCount === 0) {
-        currentScale = 1.5; // 150%
-        clickCount = 1;
-        applyZoom();
-      }
-      // 이미 확대된 상태에서 클릭 → 아무 효과 없음
+      // 클릭 단계: 100% → 150% → 200% → 300% → 100% 순환
+      const steps = [1.0, 1.5, 2.0, 3.0];
+      const nextStep = (steps.indexOf(currentScale) + 1) % steps.length;
+      currentScale = steps[nextStep];
+      if (currentScale === 1.0) { translateX = 0; translateY = 0; }
+      clickCount = currentScale === 1.0 ? 0 : 1;
+      applyZoom();
     }
 
     function zoom(delta) {
@@ -244,7 +266,7 @@
     }
 
     function resetZoom() {
-      currentScale = 1.0; // 100% = 안 잘리는 원본 크기
+      currentScale = 1.0;
       translateX = 0;
       translateY = 0;
       clickCount = 0;
@@ -254,15 +276,16 @@
     function applyZoom() {
       galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
       document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
-      galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : (isDragging ? 'grabbing' : 'zoom-in');
+      galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
     }
 
-    // 드래그로 이동 (확대된 상태에서만)
-    let isDragging = false, startX, startY, translateX = 0, translateY = 0;
+    // 드래그로 이동 (확대된 상태에서만, 드래그 중에는 클릭 이벤트 차단)
+    let isDragging = false, dragMoved = false, startX, startY, translateX = 0, translateY = 0;
 
     galleryMain.addEventListener('mousedown', (e) => {
       if (currentScale <= 1.0) return;
       isDragging = true;
+      dragMoved = false;
       startX = e.clientX - translateX;
       startY = e.clientY - translateY;
       galleryMain.style.cursor = 'grabbing';
@@ -270,6 +293,9 @@
     });
     window.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
+      const dx = e.clientX - (startX + translateX);
+      const dy = e.clientY - (startY + translateY);
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragMoved = true;
       translateX = e.clientX - startX;
       translateY = e.clientY - startY;
       applyZoom();
@@ -277,16 +303,26 @@
     window.addEventListener('mouseup', () => {
       if (!isDragging) return;
       isDragging = false;
-      galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : 'zoom-in';
+      galleryMain.style.cursor = 'zoom-in';
     });
 
-    // 이미지 박스 클릭시 확대(클릭 1회 = 150%)
+    // 이미지 박스 클릭시 확대 (드래그였으면 무시)
     galleryMain.addEventListener('click', (e) => {
-      if (isDragging) return;
+      if (dragMoved) { dragMoved = false; return; }
       handleMainClick();
     });
 
-    // 600px 스크롤하면 고정 텍스트 표시
+    // 썸네일바에서 휠 → 이미지 이전/다음 전환
+    galleryThumbs.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
+      if (validIdxs.length === 0) return;
+      const pos = validIdxs.indexOf(currentIndex);
+      if (e.deltaY > 0) selectImage(validIdxs[(pos + 1) % validIdxs.length]);
+      else selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
+    }, { passive: false });
+
+    // 400px 스크롤하면 고정 텍스트 표시
     const fixedInfo = document.getElementById('fixed-info');
     window.addEventListener('scroll', () => {
       if (window.scrollY >= 400) {
