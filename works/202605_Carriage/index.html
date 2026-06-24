@@ -35,16 +35,15 @@
     .featured-marquee {
       width: 100%;
       overflow: hidden;
+      cursor: grab;
+      user-select: none;
     }
+    .featured-marquee.dragging { cursor: grabbing; }
     .featured-track {
       display: flex;
       gap: 8px;
       width: max-content;
-      animation: featured-scroll 40s linear infinite;
     }
-    .featured-marquee:hover .featured-track { animation-play-state: paused; }
-    .featured-marquee { cursor: grab; }
-    .featured-marquee.dragging { cursor: grabbing; }
     .featured-track a {
       flex-shrink: 0;
       display: block;
@@ -63,10 +62,6 @@
       transition: transform 0.3s ease;
     }
     .featured-track a:hover img { transform: scale(1.05); }
-    @keyframes featured-scroll {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
     @media (max-width: 768px) {
       .featured-track a { width: 140px; height: 140px; }
     }
@@ -245,51 +240,58 @@
     document.getElementById('hero-video').querySelector('source').src = chosenVideo;
     document.getElementById('hero-video').load();
 
-    // 마키 드래그로 좌우 이동
+    // 마키 자동 스크롤 + 드래그 이동
     (function() {
       const marquee = document.querySelector('.featured-marquee');
       const track = document.querySelector('.featured-track');
       if (!marquee || !track) return;
-      let isDown = false, startX, scrollLeft = 0, dragMoved = false;
+
+      let offset = 0;
+      let speed = 0.5; // px per frame (40s 기준과 동일한 속도)
+      let paused = false;
+      let halfW = 0;
+      let isDown = false, startX = 0, startOffset = 0, dragMoved = false;
+
+      function getHalfW() { return track.scrollWidth / 2; }
+
+      function tick() {
+        if (!isDown && !paused) {
+          offset += speed;
+          halfW = getHalfW();
+          if (halfW > 0 && offset >= halfW) offset -= halfW;
+        }
+        track.style.transform = `translateX(${-offset}px)`;
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      marquee.addEventListener('mouseenter', () => { paused = true; });
+      marquee.addEventListener('mouseleave', () => { if (!isDown) paused = false; });
 
       marquee.addEventListener('mousedown', (e) => {
         isDown = true;
         dragMoved = false;
+        startX = e.clientX;
+        startOffset = offset;
         marquee.classList.add('dragging');
-        track.style.animationPlayState = 'paused';
-        startX = e.pageX;
-        // 현재 애니메이션 위치를 translateX로 고정
-        const matrix = window.getComputedStyle(track).transform;
-        if (matrix && matrix !== 'none') {
-          scrollLeft = new DOMMatrix(matrix).m41;
-        }
         e.preventDefault();
       });
       window.addEventListener('mousemove', (e) => {
         if (!isDown) return;
-        const dx = e.pageX - startX;
+        const dx = e.clientX - startX;
         if (Math.abs(dx) > 3) dragMoved = true;
-        track.style.transform = `translateX(${scrollLeft + dx}px)`;
-        track.style.animation = 'none';
+        halfW = getHalfW();
+        offset = startOffset - dx;
+        if (halfW > 0) {
+          if (offset < 0) offset += halfW;
+          if (offset >= halfW) offset -= halfW;
+        }
       });
       window.addEventListener('mouseup', () => {
         if (!isDown) return;
         isDown = false;
         marquee.classList.remove('dragging');
-        // 드래그 후 현재 위치에서 애니메이션 재개
-        const matrix = window.getComputedStyle(track).transform;
-        const currentX = matrix && matrix !== 'none' ? new DOMMatrix(matrix).m41 : 0;
-        // 절반 지점 넘으면 루프 위치 보정
-        const halfW = track.scrollWidth / 2;
-        let newX = currentX;
-        if (newX > 0) newX -= halfW;
-        if (newX < -halfW) newX += halfW;
-        track.style.transform = `translateX(${newX}px)`;
-        // 잠시 후 애니메이션 재개 (현재 위치에서 이어서)
-        setTimeout(() => {
-          track.style.animation = '';
-          track.style.transform = '';
-        }, 50);
+        paused = false;
       });
     })();
 
