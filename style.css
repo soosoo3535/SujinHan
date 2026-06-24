@@ -549,6 +549,39 @@ a { text-decoration: none; color: inherit; }
   .about-hero { flex-direction: column; gap: 28px; }
   .category-grid { column-count: 1; }
   .works-grid { grid-template-columns: 1fr; }
+
+  /* 상세페이지 패딩 축소 */
+  .main { padding-left: 16px !important; padding-right: 16px !important; padding-top: 60px !important; }
+  .page-title h1 { font-size: 1.8rem; }
+
+  /* 좌우 카테고리 이동 버튼 숨김 (모바일에선 공간 부족) */
+  .page-nav { display: none; }
+
+  /* 갤러리: 세로 배치로 전환 */
+  .inline-gallery { flex-direction: column !important; }
+  .gallery-thumbs {
+    width: 100% !important;
+    flex-direction: row !important;
+    height: 70px;
+    justify-content: flex-start !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 0;
+  }
+  .gallery-main img { max-height: 60vw; }
+  .gallery-video { max-height: 56vw; }
+
+  /* About 패딩 */
+  .about-wrap { padding: 0 20px !important; gap: 40px !important; }
+  .about-left { width: 100% !important; }
+
+  /* fixed-info 크기 */
+  .fixed-title { font-size: 1.4rem; }
+  .fixed-date, .fixed-tools { font-size: 0.8rem; }
+
+  /* ZbrushStudy 그룹 제목 */
+  .group-title { font-size: 24px !important; }
+  .zbrush-group { margin-bottom: 60px !important; }
 }
 
 /* ─── REDUCED MOTION ─────────────────────────────────────── */
