@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -33,15 +34,19 @@
     }
     .featured-marquee {
       width: 100%;
-      overflow: hidden;
+      overflow-x: scroll;
+      cursor: grab;
+      user-select: none;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
+    .featured-marquee::-webkit-scrollbar { display: none; }
+    .featured-marquee.dragging { cursor: grabbing; }
     .featured-track {
       display: flex;
       gap: 8px;
       width: max-content;
-      animation: featured-scroll 40s linear infinite;
     }
-    .featured-marquee:hover .featured-track { animation-play-state: paused; }
     .featured-track a {
       flex-shrink: 0;
       display: block;
@@ -60,10 +65,6 @@
       transition: transform 0.3s ease;
     }
     .featured-track a:hover img { transform: scale(1.05); }
-    @keyframes featured-scroll {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
     @media (max-width: 768px) {
       .featured-track a { width: 140px; height: 140px; }
     }
@@ -241,6 +242,53 @@
     }
     document.getElementById('hero-video').querySelector('source').src = chosenVideo;
     document.getElementById('hero-video').load();
+
+    // 마키 자동 스크롤 + 드래그 이동 (scrollLeft 방식)
+    (function() {
+      const marquee = document.querySelector('.featured-marquee');
+      if (!marquee) return;
+
+      let paused = false;
+      let isDown = false, startX = 0, startScroll = 0;
+
+      // 자동 스크롤 (이미지 로드 후 halfW가 생기면 루프)
+      let lastTime = null;
+      function tick(timestamp) {
+        if (lastTime !== null && !isDown && !paused) {
+          const halfW = marquee.scrollWidth / 2;
+          marquee.scrollLeft += 0.5;
+          if (halfW > 0 && marquee.scrollLeft >= halfW) {
+            marquee.scrollLeft -= halfW;
+          }
+        }
+        lastTime = timestamp;
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      marquee.addEventListener('mouseenter', () => { paused = true; });
+      marquee.addEventListener('mouseleave', () => { if (!isDown) paused = false; });
+
+      marquee.addEventListener('mousedown', (e) => {
+        isDown = true;
+        paused = true;
+        startX = e.clientX;
+        startScroll = marquee.scrollLeft;
+        marquee.classList.add('dragging');
+        e.preventDefault();
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const dx = e.clientX - startX;
+        marquee.scrollLeft = startScroll - dx;
+      });
+      window.addEventListener('mouseup', () => {
+        if (!isDown) return;
+        isDown = false;
+        paused = false;
+        marquee.classList.remove('dragging');
+      });
+    })();
 
     function copyHeroEmail(e) {
       navigator.clipboard.writeText('susujin3535@gmail.com');

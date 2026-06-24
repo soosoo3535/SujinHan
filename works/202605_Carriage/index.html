@@ -4,342 +4,341 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sujin Han — 3D Environment Artist</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Carriage — SujinHan</title>
+  <link rel="stylesheet" href="../../style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&display=swap" rel="stylesheet"/>
   <style>
-    .main { padding-left: 150px !important; padding-right: 150px !important; }
-    .page-title { padding-top: 350px !important; padding-bottom: 350px !important; }
-    .page-title h1 { margin-top: -50px; }
-    .hero-tools {
-      position: relative;
-      z-index: 1;
-      padding-left: 50px;
-      margin-top: 8px;
+    @font-face {
+      font-family: 'Chiron GoRound TC';
+      src: url('../../fonts/ChironGoRoundTC-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; padding-top: 100px !important; }
+    .page-title { padding-bottom: 10px !important; margin-left: -10px; }
+    @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } }
+    .tools-text { margin-top: 12px; font-family: 'Coustard', serif; font-size: 1.2rem; margin-bottom: 8px; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; margin-left: 5px; }
+    .work-icon { display: block; max-width: 25%; height: auto; margin-bottom: 10px; margin-left: 5px; }
+    .fixed-info {
+      position: fixed;
+      left: 48px;
+      bottom: 48px;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .fixed-info.visible { opacity: 1; }
+    .fixed-title {
+      font-family: 'Coustard', serif;
+      font-size: 2.3rem;
+      font-weight: 400;
+      color: #E8EAF0;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .fixed-date {
+      font-family: 'Coustard', serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #6B7280;
+      letter-spacing: 0.1em;
+      margin-bottom: 2px;
+      padding-left: 10px;
+    }
+    .fixed-tools {
+      font-family: 'Coustard', serif;
       font-size: 1.0rem;
       font-weight: 400;
-      letter-spacing: 0.15em;
-      text-transform: none;
-      color: var(--muted);
+      color: #ffffff;
+      letter-spacing: 0.08em;
+      padding-left: 10px;
     }
-    .hero-tools.first-line { margin-top: 2.6em; }
-    .featured-section { border-top: 1px solid #696c64; padding-top: 48px; margin-top: 48px; }
-    .featured-title {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      color: var(--text);
-      margin-bottom: 24px;
-    }
-    .featured-marquee {
-      width: 100%;
-      overflow: hidden;
-      cursor: grab;
-      user-select: none;
-    }
-    .featured-marquee.dragging { cursor: grabbing; }
-    .featured-track {
+
+    /* 인라인 갤러리: 이미지(좌) + 세로 썸네일바(우) */
+    .inline-gallery { display: flex; flex-direction: row; align-items: stretch; gap: 16px; margin-top: 10px; }
+
+    .gallery-main {
+      position: relative;
+      flex: 1;
+      min-width: 0;
       display: flex;
-      gap: 8px;
-      width: max-content;
-    }
-    .featured-track a {
-      flex-shrink: 0;
-      display: block;
-      width: 300px;
-      height: 300px;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-in;
       overflow: hidden;
-      border-radius: 3px;
-      background: var(--surface);
     }
-    .featured-track img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
+    .gallery-main img {
+      max-width: 100%;
+      max-height: 82vh;
+      object-fit: contain;
       display: block;
-      transition: transform 0.3s ease;
+      transform-origin: center center;
+      transition: transform 0.2s ease;
     }
-    .featured-track a:hover img { transform: scale(1.05); }
-    @media (max-width: 768px) {
-      .featured-track a { width: 140px; height: 140px; }
+
+    /* 도구모음: 이미지 위에 레이어로 겹쳐서 표시 */
+    .gallery-controls {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(105,108,100,0.6);
+      border: 1px solid #696c64;
+      border-radius: 4px;
+      padding: 6px 13px;
     }
+    .lb-btn { background: none; border: none; color: #ffffff; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; border-radius: 2px; transition: background 0.2s; }
+    .lb-btn:hover { background: rgba(78,205,196,0.12); color: #4ECDC4; }
+    .zoom-label { font-size: 0.75rem; color: #ffffff; min-width: 40px; text-align: center; font-family: 'Coustard', serif; }
+
+    /* 세로 썸네일바 (현재 이미지가 중앙, 위=이전 / 아래=다음, 무한순환) */
+    .gallery-thumbs {
+      width: 70px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-thumb {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 2px;
+      opacity: 0.5;
+      transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .lb-thumb:hover { opacity: 0.8; }
+    .lb-thumb.active {
+      border-color: #ffffff;
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    /* 좌우 카테고리 이동 버튼 */
+    .page-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.3);
+      font-size: 3rem;
+      cursor: pointer;
+      padding: 18px 24px;
+      transition: color 0.2s;
+      font-family: 'Coustard', serif;
+    }
+    .page-nav:hover { color: rgba(255,255,255,0.9); }
+    .page-nav-prev { left: 18px; }
+    .page-nav-next { right: 18px; }
   </style>
 </head>
 <body>
-
+  <button class="page-nav page-nav-prev" onclick="location.href='../202606_HandDrill2/index.html'">‹</button>
+  <button class="page-nav page-nav-next" onclick="location.href='../202603_HandDrill/index.html'">›</button>
   <nav class="nav">
     <div class="nav-links">
-      <a href="index.html" class="nav-btn active">Home</a>
-      <a href="about.html" class="nav-btn">About</a>
+      <a href="../../index.html" class="nav-btn">Home</a>
+      <a href="../../about.html" class="nav-btn">About</a>
     </div>
   </nav>
-
   <main class="main">
-
-    <section class="page-title">
-      <div class="hero-video-wrap">
-        <video id="hero-video" autoplay muted loop playsinline>
-          <source src="workani1.mp4" type="video/mp4"/>
-        </video>
-        <div class="hero-gradient"></div>
-      </div>
-      <h1>Sujin Han</h1>
-      <p class="subtitle">3D Environment Artist</p>
-      <p class="hero-tools first-line">3Ds Max · Rizom UV · Marmoset · Unreal Engine · Zbrush · Knald</p>
-      <p class="hero-tools">Photoshop · Substance Painter · Substance Designer</p>
-      <div class="hero-email" style="position:absolute; bottom:10px; right:20px; z-index:2; padding-left:0;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-        <span id="hero-email" onclick="copyHeroEmail(event)">susujin3535@gmail.com</span>
-      </div>
-      <div class="hero-scroll-hint" style="position:absolute; bottom:10px; left:20px; z-index:2;">
-        <span style="font-family: var(--font-body); font-size: 1.0rem; color: var(--muted); letter-spacing: 0.08em;">Scroll to explore ↓</span>
-      </div>
-      <div id="hero-copy-tooltip" style="position:fixed; display:none; background:rgba(105,108,100,0.9); color:#ffffff; font-family:'Coustard',serif; font-size:0.85rem; padding:6px 12px; border-radius:4px; pointer-events:none; z-index:9999; white-space:nowrap;">클립보드에 복사되었습니다.</div>
+    <section class="page-title works-title">
+      <a href="../../index.html" class="back-btn">← Back</a>
+      <h1 style="max-width: 800px; margin: 0 auto; padding-left: 0; text-align: center; font-size: 2.6rem;">Carriage</h1>
+      <p class="subtitle" style="max-width: 800px; margin: 0 auto 12px auto; padding-left: 0; text-align: center; font-size: 0.9rem;">2026.05</p>
+      <img src="carriage-icon.png" alt="Carriage icons" class="work-icon" style="margin: 0 auto 1px auto; height: 55px; width: auto; max-width: none;" onerror="this.style.display='none'"/>
+      <p class="tools-text" style="text-align: center; font-size: 0.9rem; margin-top: 0; margin-bottom: 50px;">3Ds Max · Zbrush · Rizom UV · Marmoset · Substance Painter · Unreal Engine</p>
+      <p style="margin: 0 auto 15px auto; font-family: 'Chiron GoRound TC', sans-serif; font-size: 1.3rem; font-weight: 400; line-height: 1.8; letter-spacing: 0.02em; color: #E8EAF0; text-align: center;">미국 서부 개척시대의 마차를 모티프로 삼아, 오랜 시간 거친 황야를 달려온 사물의 흔적을 표현하는 데 초점을<br/>맞췄습니다. 특히 지면과 가까운 하부로 갈수록 먼지와 오염이 더 많이 쌓일 것이라 판단해 오염도 차이를 표현했습니다.<br/>차체 외형뿐 아니라 서스펜션과 브레이크 구조 등 하부 메커니즘까지 구현해 단순한 형태 재현을 넘어서고자 했습니다.</p>
+      <p class="subtitle" style="max-width: 800px; margin: 0 auto 60px auto; padding-left: 0; text-transform: none; font-size: 0.8rem; text-align: center;">* background : <a href="https://fab.com/s/0554e320be34" target="_blank" style="color:inherit; text-decoration:underline;">https://fab.com/s/0554e320be34</a></p>
     </section>
 
-    <section class="category-grid">
+    <!-- 고정 텍스트 -->
+    <div class="fixed-info" id="fixed-info">
+      <p class="fixed-title">Carriage</p>
+      <p class="fixed-date">2026.05</p>
+      <p class="fixed-tools">3Ds Max · Zbrush · Rizom UV · Marmoset · Substance Painter · Unreal Engine</p>
+    </div>
 
-      <a href="works/202606_Sanctuary/index.html" class="category-card" style="height:250px;">
-        <div class="card-thumb">
-          <img src="works/202606_Sanctuary/thumb.jpg" alt="Sanctuary" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Sanctuary</span>
-            <span class="card-label-date">2026.06 ~</span>
-            <img src="works/202606_Sanctuary/sanctuary-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
+    <!-- 인라인 갤러리: 메인 이미지(확대/드래그) + 도구모음 + 썸네일바 -->
+    <section class="inline-gallery" id="inline-gallery">
+      <div class="gallery-main" id="gallery-main">
+        <img id="gallery-img" src="" alt=""/>
+        <div class="gallery-controls">
+          <button class="lb-btn" onclick="zoom(-0.2); event.stopPropagation()">－</button>
+          <span class="zoom-label" id="zoom-label">100%</span>
+          <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
+          <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
         </div>
-      </a>
-
-      <a href="works/202606_HandDrill2/index.html" class="category-card" style="height:550px;">
-        <div class="card-thumb">
-          <img src="works/202606_HandDrill2/thumb.jpg" alt="Hand Drill 2" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Hand Drill 2</span>
-            <span class="card-label-date">2026.06</span>
-            <img src="works/202606_HandDrill2/handdrill2-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202601_Fireplace/index.html" class="category-card" style="height:314px;">
-        <div class="card-thumb">
-          <img src="works/202601_Fireplace/thumb.jpg" alt="Fireplace" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Fireplace</span>
-            <span class="card-label-date">2026.01</span>
-            <img src="works/202601_Fireplace/fireplace-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202402_zChildRoom/index.html" class="category-card" style="height:350px;">
-        <div class="card-thumb">
-          <img src="works/202402_zChildRoom/thumb.jpg" alt="Child Room" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Child Room</span>
-            <span class="card-label-date">2024.02</span>
-            <img src="works/202402_zChildRoom/childroom-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202605_Carriage/index.html" class="category-card" style="height:520px;">
-        <div class="card-thumb">
-          <img src="works/202605_Carriage/thumb.jpg" alt="Carriage" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Carriage</span>
-            <span class="card-label-date">2026.05</span>
-            <img src="works/202605_Carriage/carriage-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202601_CashRegister/index.html" class="category-card" style="height:450px;">
-        <div class="card-thumb">
-          <img src="works/202601_CashRegister/thumb.jpg" alt="Cash Register" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Cash Register</span>
-            <span class="card-label-date">2026.01</span>
-            <img src="works/202601_CashRegister/cashregister-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202402_Sci-fiCorridor/index.html" class="category-card" style="height:510px;">
-        <div class="card-thumb">
-          <img src="works/202402_Sci-fiCorridor/thumb.jpg" alt="Sci-fi Corridor" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Sci-fi Corridor</span>
-            <span class="card-label-date">2024.02</span>
-            <img src="works/202402_Sci-fiCorridor/scifi-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202603_HandDrill/index.html" class="category-card" style="height:460px;">
-        <div class="card-thumb">
-          <img src="works/202603_HandDrill/thumb.jpg" alt="Hand Drill" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Hand Drill</span>
-            <span class="card-label-date">2026.03</span>
-            <img src="works/202603_HandDrill/handdrill-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202511_ZbrushStudy/index.html" class="category-card" style="height:630px;">
-        <div class="card-thumb">
-          <img src="works/202511_ZbrushStudy/thumb.jpg" alt="Zbrush Study" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Zbrush Study</span>
-            <span class="card-label-date">2025.11</span>
-            <img src="works/202511_ZbrushStudy/zbrushstudy-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202311_Tavern/index.html" class="category-card" style="height:390px;">
-        <div class="card-thumb">
-          <img src="works/202311_Tavern/thumb.jpg" alt="Tavern" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Tavern</span>
-            <span class="card-label-date">2023.11</span>
-            <img src="works/202311_Tavern/tavern-icon.png" class="card-icon" onerror="this.style.display='none'"/>
-          </div>
-        </div>
-      </a>
-
-    </section>
-
-    <section class="featured-section" id="substance-featured">
-      <h2 class="featured-title">Substance Designer</h2>
-      <div class="featured-marquee">
-        <div class="featured-track" id="substance-featured-track"></div>
       </div>
+
+      <div class="gallery-thumbs" id="gallery-thumbs"></div>
     </section>
   </main>
-
   <footer class="footer">
     <p>© SujinHan. All Rights Reserved.</p>
   </footer>
-
   <script>
-    const videos = ['workani1.mp4', 'workani2.mp4', 'workani3.mp4'];
-    const key = 'heroVideoVisited';
-    let chosenVideo;
-    if (!sessionStorage.getItem(key)) {
-      // 첫 방문: workani1 고정
-      chosenVideo = 'workani1.mp4';
-      sessionStorage.setItem(key, 'true');
-    } else {
-      // 이후 방문: 랜덤
-      chosenVideo = videos[Math.floor(Math.random() * videos.length)];
-    }
-    document.getElementById('hero-video').querySelector('source').src = chosenVideo;
-    document.getElementById('hero-video').load();
+    const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
+                       'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
+                       'work11.jpg','work12.jpg'];
+    const loadedSrcs = [];
+    let pendingCount = imageSrcs.length;
 
-    // 마키 자동 스크롤 + 드래그 이동
-    (function() {
-      const marquee = document.querySelector('.featured-marquee');
-      const track = document.querySelector('.featured-track');
-      if (!marquee || !track) return;
+    const galleryImg = document.getElementById('gallery-img');
+    const galleryMain = document.getElementById('gallery-main');
+    const galleryThumbs = document.getElementById('gallery-thumbs');
 
-      let offset = 0;
-      let speed = 0.5; // px per frame (40s 기준과 동일한 속도)
-      let paused = false;
-      let halfW = 0;
-      let isDown = false, startX = 0, startOffset = 0, dragMoved = false;
+    imageSrcs.forEach((src, idx) => {
+      const probe = new Image();
+      probe.onload = () => { loadedSrcs[idx] = src; settle(); };
+      probe.onerror = () => { settle(); };
+      probe.src = src;
+    });
 
-      function getHalfW() { return track.scrollWidth / 2; }
-
-      function tick() {
-        if (!isDown && !paused) {
-          offset += speed;
-          halfW = getHalfW();
-          if (halfW > 0 && offset >= halfW) offset -= halfW;
-        }
-        track.style.transform = `translateX(${-offset}px)`;
-        requestAnimationFrame(tick);
+    function settle() {
+      pendingCount--;
+      if (pendingCount === 0) {
+        const validIdxs = loadedSrcs.map((s, i) => s ? i : -1).filter(i => i >= 0);
+        if (validIdxs.length === 0) return;
+        selectImage(validIdxs[0]);
       }
-      requestAnimationFrame(tick);
-
-      marquee.addEventListener('mouseenter', () => { paused = true; });
-      marquee.addEventListener('mouseleave', () => { if (!isDown) paused = false; });
-
-      marquee.addEventListener('mousedown', (e) => {
-        isDown = true;
-        dragMoved = false;
-        startX = e.clientX;
-        startOffset = offset;
-        marquee.classList.add('dragging');
-        e.preventDefault();
-      });
-      window.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        const dx = e.clientX - startX;
-        if (Math.abs(dx) > 3) dragMoved = true;
-        halfW = getHalfW();
-        offset = startOffset - dx;
-        if (halfW > 0) {
-          if (offset < 0) offset += halfW;
-          if (offset >= halfW) offset -= halfW;
-        }
-      });
-      window.addEventListener('mouseup', () => {
-        if (!isDown) return;
-        isDown = false;
-        marquee.classList.remove('dragging');
-        paused = false;
-      });
-    })();
-
-    function copyHeroEmail(e) {
-      navigator.clipboard.writeText('susujin3535@gmail.com');
-      const tooltip = document.getElementById('hero-copy-tooltip');
-      tooltip.style.display = 'block';
-      tooltip.style.left = (e.clientX + 12) + 'px';
-      tooltip.style.top = (e.clientY + 12) + 'px';
-      setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
     }
 
-    // Substance Designer 폴더 이미지를 가로 무한 스크롤 마키로 표시
-    (function () {
-      const basePath = 'works/202312_Substance_Designer/';
-      const candidates = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
-                           'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
-                           'work11.jpg','work12.jpg','work13.jpg','work14.jpg','work15.jpg'];
-      const track = document.getElementById('substance-featured-track');
-      const found = [];
-      let pending = candidates.length;
+    let currentIndex = 0;
+    let currentScale = 1.0;
+    let clickCount = 0;
 
-      candidates.forEach((file, idx) => {
-        const probe = new Image();
-        probe.onload = () => { found[idx] = file; settle(); };
-        probe.onerror = () => { settle(); };
-        probe.src = basePath + file;
-      });
+    function selectImage(idx) {
+      currentIndex = idx;
+      galleryImg.src = loadedSrcs[idx];
+      resetZoom();
+      updateThumbs();
+    }
 
-      function settle() {
-        pending--;
-        if (pending === 0) {
-          const validFiles = found.filter(Boolean);
-          if (validFiles.length === 0) return;
-          // 끊김 없는 무한 루프를 위해 이미지 세트를 두 번 반복
-          [...validFiles, ...validFiles].forEach(file => {
-            const a = document.createElement('a');
-            a.href = basePath + 'index.html?img=' + encodeURIComponent(file);
-            const img = document.createElement('img');
-            img.src = basePath + file;
-            img.alt = 'Substance Designer';
-            a.appendChild(img);
-            track.appendChild(a);
-          });
-        }
+    // 썸네일바: 현재 이미지가 항상 중앙, 양옆 4개씩, 무한 순환
+    function updateThumbs() {
+      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
+      const total = validIdxs.length;
+      if (total === 0) return;
+
+      const pos = validIdxs.indexOf(currentIndex);
+      const visible = 9; // 양옆 4개 + 현재 1개
+      const half = Math.floor(visible / 2);
+
+      galleryThumbs.innerHTML = '';
+      for (let i = -half; i <= half; i++) {
+        const realPos = ((pos + i) % total + total) % total;
+        const realIdx = validIdxs[realPos];
+        const thumb = document.createElement('img');
+        thumb.src = loadedSrcs[realIdx];
+        thumb.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+        thumb.addEventListener('click', () => selectImage(realIdx));
+        galleryThumbs.appendChild(thumb);
       }
-    })();
+    }
+
+    function handleMainClick() {
+      // 클릭 단계: 100% → 150% → 200% → 300% → 100% 순환
+      const steps = [1.0, 1.5, 2.0, 3.0];
+      const nextStep = (steps.indexOf(currentScale) + 1) % steps.length;
+      currentScale = steps[nextStep];
+      if (currentScale === 1.0) { translateX = 0; translateY = 0; }
+      clickCount = currentScale === 1.0 ? 0 : 1;
+      applyZoom();
+    }
+
+    function zoom(delta) {
+      currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
+      if (currentScale > 1.0) clickCount = 1;
+      applyZoom();
+    }
+
+    function resetZoom() {
+      currentScale = 1.0;
+      translateX = 0;
+      translateY = 0;
+      clickCount = 0;
+      applyZoom();
+    }
+
+    function applyZoom() {
+      galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
+      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
+      galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
+    }
+
+    // 드래그로 이동 (확대된 상태에서만, 드래그 중에는 클릭 이벤트 차단)
+    let isDragging = false, dragMoved = false, startX, startY, translateX = 0, translateY = 0;
+
+    galleryMain.addEventListener('mousedown', (e) => {
+      if (currentScale <= 1.0) return;
+      isDragging = true;
+      dragMoved = false;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      galleryMain.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - (startX + translateX);
+      const dy = e.clientY - (startY + translateY);
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragMoved = true;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      applyZoom();
+    });
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      galleryMain.style.cursor = 'zoom-in';
+    });
+
+    // 이미지 박스 클릭시 확대 (드래그였으면 무시)
+    galleryMain.addEventListener('click', (e) => {
+      if (dragMoved) { dragMoved = false; return; }
+      handleMainClick();
+    });
+
+    // 썸네일바에서 휠 → 이미지 이전/다음 전환
+    galleryThumbs.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
+      if (validIdxs.length === 0) return;
+      const pos = validIdxs.indexOf(currentIndex);
+      if (e.deltaY > 0) selectImage(validIdxs[(pos + 1) % validIdxs.length]);
+      else selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
+    }, { passive: false });
+
+    // 400px 스크롤하면 고정 텍스트 표시
+    const fixedInfo = document.getElementById('fixed-info');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY >= 400) {
+        fixedInfo.classList.add('visible');
+      } else {
+        fixedInfo.classList.remove('visible');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
+      if (validIdxs.length === 0) return;
+      const pos = validIdxs.indexOf(currentIndex);
+      if (e.key === 'ArrowRight') selectImage(validIdxs[(pos + 1) % validIdxs.length]);
+      if (e.key === 'ArrowLeft') selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
+    });
   </script>
-
 </body>
 </html>
