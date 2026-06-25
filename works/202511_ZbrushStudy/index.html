@@ -250,8 +250,6 @@
           thumb.addEventListener('click', () => selectImage(i));
           galleryThumbs.appendChild(thumb);
         }
-        const activeThumb = galleryThumbs.querySelector('.lb-thumb.active');
-        if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
 
       function handleMainClick() {
