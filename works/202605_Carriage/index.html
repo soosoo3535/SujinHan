@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -105,7 +106,13 @@
       gap: 6px;
       align-items: center;
       justify-content: center;
+      overflow-y: auto;
+      max-height: 82vh;
+      scrollbar-width: none;
+      cursor: grab;
     }
+    .gallery-thumbs::-webkit-scrollbar { display: none; }
+    .gallery-thumbs.dragging { cursor: grabbing; }
     .lb-thumb {
       flex-shrink: 0;
       width: 60px;
@@ -356,6 +363,32 @@
       if (e.deltaY > 0) selectImage(validIdxs[(pos + 1) % validIdxs.length]);
       else selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
     }, { passive: false });
+
+    // PC 썸네일바 드래그로 위아래 스크롤 (선택 안됨)
+    let thumbDragging = false, thumbDragMoved = false, thumbStartY = 0, thumbStartScroll = 0;
+    galleryThumbs.addEventListener('mousedown', (e) => {
+      thumbDragging = true;
+      thumbDragMoved = false;
+      thumbStartY = e.clientY;
+      thumbStartScroll = galleryThumbs.scrollTop;
+      galleryThumbs.classList.add('dragging');
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!thumbDragging) return;
+      const dy = e.clientY - thumbStartY;
+      if (Math.abs(dy) > 3) thumbDragMoved = true;
+      galleryThumbs.scrollTop = thumbStartScroll - dy;
+    });
+    window.addEventListener('mouseup', () => {
+      if (!thumbDragging) return;
+      thumbDragging = false;
+      galleryThumbs.classList.remove('dragging');
+    });
+    // 드래그 중이면 클릭(이미지 선택) 차단
+    galleryThumbs.addEventListener('click', (e) => {
+      if (thumbDragMoved) { thumbDragMoved = false; e.stopPropagation(); }
+    }, true);
 
     // 400px 스크롤하면 고정 텍스트 표시
     const fixedInfo = document.getElementById('fixed-info');
