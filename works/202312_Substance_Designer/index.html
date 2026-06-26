@@ -179,7 +179,7 @@
     <p>© SujinHan. All Rights Reserved.</p>
   </footer>
   <script>
-    // 파일명: 날짜_workN.jpg 형식, 이름 역순 정렬 (최신 날짜가 먼저)
+    // ── 변수 선언 (모두 맨 위에) ──────────────────────────────
     const imageSrcs = [
       '2024.01_work5.jpg',
       '2024.01_work4.jpg',
@@ -189,11 +189,18 @@
     ];
     const loadedSrcs = [];
     let pendingCount = imageSrcs.length;
+    let currentIndex = 0;
+    let currentScale = 1.0;
+    let clickCount = 0;
+    let isDragging = false, dragMoved = false;
+    let startX = 0, startY = 0, translateX = 0, translateY = 0;
 
     const galleryImg = document.getElementById('gallery-img');
     const galleryMain = document.getElementById('gallery-main');
     const galleryThumbs = document.getElementById('gallery-thumbs');
+    const fixedInfo = document.getElementById('fixed-info');
 
+    // ── 이미지 로딩 ──────────────────────────────────────────
     imageSrcs.forEach((src, idx) => {
       const probe = new Image();
       probe.onload = () => { loadedSrcs[idx] = src; settle(); };
@@ -206,7 +213,6 @@
       if (pendingCount === 0) {
         const validIdxs = loadedSrcs.map((s, i) => s ? i : -1).filter(i => i >= 0);
         if (validIdxs.length === 0) return;
-        // 홈에서 특정 이미지를 클릭해 들어온 경우, 그 이미지로 바로 열기
         const params = new URLSearchParams(window.location.search);
         const requestedFile = params.get('img');
         const requestedIdx = requestedFile ? imageSrcs.indexOf(requestedFile) : -1;
@@ -218,16 +224,11 @@
       }
     }
 
-    let currentIndex = 0;
-    let currentScale = 1.0;
-    let clickCount = 0;
-
+    // ── 갤러리 함수 ──────────────────────────────────────────
     function selectImage(idx) {
       currentIndex = idx;
       galleryImg.src = loadedSrcs[idx];
-      // 파일명에서 날짜 추출 (예: '2024.01_work2.jpg' → '2024.01')
-      const filename = imageSrcs[idx];
-      const dateMatch = filename.match(/^(\d{4}\.\d{2})/);
+      const dateMatch = imageSrcs[idx].match(/^(\d{4}\.\d{2})/);
       if (dateMatch) {
         document.getElementById('fixed-date').textContent = dateMatch[1];
       }
@@ -235,12 +236,9 @@
       updateThumbs();
     }
 
-    // 썸네일바: 전체 이미지를 고정 순서로 항상 표시, 현재 이미지만 강조 (무한순환 없음)
     function updateThumbs() {
       const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
-      const total = validIdxs.length;
-      if (total === 0) return;
-
+      if (validIdxs.length === 0) return;
       galleryThumbs.innerHTML = '';
       validIdxs.forEach(realIdx => {
         const thumb = document.createElement('img');
@@ -252,7 +250,6 @@
     }
 
     function handleMainClick() {
-      // 클릭 단계: 100% → 150% → 200% → 300% → 100% 순환
       const steps = [1.0, 1.5, 2.0, 3.0];
       const nextStep = (steps.indexOf(currentScale) + 1) % steps.length;
       currentScale = steps[nextStep];
@@ -263,7 +260,6 @@
 
     function zoom(delta) {
       currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
-      if (currentScale > 1.0) clickCount = 1;
       applyZoom();
     }
 
@@ -281,9 +277,7 @@
       galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
     }
 
-    // 드래그로 이동 (확대된 상태에서만, 드래그 중에는 클릭 이벤트 차단)
-    let isDragging = false, dragMoved = false, startX, startY, translateX = 0, translateY = 0;
-
+    // ── 드래그 이동 ──────────────────────────────────────────
     galleryMain.addEventListener('mousedown', (e) => {
       if (currentScale <= 1.0) return;
       isDragging = true;
@@ -307,14 +301,12 @@
       isDragging = false;
       galleryMain.style.cursor = 'zoom-in';
     });
-
-    // 이미지 박스 클릭시 확대 (드래그였으면 무시)
     galleryMain.addEventListener('click', (e) => {
       if (dragMoved) { dragMoved = false; return; }
       handleMainClick();
     });
 
-    // 썸네일바에서 휠 → 이미지 이전/다음 전환
+    // ── 휠 이미지 전환 ───────────────────────────────────────
     galleryThumbs.addEventListener('wheel', (e) => {
       e.preventDefault();
       const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
@@ -324,14 +316,10 @@
       else selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
     }, { passive: false });
 
-    // 600px 스크롤하면 고정 텍스트 표시
-    const fixedInfo = document.getElementById('fixed-info');
+    // ── 스크롤 고정 텍스트 ───────────────────────────────────
     window.addEventListener('scroll', () => {
-      if (window.scrollY >= 200) {
-        fixedInfo.classList.add('visible');
-      } else {
-        fixedInfo.classList.remove('visible');
-      }
+      if (window.scrollY >= 200) fixedInfo.classList.add('visible');
+      else fixedInfo.classList.remove('visible');
     });
 
     document.addEventListener('keydown', (e) => {
