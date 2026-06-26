@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -179,7 +180,7 @@
     <p>© SujinHan. All Rights Reserved.</p>
   </footer>
   <script>
-    // ── 변수 선언 (모두 맨 위에) ──────────────────────────────
+    // 파일명: 날짜_workN.jpg 형식, 역순 정렬 (최신 먼저)
     const imageSrcs = [
       '2024.01_work5.jpg',
       '2024.01_work4.jpg',
@@ -228,6 +229,7 @@
     function selectImage(idx) {
       currentIndex = idx;
       galleryImg.src = loadedSrcs[idx];
+      // 파일명 앞 날짜 추출 (예: '2024.01_work5.jpg' → '2024.01')
       const dateMatch = imageSrcs[idx].match(/^(\d{4}\.\d{2})/);
       if (dateMatch) {
         document.getElementById('fixed-date').textContent = dateMatch[1];
