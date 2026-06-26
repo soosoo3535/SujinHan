@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -91,13 +90,16 @@
 
     /* 세로 썸네일바 (현재 이미지가 중앙, 위=이전 / 아래=다음, 무한순환) */
     .gallery-thumbs {
-      width: 70px;
+      width: 70px !important;
       flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
+      display: flex !important;
+      flex-direction: column !important;
       gap: 6px;
       align-items: center;
       justify-content: center;
+      height: auto !important;
+      overflow: visible !important;
+      margin-bottom: 0 !important;
     }
     .lb-thumb {
       flex-shrink: 0;
@@ -157,7 +159,7 @@
     <!-- 고정 텍스트 -->
     <div class="fixed-info" id="fixed-info">
       <p class="fixed-title">Substance Designer</p>
-      <p class="fixed-date">2023.12</p>
+      <p class="fixed-date" id="fixed-date">2023.12</p>
       <p class="fixed-tools">Substance Designer · Marmoset</p>
     </div>
 
