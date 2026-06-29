@@ -270,7 +270,7 @@
       marquee.addEventListener('wheel', (e) => {
         e.preventDefault();
         const halfW = marquee.scrollWidth / 2;
-        let newScroll = marquee.scrollLeft + e.deltaY * 0.5;
+        let newScroll = marquee.scrollLeft + e.deltaY * 1.0;
         if (halfW > 0) {
           if (newScroll < 0) newScroll += halfW;
           if (newScroll >= halfW) newScroll -= halfW;
