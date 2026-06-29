@@ -267,6 +267,17 @@
       }
       requestAnimationFrame(tick);
 
+      marquee.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const halfW = marquee.scrollWidth / 2;
+        let newScroll = marquee.scrollLeft + e.deltaY * 0.5;
+        if (halfW > 0) {
+          if (newScroll < 0) newScroll += halfW;
+          if (newScroll >= halfW) newScroll -= halfW;
+        }
+        marquee.scrollLeft = newScroll;
+      }, { passive: false });
+
       marquee.addEventListener('mouseenter', () => { paused = true; });
       marquee.addEventListener('mouseleave', () => { if (!isDown) paused = false; });
 
