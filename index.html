@@ -242,7 +242,9 @@
       chosenVideo = videos[Math.floor(Math.random() * videos.length)];
     }
     document.getElementById('hero-video').querySelector('source').src = chosenVideo;
-    document.getElementById('hero-video').load();
+    const heroVideo = document.getElementById('hero-video');
+    heroVideo.load();
+    heroVideo.play().catch(() => {});
 
     // 마키 자동 스크롤 + 드래그 이동 (scrollLeft 방식)
     (function() {
