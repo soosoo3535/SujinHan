@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -76,6 +75,13 @@
       display: block;
       transform-origin: center center;
       transition: transform 0.2s ease;
+    }
+    .gallery-video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 82vh;
+      border: none;
+      display: none;
     }
 
     /* 도구모음: 이미지 위에 레이어로 겹쳐서 표시 */
@@ -175,7 +181,10 @@
     <section class="inline-gallery" id="inline-gallery">
       <div class="gallery-main" id="gallery-main">
         <img id="gallery-img" src="" alt=""/>
-        <div class="gallery-controls">
+        <iframe id="gallery-video" class="gallery-video" src="" title="Carriage video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+        <div class="gallery-controls" id="gallery-controls">
           <button class="lb-btn" tabindex="-1" onclick="zoom(-0.2); event.stopPropagation()">－</button>
           <span class="zoom-label" id="zoom-label">100%</span>
           <button class="lb-btn" tabindex="-1" onclick="zoom(0.2); event.stopPropagation()">＋</button>
@@ -190,15 +199,19 @@
     <p>© SujinHan. All Rights Reserved.</p>
   </footer>
   <script>
+    const VIDEO_ID = 'ONubpWn_HDE';
     const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
                        'work6.jpg','work7.jpg','work8.jpg','work9.jpg','work10.jpg',
                        'work11.jpg','work12.jpg'];
     const loadedSrcs = [];
     let pendingCount = imageSrcs.length;
+    let slides = [{ type: 'video', id: VIDEO_ID }];
 
     const galleryImg = document.getElementById('gallery-img');
+    const galleryVideo = document.getElementById('gallery-video');
     const galleryMain = document.getElementById('gallery-main');
     const galleryThumbs = document.getElementById('gallery-thumbs');
+    const galleryControls = document.getElementById('gallery-controls');
 
     imageSrcs.forEach((src, idx) => {
       const probe = new Image();
@@ -210,79 +223,89 @@
     function settle() {
       pendingCount--;
       if (pendingCount === 0) {
-        const validIdxs = loadedSrcs.map((s, i) => s ? i : -1).filter(i => i >= 0);
-        if (validIdxs.length === 0) return;
-        selectImage(validIdxs[0]);
+        imageSrcs.forEach((src, idx) => {
+          if (loadedSrcs[idx]) slides.push({ type: 'image', src: loadedSrcs[idx] });
+        });
+        selectSlide(0);
       }
     }
 
     let currentIndex = 0;
     let currentScale = 1.0;
     let clickCount = 0;
+    let isDragging = false, dragMoved = false, startX, startY, translateX = 0, translateY = 0;
 
-    function selectImage(idx) {
+    function selectSlide(idx) {
       currentIndex = idx;
-      galleryImg.src = loadedSrcs[idx];
-      resetZoom();
+      const slide = slides[idx];
+      if (slide.type === 'video') {
+        galleryImg.style.display = 'none';
+        galleryControls.style.display = 'none';
+        galleryMain.style.cursor = 'default';
+        galleryVideo.style.display = 'block';
+        galleryVideo.src = `https://www.youtube.com/embed/${slide.id}?rel=0&modestbranding=1&autoplay=1&mute=1`;
+      } else {
+        galleryVideo.style.display = 'none';
+        galleryVideo.src = '';
+        galleryImg.style.display = 'block';
+        galleryControls.style.display = 'flex';
+        galleryMain.style.cursor = 'zoom-in';
+        galleryImg.src = slide.src;
+        resetZoom();
+      }
       updateThumbs();
     }
 
     // 썸네일바: PC=세로 9개 윈도우(4+1+4), 모바일=전체 가로 무한순환
     function updateThumbs() {
-      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
-      const total = validIdxs.length;
+      const total = slides.length;
       if (total === 0) return;
-
       galleryThumbs.innerHTML = '';
       const isMobile = window.innerWidth <= 768;
 
       if (isMobile) {
-        // 모바일: 3벌 복사, 가로 무한순환, 현재 이미지 가운데
         const thumbSize = 66;
         for (let copy = 0; copy < 3; copy++) {
-          validIdxs.forEach((realIdx) => {
-            const thumb = document.createElement('img');
-            thumb.src = loadedSrcs[realIdx];
+          slides.forEach((slide, realIdx) => {
+            const thumb = document.createElement(slide.type === 'video' ? 'div' : 'img');
             const isActive = realIdx === currentIndex && copy === 1;
             thumb.className = 'lb-thumb' + (isActive ? ' active' : '');
-            thumb.addEventListener('click', () => selectImage(realIdx));
+            if (slide.type === 'video') {
+              thumb.style.backgroundImage = `url(https://img.youtube.com/vi/${slide.id}/hqdefault.jpg)`;
+              thumb.textContent = '▶';
+            } else { thumb.src = slide.src; }
+            thumb.addEventListener('click', () => selectSlide(realIdx));
             galleryThumbs.appendChild(thumb);
           });
         }
         requestAnimationFrame(() => {
-          const posInMiddle = total + validIdxs.indexOf(currentIndex);
-          const targetScroll = posInMiddle * thumbSize - galleryThumbs.offsetWidth / 2 + thumbSize / 2;
-          galleryThumbs.scrollLeft = targetScroll;
+          const posInMiddle = total + currentIndex;
+          galleryThumbs.scrollLeft = posInMiddle * thumbSize - galleryThumbs.offsetWidth / 2 + thumbSize / 2;
         });
       } else {
-        // PC: 4+1+4 윈도우, 무한순환
-        const pos = validIdxs.indexOf(currentIndex);
         const visible = 9;
         const half = Math.floor(visible / 2);
         for (let i = -half; i <= half; i++) {
-          const realPos = ((pos + i) % total + total) % total;
-          const realIdx = validIdxs[realPos];
-          const thumb = document.createElement('img');
-          thumb.src = loadedSrcs[realIdx];
+          const realPos = ((currentIndex + i) % total + total) % total;
+          const slide = slides[realPos];
+          const thumb = document.createElement(slide.type === 'video' ? 'div' : 'img');
           thumb.className = 'lb-thumb' + (i === 0 ? ' active' : '');
-          thumb.addEventListener('click', () => selectImage(realIdx));
+          if (slide.type === 'video') {
+            thumb.style.backgroundImage = `url(https://img.youtube.com/vi/${slide.id}/hqdefault.jpg)`;
+            thumb.textContent = '▶';
+          } else { thumb.src = slide.src; }
+          thumb.addEventListener('click', () => selectSlide(realPos));
           galleryThumbs.appendChild(thumb);
         }
       }
     }
 
-    // 모바일 썸네일 무한루프: 경계 도달시 중간 세트로 점프
     galleryThumbs.addEventListener('scroll', () => {
       if (window.innerWidth > 768) return;
-      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
-      const total = validIdxs.length;
-      if (total === 0) return;
+      const total = slides.length;
       const totalW = total * 66;
-      if (galleryThumbs.scrollLeft < 66) {
-        galleryThumbs.scrollLeft += totalW;
-      } else if (galleryThumbs.scrollLeft > totalW * 2 - 66) {
-        galleryThumbs.scrollLeft -= totalW;
-      }
+      if (galleryThumbs.scrollLeft < 66) galleryThumbs.scrollLeft += totalW;
+      else if (galleryThumbs.scrollLeft > totalW * 2 - 66) galleryThumbs.scrollLeft -= totalW;
     }, { passive: true });
 
     function handleMainClick() {
@@ -315,9 +338,6 @@
       galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
     }
 
-    // 드래그로 이동 (확대된 상태에서만, 드래그 중에는 클릭 이벤트 차단)
-    let isDragging = false, dragMoved = false, startX, startY, translateX = 0, translateY = 0;
-
     galleryMain.addEventListener('mousedown', (e) => {
       if (currentScale <= 1.0) return;
       isDragging = true;
@@ -348,32 +368,25 @@
       handleMainClick();
     });
 
-    // 썸네일바에서 휠 → 이미지 이전/다음 전환
     galleryThumbs.addEventListener('wheel', (e) => {
       e.preventDefault();
-      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
-      if (validIdxs.length === 0) return;
-      const pos = validIdxs.indexOf(currentIndex);
-      if (e.deltaY > 0) selectImage(validIdxs[(pos + 1) % validIdxs.length]);
-      else selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
+      const total = slides.length;
+      if (total === 0) return;
+      if (e.deltaY > 0) selectSlide((currentIndex + 1) % total);
+      else selectSlide((currentIndex - 1 + total) % total);
     }, { passive: false });
 
-    // 400px 스크롤하면 고정 텍스트 표시
     const fixedInfo = document.getElementById('fixed-info');
     window.addEventListener('scroll', () => {
-      if (window.scrollY >= 400) {
-        fixedInfo.classList.add('visible');
-      } else {
-        fixedInfo.classList.remove('visible');
-      }
+      if (window.scrollY >= 400) fixedInfo.classList.add('visible');
+      else fixedInfo.classList.remove('visible');
     });
 
     document.addEventListener('keydown', (e) => {
-      const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
-      if (validIdxs.length === 0) return;
-      const pos = validIdxs.indexOf(currentIndex);
-      if (e.key === 'ArrowRight') selectImage(validIdxs[(pos + 1) % validIdxs.length]);
-      if (e.key === 'ArrowLeft') selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
+      const total = slides.length;
+      if (total === 0) return;
+      if (e.key === 'ArrowRight') selectSlide((currentIndex + 1) % total);
+      if (e.key === 'ArrowLeft') selectSlide((currentIndex - 1 + total) % total);
     });
   </script>
 </body>
