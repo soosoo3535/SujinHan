@@ -213,7 +213,6 @@
     const galleryVideo = document.getElementById('gallery-video');
     const galleryMain = document.getElementById('gallery-main');
     const galleryThumbs = document.getElementById('gallery-thumbs');
-    const galleryControls = document.getElementById('gallery-controls');
 
     imageSrcs.forEach((src, idx) => {
       const probe = new Image();
@@ -242,7 +241,6 @@
       const slide = slides[idx];
       if (slide.type === 'video') {
         galleryImg.style.display = 'none';
-        galleryControls.style.display = 'none';
         galleryMain.style.cursor = 'default';
         galleryVideo.style.display = 'block';
         galleryVideo.src = `https://www.youtube.com/embed/${slide.id}?rel=0&modestbranding=1&autoplay=1&mute=1`;
@@ -250,7 +248,6 @@
         galleryVideo.style.display = 'none';
         galleryVideo.src = '';
         galleryImg.style.display = 'block';
-        galleryControls.style.display = 'flex';
         galleryMain.style.cursor = 'zoom-in';
         galleryImg.src = slide.src;
         resetZoom();
