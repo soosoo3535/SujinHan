@@ -205,12 +205,6 @@
         <div class="inline-gallery">
           <div class="gallery-main">
             <img class="gallery-img" src="" alt="${group.title}"/>
-            <div class="gallery-controls">
-              <button class="lb-btn zoom-out-btn" tabindex="-1">－</button>
-              <span class="zoom-label">100%</span>
-              <button class="lb-btn zoom-in-btn" tabindex="-1">＋</button>
-              <button class="lb-btn zoom-reset-btn" tabindex="-1">↺</button>
-            </div>
           </div>
           <div class="gallery-thumbs"></div>
         </div>
@@ -223,7 +217,6 @@
       const galleryImg = container.querySelector('.gallery-img');
       const galleryMain = container.querySelector('.gallery-main');
       const galleryThumbs = container.querySelector('.gallery-thumbs');
-      const zoomLabel = container.querySelector('.zoom-label');
 
       let currentIndex = 0;
       let currentScale = 1.0;
@@ -253,11 +246,16 @@
       }
 
       function handleMainClick() {
-        if (clickCount === 0) {
-          currentScale = 1.5; // 150%
+        if (currentScale === 1.0) {
+          currentScale = 3.0;
           clickCount = 1;
-          applyZoom();
+        } else {
+          currentScale = 1.0;
+          translateX = 0;
+          translateY = 0;
+          clickCount = 0;
         }
+        applyZoom();
       }
 
       function zoom(delta) {
@@ -276,7 +274,6 @@
 
       function applyZoom() {
         galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
-        zoomLabel.textContent = Math.round(currentScale * 100) + '%';
         galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
       }
 
@@ -298,7 +295,7 @@
       window.addEventListener('mouseup', () => {
         if (!isDragging) return;
         isDragging = false;
-        galleryMain.style.cursor = currentScale >= 2 ? 'zoom-out' : 'zoom-in';
+        galleryMain.style.cursor = 'zoom-in';
       });
 
       // 이미지 박스 클릭시 확대(클릭 1회 = 150%)
@@ -307,18 +304,17 @@
         handleMainClick();
       });
 
-      container.querySelector('.zoom-out-btn').addEventListener('click', (e) => { e.stopPropagation(); zoom(-0.2); });
-      container.querySelector('.zoom-in-btn').addEventListener('click', (e) => { e.stopPropagation(); zoom(0.2); });
-      container.querySelector('.zoom-reset-btn').addEventListener('click', (e) => { e.stopPropagation(); resetZoom(); });
 
-      // 썸네일바에서 휠 → 이미지 이전/다음 전환
-      galleryThumbs.addEventListener('wheel', (e) => {
+      // 썸네일바 + 메인 이미지 위에서 휠 → 이미지 이전/다음 전환
+      function wheelNavigate(e) {
         e.preventDefault();
         const total = images.length;
         if (total === 0) return;
         if (e.deltaY > 0) selectImage((currentIndex + 1) % total);
         else selectImage((currentIndex - 1 + total) % total);
-      }, { passive: false });
+      }
+      galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
+      galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
 
       selectImage(0);
     }
