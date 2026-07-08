@@ -192,12 +192,6 @@
         <iframe id="gallery-video" class="gallery-video" src="" title="Carriage video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
-        <div class="gallery-controls" id="gallery-controls">
-          <button class="lb-btn" tabindex="-1" onclick="zoom(-0.2); event.stopPropagation()">－</button>
-          <span class="zoom-label" id="zoom-label">100%</span>
-          <button class="lb-btn" tabindex="-1" onclick="zoom(0.2); event.stopPropagation()">＋</button>
-          <button class="lb-btn" tabindex="-1" onclick="resetZoom(); event.stopPropagation()">↺</button>
-        </div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -379,13 +373,15 @@
       handleMainClick();
     });
 
-    galleryThumbs.addEventListener('wheel', (e) => {
+    function wheelNavigate(e) {
       e.preventDefault();
       const total = slides.length;
       if (total === 0) return;
       if (e.deltaY > 0) selectSlide((currentIndex + 1) % total);
       else selectSlide((currentIndex - 1 + total) % total);
-    }, { passive: false });
+    }
+    galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
+    galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
 
     const fixedInfo = document.getElementById('fixed-info');
     window.addEventListener('scroll', () => {
