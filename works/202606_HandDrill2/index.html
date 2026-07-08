@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -283,12 +284,16 @@
     }, { passive: true });
 
     function handleMainClick() {
-      // 클릭 단계: 100% → 150% → 200% → 300% → 100% 순환
-      const steps = [1.0, 1.5, 2.0, 3.0];
-      const nextStep = (steps.indexOf(currentScale) + 1) % steps.length;
-      currentScale = steps[nextStep];
-      if (currentScale === 1.0) { translateX = 0; translateY = 0; }
-      clickCount = currentScale === 1.0 ? 0 : 1;
+      // 클릭 토글: 100% ↔ 300%
+      if (currentScale === 1.0) {
+        currentScale = 3.0;
+        clickCount = 1;
+      } else {
+        currentScale = 1.0;
+        translateX = 0;
+        translateY = 0;
+        clickCount = 0;
+      }
       applyZoom();
     }
 
