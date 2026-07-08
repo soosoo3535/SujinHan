@@ -319,9 +319,6 @@
       }
       applyZoom();
     }
-      clickCount = currentScale === 1.0 ? 0 : 1;
-      applyZoom();
-    }
 
     function zoom(delta) {
       currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
