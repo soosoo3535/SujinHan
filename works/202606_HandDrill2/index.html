@@ -174,12 +174,6 @@
     <section class="inline-gallery" id="inline-gallery">
       <div class="gallery-main" id="gallery-main">
         <img id="gallery-img" src="" alt=""/>
-        <div class="gallery-controls">
-          <button class="lb-btn" tabindex="-1" onclick="zoom(-0.2); event.stopPropagation()">－</button>
-          <span class="zoom-label" id="zoom-label">100%</span>
-          <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
-          <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
-        </div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -350,15 +344,17 @@
       handleMainClick();
     });
 
-    // 썸네일바에서 휠 → 이미지 이전/다음 전환
-    galleryThumbs.addEventListener('wheel', (e) => {
+    // 썸네일바 + 메인 이미지 위에서 휠 → 이미지 이전/다음 전환
+    function wheelNavigate(e) {
       e.preventDefault();
       const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
       if (validIdxs.length === 0) return;
       const pos = validIdxs.indexOf(currentIndex);
       if (e.deltaY > 0) selectImage(validIdxs[(pos + 1) % validIdxs.length]);
       else selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
-    }, { passive: false });
+    }
+    galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
+    galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
 
     // 600px 스크롤하면 고정 텍스트 표시
     const fixedInfo = document.getElementById('fixed-info');
