@@ -307,7 +307,6 @@
 
     function applyZoom() {
       galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
-      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
       galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
     }
 
