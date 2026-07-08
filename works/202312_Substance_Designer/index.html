@@ -168,12 +168,6 @@
     <section class="inline-gallery" id="inline-gallery">
       <div class="gallery-main" id="gallery-main">
         <img id="gallery-img" src="" alt=""/>
-        <div class="gallery-controls">
-          <button class="lb-btn" tabindex="-1" onclick="zoom(-0.2); event.stopPropagation()">－</button>
-          <span class="zoom-label" id="zoom-label">100%</span>
-          <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
-          <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
-        </div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -283,7 +277,6 @@
 
     function applyZoom() {
       galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
-      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
       galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
     }
 
