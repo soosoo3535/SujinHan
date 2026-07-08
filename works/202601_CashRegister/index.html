@@ -192,12 +192,6 @@
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
-        <div class="gallery-controls" id="gallery-controls">
-          <button class="lb-btn" tabindex="-1" onclick="zoom(-0.2); event.stopPropagation()">－</button>
-          <span class="zoom-label" id="zoom-label">100%</span>
-          <button class="lb-btn" onclick="zoom(0.2); event.stopPropagation()">＋</button>
-          <button class="lb-btn" onclick="resetZoom(); event.stopPropagation()">↺</button>
-        </div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -220,7 +214,6 @@
     const galleryVideo = document.getElementById('gallery-video');
     const galleryMain = document.getElementById('gallery-main');
     const galleryThumbs = document.getElementById('gallery-thumbs');
-    const galleryControls = document.getElementById('gallery-controls');
 
     imageSrcs.forEach((src, idx) => {
       const probe = new Image();
@@ -249,7 +242,6 @@
 
       if (slide.type === 'video') {
         galleryImg.style.display = 'none';
-        galleryControls.style.display = 'none';
         galleryMain.style.cursor = 'default';
         galleryVideo.style.display = 'block';
         galleryVideo.src = `https://www.youtube.com/embed/${slide.id}?rel=0&modestbranding=1&autoplay=1&mute=1`;
@@ -257,7 +249,6 @@
         galleryVideo.style.display = 'none';
         galleryVideo.src = ''; // 다른 슬라이드로 넘어가면 영상 정지
         galleryImg.style.display = 'block';
-        galleryControls.style.display = 'flex';
         galleryImg.src = slide.src;
         resetZoom();
       }
@@ -292,12 +283,16 @@
 
     function handleMainClick() {
       if (slides[currentIndex].type !== 'image') return;
-      if (clickCount === 0) {
-        currentScale = 1.5; // 150%
+      if (currentScale === 1.0) {
+        currentScale = 3.0;
         clickCount = 1;
-        applyZoom();
+      } else {
+        currentScale = 1.0;
+        translateX = 0;
+        translateY = 0;
+        clickCount = 0;
       }
-      // 이미 확대된 상태에서 클릭 → 아무 효과 없음
+      applyZoom();
     }
 
     function zoom(delta) {
@@ -317,7 +312,6 @@
 
     function applyZoom() {
       galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
-      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
       galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
     }
 
@@ -372,13 +366,15 @@
     });
 
     // 썸네일바에서 휠 → 이미지/영상 이전/다음 전환
-    galleryThumbs.addEventListener('wheel', (e) => {
+    function wheelNavigate(e) {
       e.preventDefault();
       const total = slides.length;
       if (total === 0) return;
       if (e.deltaY > 0) selectSlide((currentIndex + 1) % total);
       else selectSlide((currentIndex - 1 + total) % total);
-    }, { passive: false });
+    }
+    galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
+    galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
   </script>
 </body>
 </html>
