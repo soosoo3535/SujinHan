@@ -254,11 +254,15 @@
     }
 
     function handleMainClick() {
-      const steps = [1.0, 1.5, 2.0, 3.0];
-      const nextStep = (steps.indexOf(currentScale) + 1) % steps.length;
-      currentScale = steps[nextStep];
-      if (currentScale === 1.0) { translateX = 0; translateY = 0; }
-      clickCount = currentScale === 1.0 ? 0 : 1;
+      if (currentScale === 1.0) {
+        currentScale = 3.0;
+        clickCount = 1;
+      } else {
+        currentScale = 1.0;
+        translateX = 0;
+        translateY = 0;
+        clickCount = 0;
+      }
       applyZoom();
     }
 
@@ -310,14 +314,16 @@
     });
 
     // ── 휠 이미지 전환 ───────────────────────────────────────
-    galleryThumbs.addEventListener('wheel', (e) => {
+    function wheelNavigate(e) {
       e.preventDefault();
       const validIdxs = loadedSrcs.map((s,i) => s ? i : -1).filter(i => i >= 0);
       if (validIdxs.length === 0) return;
       const pos = validIdxs.indexOf(currentIndex);
       if (e.deltaY > 0) selectImage(validIdxs[(pos + 1) % validIdxs.length]);
       else selectImage(validIdxs[(pos - 1 + validIdxs.length) % validIdxs.length]);
-    }, { passive: false });
+    }
+    galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
+    galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
 
     // ── 스크롤 고정 텍스트 ───────────────────────────────────
     window.addEventListener('scroll', () => {
