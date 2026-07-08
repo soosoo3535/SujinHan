@@ -192,6 +192,12 @@
         <iframe id="gallery-video" class="gallery-video" src="" title="Carriage video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
+        <div class="gallery-controls" id="gallery-controls">
+          <button class="lb-btn" tabindex="-1" onclick="zoom(-0.2); event.stopPropagation()">－</button>
+          <span class="zoom-label" id="zoom-label">100%</span>
+          <button class="lb-btn" tabindex="-1" onclick="zoom(0.2); event.stopPropagation()">＋</button>
+          <button class="lb-btn" tabindex="-1" onclick="resetZoom(); event.stopPropagation()">↺</button>
+        </div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -311,16 +317,12 @@
     }, { passive: true });
 
     function handleMainClick() {
-      // 클릭 토글: 100% ↔ 300%
-      if (currentScale === 1.0) {
-        currentScale = 3.0;
-        clickCount = 1;
-      } else {
-        currentScale = 1.0;
-        translateX = 0;
-        translateY = 0;
-        clickCount = 0;
-      }
+      // 클릭 단계: 100% → 150% → 200% → 300% → 100% 순환
+      const steps = [1.0, 1.5, 2.0, 3.0];
+      const nextStep = (steps.indexOf(currentScale) + 1) % steps.length;
+      currentScale = steps[nextStep];
+      if (currentScale === 1.0) { translateX = 0; translateY = 0; }
+      clickCount = currentScale === 1.0 ? 0 : 1;
       applyZoom();
     }
 
@@ -340,6 +342,7 @@
 
     function applyZoom() {
       galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
+      document.getElementById('zoom-label').textContent = Math.round(currentScale * 100) + '%';
       galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
     }
 
@@ -373,15 +376,13 @@
       handleMainClick();
     });
 
-    function wheelNavigate(e) {
+    galleryThumbs.addEventListener('wheel', (e) => {
       e.preventDefault();
       const total = slides.length;
       if (total === 0) return;
       if (e.deltaY > 0) selectSlide((currentIndex + 1) % total);
       else selectSlide((currentIndex - 1 + total) % total);
-    }
-    galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
-    galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
+    }, { passive: false });
 
     const fixedInfo = document.getElementById('fixed-info');
     window.addEventListener('scroll', () => {
