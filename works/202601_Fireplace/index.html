@@ -192,7 +192,6 @@
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
-        <div id="video-wheel-overlay" style="position:absolute;inset:0;z-index:3;display:none;"></div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -249,8 +248,8 @@
         document.getElementById('video-wheel-overlay').style.display = 'block';
       } else {
         galleryVideo.style.display = 'none';
-        galleryVideo.src = ''; // 다른 슬라이드로 넘어가면 영상 정지
-        document.getElementById('video-wheel-overlay').style.display = 'none';
+        galleryVideo.src = '';
+        document.getElementById('video-wheel-overlay').style.display = 'none'; // 다른 슬라이드로 넘어가면 영상 정지
         galleryImg.style.display = 'block';
         galleryImg.src = slide.src;
         resetZoom();
