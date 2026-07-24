@@ -192,6 +192,7 @@
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
+        <div id="video-wheel-overlay" style="position:absolute;inset:0;z-index:3;display:none;"></div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -245,9 +246,11 @@
         galleryMain.style.cursor = 'default';
         galleryVideo.style.display = 'block';
         galleryVideo.src = `https://www.youtube.com/embed/${slide.id}?rel=0&modestbranding=1&autoplay=1&mute=1`;
+        document.getElementById('video-wheel-overlay').style.display = 'block';
       } else {
         galleryVideo.style.display = 'none';
         galleryVideo.src = ''; // 다른 슬라이드로 넘어가면 영상 정지
+        document.getElementById('video-wheel-overlay').style.display = 'none';
         galleryImg.style.display = 'block';
         galleryImg.src = slide.src;
         resetZoom();
@@ -375,6 +378,7 @@
     }
     galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
     galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
+    document.getElementById('video-wheel-overlay').addEventListener('wheel', wheelNavigate, { passive: false });
   </script>
 </body>
 </html>
