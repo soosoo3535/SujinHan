@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -192,6 +193,7 @@
         <iframe id="gallery-video" class="gallery-video" src="" title="Carriage video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
+        <div id="video-wheel-overlay" style="position:absolute;inset:0;z-index:3;display:none;"></div>
       </div>
 
       <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -244,9 +246,11 @@
         galleryMain.style.cursor = 'default';
         galleryVideo.style.display = 'block';
         galleryVideo.src = `https://www.youtube.com/embed/${slide.id}?rel=0&modestbranding=1&autoplay=1&mute=1`;
+        document.getElementById('video-wheel-overlay').style.display = 'block';
       } else {
         galleryVideo.style.display = 'none';
         galleryVideo.src = '';
+        document.getElementById('video-wheel-overlay').style.display = 'none';
         galleryImg.style.display = 'block';
         galleryMain.style.cursor = 'zoom-in';
         galleryImg.src = slide.src;
@@ -378,6 +382,7 @@
     }
     galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
     galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
+    document.getElementById('video-wheel-overlay').addEventListener('wheel', wheelNavigate, { passive: false });
 
     const fixedInfo = document.getElementById('fixed-info');
     window.addEventListener('scroll', () => {
