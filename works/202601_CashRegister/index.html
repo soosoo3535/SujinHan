@@ -198,7 +198,10 @@
     }
     galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
     galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
-    document.getElementById('video-wheel-overlay').addEventListener('wheel', wheelNavigate, { passive: false });
+    document.getElementById('video-wheel-overlay').addEventListener('wheel', (e) => {
+      e.stopPropagation();
+      wheelNavigate(e);
+    }, { passive: false });
   </script>
 </body>
 </html>
