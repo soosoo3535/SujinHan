@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,208 +10,378 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
+
     gtag('config', 'G-EL3TD4CRD1');
   </script>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Crusher — SujinHan</title>
-  <link rel="stylesheet" href="../../style.css" />
+  <meta name="viewport" content="width=1200"/>
+  <title>Sujin Han — 3D Environment Artist</title>
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&display=swap" rel="stylesheet"/>
   <style>
-    @font-face {
-      font-family: 'Chiron GoRound TC';
-      src: url('../../fonts/ChironGoRoundTC-Regular.ttf') format('truetype');
+    .main { padding-left: 150px !important; padding-right: 150px !important; }
+    .page-title { padding-top: 350px !important; padding-bottom: 350px !important; }
+    .page-title h1 { margin-top: -50px; }
+    .hero-tools {
+      position: relative;
+      z-index: 1;
+      padding-left: 50px;
+      margin-top: 8px;
+      font-size: 1.0rem;
       font-weight: 400;
-      font-style: normal;
-      font-display: swap;
+      letter-spacing: 0.15em;
+      text-transform: none;
+      color: #9ca5b5;
     }
-    .main { padding-left: 200px !important; padding-right: 200px !important; max-width: 100% !important; padding-top: 100px !important; }
-    .page-title { padding-bottom: 10px !important; margin-left: -10px; }
-    @media (max-width: 768px) { .main { padding-left: 16px !important; padding-right: 16px !important; } }
-    .tools-text { margin-top: 12px; font-family: 'Coustard', serif; font-size: 1.2rem; margin-bottom: 8px; font-weight: 400; letter-spacing: 0.1em; color: #6B7280; margin-left: 5px; }
-    .work-icon { display: block; max-width: 25%; height: auto; margin-bottom: 10px; margin-left: 5px; }
-    .fixed-info { position: fixed; left: 48px; bottom: 48px; z-index: 50; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
-    .fixed-info.visible { opacity: 1; }
-    .fixed-title { font-family: 'Coustard', serif; font-size: 2.3rem; font-weight: 400; color: #E8EAF0; letter-spacing: 0.04em; margin-bottom: 4px; }
-    .fixed-date { font-family: 'Coustard', serif; font-size: 0.9rem; font-weight: 400; color: #6B7280; letter-spacing: 0.1em; margin-bottom: 2px; padding-left: 10px; }
-    .fixed-tools { font-family: 'Coustard', serif; font-size: 1.0rem; font-weight: 400; color: #ffffff; letter-spacing: 0.08em; padding-left: 10px; }
-    .inline-gallery { display: flex; flex-direction: row; align-items: stretch; gap: 16px; margin-top: 10px; }
-    .gallery-main { position: relative; flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; cursor: zoom-in; overflow: hidden; }
-    .gallery-main img { max-width: 100%; max-height: 82vh; object-fit: contain; display: block; transform-origin: center center; transition: transform 0.2s ease; }
-    .gallery-video { width: 100%; aspect-ratio: 16 / 9; max-height: 82vh; border: none; display: none; }
-    .gallery-controls { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 5; display: flex; align-items: center; gap: 8px; background: rgba(105,108,100,0.6); border: 1px solid #696c64; border-radius: 4px; padding: 6px 13px; }
-    .lb-btn { background: none; border: none; color: #ffffff; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; border-radius: 2px; transition: background 0.2s; }
-    .lb-btn:hover { background: rgba(78,205,196,0.12); color: #4ECDC4; }
-    .zoom-label { font-size: 0.75rem; color: #ffffff; min-width: 40px; text-align: center; font-family: 'Coustard', serif; }
-    .gallery-thumbs { width: 70px; flex-shrink: 0; display: flex; flex-direction: column; gap: 6px; align-items: center; justify-content: center; }
-    .lb-thumb { flex-shrink: 0; width: 60px; height: 60px; object-fit: cover; cursor: pointer; border: 2px solid transparent; border-radius: 2px; opacity: 0.5; transition: opacity 0.2s, border-color 0.2s, transform 0.2s; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 1.1rem; text-shadow: 0 0 4px rgba(0,0,0,0.8); }
-    .lb-thumb:hover { opacity: 0.8; }
-    .lb-thumb.active { border-color: #ffffff; opacity: 1; transform: scale(1.15); }
-    .page-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 40; background: none; border: none; color: rgba(255,255,255,0.3); font-size: 3rem; cursor: pointer; padding: 18px 24px; transition: color 0.2s; font-family: 'Coustard', serif; }
-    .page-nav:hover { color: rgba(255,255,255,0.9); }
-    .page-nav-prev { left: 18px; }
-    .page-nav-next { right: 18px; }
+    .hero-tools.first-line { margin-top: 2.6em; }
+    .featured-section { border-top: 1px solid #696c64; padding-top: 48px; margin-top: 48px; }
+    .featured-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .featured-marquee {
+      width: 100%;
+      overflow-x: scroll;
+      cursor: grab;
+      user-select: none;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .featured-marquee::-webkit-scrollbar { display: none; }
+    .featured-marquee.dragging { cursor: grabbing; }
+    .featured-track {
+      display: flex;
+      gap: 8px;
+      width: max-content;
+    }
+    .featured-track a {
+      flex-shrink: 0;
+      display: block;
+      width: 300px;
+      height: 300px;
+      overflow: hidden;
+      border-radius: 3px;
+      background: var(--surface);
+    }
+    .featured-track img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .featured-track a:hover img { transform: scale(1.05); }
+    @media (max-width: 768px) {
+      .featured-track a { width: 140px; height: 140px; }
+      .main { padding-left: 3px !important; padding-right: 3px !important; }
+    }
   </style>
 </head>
 <body>
-  <button class="page-nav page-nav-prev" onclick="location.href='../202312_Substance_Designer/index.html'">‹</button>
-  <button class="page-nav page-nav-next" onclick="location.href='../202607_Sanctuary/index.html'">›</button>
+
   <nav class="nav">
     <div class="nav-links">
-      <a href="../../index.html" class="nav-btn">Home</a>
-      <a href="../../about.html" class="nav-btn">About</a>
+      <a href="index.html" class="nav-btn active">Home</a>
+      <a href="about.html" class="nav-btn">About</a>
     </div>
   </nav>
+
   <main class="main">
-    <section class="page-title works-title">
-      <a href="../../index.html" class="back-btn">← Back</a>
-      <h1 style="max-width: 800px; margin: 0 auto; padding-left: 0; text-align: center; font-size: 2.6rem;">Crusher</h1>
-      <p class="subtitle" style="max-width: 800px; margin: 0 auto 12px auto; padding-left: 0; text-align: center; font-size: 0.9rem;">2026.10</p>
-      <img src="crusher-icon.png" alt="Crusher icons" class="work-icon" style="margin: 0 auto 1px auto; height: 55px; width: auto; max-width: none;" onerror="this.style.display='none'"/>
-      <p class="tools-text" style="text-align: center; font-size: 0.9rem; margin-top: 0; margin-bottom: 50px;">3Ds Max · Rizom UV · Marmoset · Substance Painter · Zbrush</p>
-      <p style="margin: 0 auto 15px auto; font-family: 'Chiron GoRound TC', sans-serif; font-size: 1.3rem; font-weight: 400; line-height: 1.8; letter-spacing: 0.02em; color: #E8EAF0; text-align: center;">SF 세계관의 광물 파쇄기를 컨셉으로 제작한 스타일라이즈드 소품 작업입니다.<br/>상단의 파쇄 메커니즘과 배관, 모듈형 패널 구조를 통해 실제로 작동할 것 같은<br/>산업용 장비의 설득력을 만들고자 했습니다.</p>
-      <p class="subtitle" style="max-width: 800px; margin: 0 auto 60px auto; padding-left: 0; text-transform: none; font-size: 0.8rem; text-align: center;">* background : <a href="https://fab.com/s/5793bd7bccb6" target="_blank" style="color:inherit; text-decoration:underline;">https://fab.com/s/5793bd7bccb6</a></p>
-    </section>
-    <div class="fixed-info" id="fixed-info">
-      <p class="fixed-title">Crusher</p>
-      <p class="fixed-date">2026.10</p>
-      <p class="fixed-tools">3Ds Max · Rizom UV · Marmoset · Substance Painter · Zbrush</p>
-    </div>
-    <section class="inline-gallery" id="inline-gallery">
-      <div class="gallery-main" id="gallery-main">
-        <img id="gallery-img" src="" alt=""/>
-        <iframe id="gallery-video" class="gallery-video" src="" title="Crusher video"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen></iframe>
-        <div id="video-wheel-overlay" style="position:absolute;inset:0;z-index:3;display:none;"></div>
+
+    <section class="page-title">
+      <div class="hero-video-wrap">
+        <video id="hero-video" autoplay muted loop playsinline>
+          <source src="workani1.mp4" type="video/mp4"/>
+        </video>
+        <div class="hero-gradient"></div>
       </div>
-      <div class="gallery-thumbs" id="gallery-thumbs"></div>
+      <h1 style="color: #E8EAF0;">Sujin Han</h1>
+      <p class="subtitle" style="color: #E8EAF0;">3D Environment Artist</p>
+      <p class="hero-tools first-line">3Ds Max · Rizom UV · Marmoset · Unreal Engine · Zbrush · Knald</p>
+      <p class="hero-tools">Photoshop · Substance Painter · Substance Designer</p>
+      <div class="hero-email" style="position:absolute; bottom:10px; right:20px; z-index:2; padding-left:0;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        <span id="hero-email" onclick="copyHeroEmail(event)">susujin3535@gmail.com</span>
+      </div>
+      <div class="hero-scroll-hint" style="position:absolute; bottom:10px; left:20px; z-index:2;">
+        <span style="font-family: var(--font-body); font-size: 1.0rem; color: #E8EAF0; letter-spacing: 0.08em;">Scroll to explore ↓</span>
+      </div>
+      <div id="hero-copy-tooltip" style="position:fixed; display:none; background:rgba(105,108,100,0.9); color:#ffffff; font-family:'Coustard',serif; font-size:0.85rem; padding:6px 12px; border-radius:4px; pointer-events:none; z-index:9999; white-space:nowrap;">클립보드에 복사되었습니다.</div>
+    </section>
+
+    <section class="category-grid">
+
+      <!-- col1 시작 -->
+      <a href="works/202699_Sanctuary/index.html" class="category-card" style="height:250px;">
+        <div class="card-thumb">
+          <img src="works/202699_Sanctuary/thumb.jpg" alt="Sanctuary" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Sanctuary</span>
+            <span class="card-label-date">~</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- col2 강제 시작 -->
+      <a href="works/202610_Crusher/index.html" class="category-card" style="height:480px; -webkit-column-break-before:always; break-before:column;">
+        <div class="card-thumb">
+          <img src="works/202610_Crusher/thumb.jpg" alt="Crusher" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Crusher</span>
+            <span class="card-label-date">2026.10</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- col3 강제 시작 -->
+      <a href="works/202606_HandDrill2/index.html" class="category-card" style="height:550px; -webkit-column-break-before:always; break-before:column;">
+        <div class="card-thumb">
+          <img src="works/202606_HandDrill2/thumb.jpg" alt="Hand Drill 2" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Hand Drill 2</span>
+            <span class="card-label-date">2026.06</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 이후 col1 → col2 → col3 순으로 -->
+      <a href="works/202605_Carriage/index.html" class="category-card" style="height:520px;">
+        <div class="card-thumb">
+          <img src="works/202605_Carriage/thumb.jpg" alt="Carriage" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Carriage</span>
+            <span class="card-label-date">2026.05</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="works/202603_HandDrill/index.html" class="category-card" style="height:460px;">
+        <div class="card-thumb">
+          <img src="works/202603_HandDrill/thumb.jpg" alt="Hand Drill" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Hand Drill</span>
+            <span class="card-label-date">2026.03</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="works/202601_Fireplace/index.html" class="category-card" style="height:314px;">
+        <div class="card-thumb">
+          <img src="works/202601_Fireplace/thumb.jpg" alt="Fireplace" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Fireplace</span>
+            <span class="card-label-date">2026.01</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="works/202601_CashRegister/index.html" class="category-card" style="height:450px;">
+        <div class="card-thumb">
+          <img src="works/202601_CashRegister/thumb.jpg" alt="Cash Register" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Cash Register</span>
+            <span class="card-label-date">2026.01</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="works/202511_ZbrushStudy/index.html" class="category-card" style="height:630px;">
+        <div class="card-thumb">
+          <img src="works/202511_ZbrushStudy/thumb.jpg" alt="Zbrush Study" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Zbrush Study</span>
+            <span class="card-label-date">2025.11</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="works/202402_zChildRoom/index.html" class="category-card" style="height:347px;">
+        <div class="card-thumb">
+          <img src="works/202402_zChildRoom/thumb.jpg" alt="Child Room" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Child Room</span>
+            <span class="card-label-date">2024.02</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="works/202402_Sci-fiCorridor/index.html" class="category-card" style="height:510px;">
+        <div class="card-thumb">
+          <img src="works/202402_Sci-fiCorridor/thumb.jpg" alt="Sci-fi Corridor" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Sci-fi Corridor</span>
+            <span class="card-label-date">2024.02</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="works/202311_Tavern/index.html" class="category-card" style="height:390px;">
+        <div class="card-thumb">
+          <img src="works/202311_Tavern/thumb.jpg" alt="Tavern" onerror="this.style.display='none'"/>
+          <div class="card-overlay">
+            <span class="card-label-title">Tavern</span>
+            <span class="card-label-date">2023.11</span>
+          </div>
+        </div>
+      </a>
+
+    </section>
+
+    <section class="featured-section" id="substance-featured">
+      <h2 class="featured-title">Substance Designer</h2>
+      <div class="featured-marquee">
+        <div class="featured-track" id="substance-featured-track"></div>
+      </div>
     </section>
   </main>
+
   <footer class="footer">
     <p>© SujinHan. All Rights Reserved.</p>
   </footer>
+
   <script>
-    // YouTube 영상 ID를 추가해 주세요 (없으면 빈 배열로 두세요)
-    const VIDEO_IDS = [];
-    const imageSrcs = ['work1.jpg','work2.jpg','work3.jpg','work4.jpg','work5.jpg',
-                       'work6.jpg','work7.jpg','work8.jpg'];
-    const loadedSrcs = [];
-    let pendingCount = imageSrcs.length;
-    let slides = VIDEO_IDS.map(id => ({ type: 'video', id }));
-    const galleryImg = document.getElementById('gallery-img');
-    const galleryVideo = document.getElementById('gallery-video');
-    const galleryMain = document.getElementById('gallery-main');
-    const galleryThumbs = document.getElementById('gallery-thumbs');
-    imageSrcs.forEach((src, idx) => {
-      const probe = new Image();
-      probe.onload = () => { loadedSrcs[idx] = src; settle(); };
-      probe.onerror = () => { settle(); };
-      probe.src = src;
-    });
-    function settle() {
-      pendingCount--;
-      if (pendingCount === 0) {
-        imageSrcs.forEach((src, idx) => {
-          if (loadedSrcs[idx]) slides.push({ type: 'image', src: loadedSrcs[idx] });
-        });
-        selectSlide(0);
+    const videos = ['workani1.mp4', 'workani2.mp4', 'workani3.mp4'];
+    const key = 'heroVideoVisited';
+    let chosenVideo;
+    if (!sessionStorage.getItem(key)) {
+      // 첫 방문: workani1 고정
+      chosenVideo = 'workani1.mp4';
+      sessionStorage.setItem(key, 'true');
+    } else {
+      // 이후 방문: 랜덤
+      chosenVideo = videos[Math.floor(Math.random() * videos.length)];
+    }
+    document.getElementById('hero-video').querySelector('source').src = chosenVideo;
+    const heroVideo = document.getElementById('hero-video');
+    heroVideo.load();
+    heroVideo.play().catch(() => {});
+
+    // 마키 자동 스크롤 + 드래그 이동 (scrollLeft 방식)
+    (function() {
+      const marquee = document.querySelector('.featured-marquee');
+      if (!marquee) return;
+
+      let paused = false;
+      let isDown = false, startX = 0, startScroll = 0, dragMoved = false;
+
+      // 자동 스크롤 (이미지 로드 후 halfW가 생기면 루프)
+      let lastTime = null;
+      function tick(timestamp) {
+        if (lastTime !== null && !isDown && !paused) {
+          const halfW = marquee.scrollWidth / 2;
+          marquee.scrollLeft += 0.6;
+          if (halfW > 0 && marquee.scrollLeft >= halfW) {
+            marquee.scrollLeft -= halfW;
+          }
+        }
+        lastTime = timestamp;
+        requestAnimationFrame(tick);
       }
+      requestAnimationFrame(tick);
+
+      marquee.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const halfW = marquee.scrollWidth / 2;
+        let newScroll = marquee.scrollLeft + e.deltaY * 1.0;
+        if (halfW > 0) {
+          if (newScroll < 0) newScroll += halfW;
+          if (newScroll >= halfW) newScroll -= halfW;
+        }
+        marquee.scrollLeft = newScroll;
+      }, { passive: false });
+
+      marquee.addEventListener('mouseenter', () => { paused = true; });
+      marquee.addEventListener('mouseleave', () => { if (!isDown) paused = false; });
+
+      marquee.addEventListener('mousedown', (e) => {
+        isDown = true;
+        paused = true;
+        dragMoved = false;
+        startX = e.clientX;
+        startScroll = marquee.scrollLeft;
+        marquee.classList.add('dragging');
+        e.preventDefault();
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 5) dragMoved = true;
+        const halfW = marquee.scrollWidth / 2;
+        let newScroll = startScroll - dx;
+        if (halfW > 0) {
+          if (newScroll < 0) newScroll += halfW;
+          if (newScroll >= halfW) newScroll -= halfW;
+        }
+        marquee.scrollLeft = newScroll;
+      });
+      window.addEventListener('mouseup', () => {
+        if (!isDown) return;
+        isDown = false;
+        paused = false;
+        marquee.classList.remove('dragging');
+      });
+
+      // 드래그였으면 링크 클릭 차단
+      marquee.addEventListener('click', (e) => {
+        if (dragMoved) {
+          e.preventDefault();
+          dragMoved = false;
+        }
+      }, true);
+    })();
+
+    function copyHeroEmail(e) {
+      navigator.clipboard.writeText('susujin3535@gmail.com');
+      const tooltip = document.getElementById('hero-copy-tooltip');
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 12) + 'px';
+      tooltip.style.top = (e.clientY + 12) + 'px';
+      setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
     }
-    let currentIndex = 0;
-    let currentScale = 1.0;
-    let clickCount = 0;
-    function selectSlide(idx) {
-      currentIndex = idx;
-      const slide = slides[idx];
-      if (slide.type === 'video') {
-        galleryImg.style.display = 'none';
-        galleryMain.style.cursor = 'default';
-        galleryVideo.style.display = 'block';
-        galleryVideo.src = `https://www.youtube.com/embed/${slide.id}?rel=0&modestbranding=1&autoplay=1&mute=1`;
-        document.getElementById('video-wheel-overlay').style.display = 'block';
-      } else {
-        galleryVideo.style.display = 'none';
-        galleryVideo.src = '';
-        document.getElementById('video-wheel-overlay').style.display = 'none';
-        galleryImg.style.display = 'block';
-        galleryImg.src = slide.src;
-        resetZoom();
+
+    // Substance Designer 폴더 이미지를 가로 무한 스크롤 마키로 표시
+    (function () {
+      const basePath = 'works/202312_Substance_Designer/';
+      const candidates = [
+        '2026.07_work12.jpg','2026.07_work11.jpg','2026.06_work10.jpg','2026.06_work9.jpg','2026.06_work8.jpg','2026.06_work7.jpg',
+        '2024.01_work6.jpg','2024.01_work5.jpg','2024.01_work4.jpg',
+        '2023.12_work3.jpg','2023.12_work2.jpg','2023.12_work1.jpg'
+      ];
+      const track = document.getElementById('substance-featured-track');
+      const found = [];
+      let pending = candidates.length;
+
+      candidates.forEach((file, idx) => {
+        const probe = new Image();
+        probe.onload = () => { found[idx] = file; settle(); };
+        probe.onerror = () => { settle(); };
+        probe.src = basePath + file;
+      });
+
+      function settle() {
+        pending--;
+        if (pending === 0) {
+          const validFiles = found.filter(Boolean);
+          if (validFiles.length === 0) return;
+          // 끊김 없는 무한 루프를 위해 이미지 세트를 두 번 반복
+          [...validFiles, ...validFiles].forEach(file => {
+            const a = document.createElement('a');
+            a.href = basePath + 'index.html?img=' + encodeURIComponent(file);
+            const img = document.createElement('img');
+            img.src = basePath + file;
+            img.alt = 'Substance Designer';
+            a.appendChild(img);
+            track.appendChild(a);
+          });
+        }
       }
-      updateThumbs();
-    }
-    function updateThumbs() {
-      const total = slides.length;
-      if (total === 0) return;
-      const visible = window.innerWidth <= 768 ? 7 : 9;
-      const half = Math.floor(visible / 2);
-      galleryThumbs.innerHTML = '';
-      for (let i = -half; i <= half; i++) {
-        const realPos = ((currentIndex + i) % total + total) % total;
-        const slide = slides[realPos];
-        const thumb = document.createElement(slide.type === 'video' ? 'div' : 'img');
-        thumb.className = 'lb-thumb' + (i === 0 ? ' active' : '');
-        if (slide.type === 'video') {
-          thumb.style.backgroundImage = `url(https://img.youtube.com/vi/${slide.id}/hqdefault.jpg)`;
-          thumb.textContent = '▶';
-        } else { thumb.src = slide.src; }
-        thumb.addEventListener('click', () => selectSlide(realPos));
-        galleryThumbs.appendChild(thumb);
-      }
-    }
-    function handleMainClick() {
-      if (slides[currentIndex].type !== 'image') return;
-      if (currentScale === 1.0) { currentScale = 3.0; clickCount = 1; }
-      else { currentScale = 1.0; translateX = 0; translateY = 0; clickCount = 0; }
-      applyZoom();
-    }
-    function zoom(delta) {
-      if (slides[currentIndex].type !== 'image') return;
-      currentScale = Math.min(Math.max(currentScale + delta, 0.4), 3);
-      applyZoom();
-    }
-    function resetZoom() { currentScale = 1.0; translateX = 0; translateY = 0; clickCount = 0; applyZoom(); }
-    function applyZoom() {
-      galleryImg.style.transform = `scale(${currentScale}) translate(${translateX / currentScale}px, ${translateY / currentScale}px)`;
-      galleryMain.style.cursor = isDragging ? 'grabbing' : 'zoom-in';
-    }
-    let isDragging = false, dragMoved = false, startX, startY, translateX = 0, translateY = 0;
-    galleryMain.addEventListener('mousedown', (e) => {
-      if (slides[currentIndex].type !== 'image' || currentScale <= 1.0) return;
-      isDragging = true; dragMoved = false;
-      startX = e.clientX - translateX; startY = e.clientY - translateY;
-      galleryMain.style.cursor = 'grabbing'; e.preventDefault();
-    });
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      const dx = e.clientX - (startX + translateX); const dy = e.clientY - (startY + translateY);
-      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragMoved = true;
-      translateX = e.clientX - startX; translateY = e.clientY - startY; applyZoom();
-    });
-    window.addEventListener('mouseup', () => { if (!isDragging) return; isDragging = false; galleryMain.style.cursor = 'zoom-in'; });
-    galleryMain.addEventListener('click', (e) => { if (dragMoved) { dragMoved = false; return; } handleMainClick(); });
-    const fixedInfo = document.getElementById('fixed-info');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY >= 400) fixedInfo.classList.add('visible');
-      else fixedInfo.classList.remove('visible');
-    });
-    document.addEventListener('keydown', (e) => {
-      const total = slides.length;
-      if (total === 0) return;
-      if (e.key === 'ArrowRight') selectSlide((currentIndex + 1) % total);
-      if (e.key === 'ArrowLeft') selectSlide((currentIndex - 1 + total) % total);
-    });
-    function wheelNavigate(e) {
-      e.preventDefault();
-      const total = slides.length;
-      if (total === 0) return;
-      if (e.deltaY > 0) selectSlide((currentIndex + 1) % total);
-      else selectSlide((currentIndex - 1 + total) % total);
-    }
-    galleryThumbs.addEventListener('wheel', wheelNavigate, { passive: false });
-    galleryMain.addEventListener('wheel', wheelNavigate, { passive: false });
-    document.getElementById('video-wheel-overlay').addEventListener('wheel', wheelNavigate, { passive: false });
+    })();
   </script>
+
 </body>
 </html>
