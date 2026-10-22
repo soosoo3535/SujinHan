@@ -20,6 +20,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&display=swap" rel="stylesheet"/>
   <style>
     .main { padding-left: 150px !important; padding-right: 150px !important; }
+    /* div 3열 방식: category-card margin 무력화 */
+    #main-grid .category-card { margin-bottom: 0 !important; }
+    /* 모바일: 3열 → 1열 세로 스택 */
+    @media (max-width: 768px) {
+      #main-grid { flex-direction: column !important; }
+      #main-grid .grid-col { gap: 8px !important; }
+    }
     .page-title { padding-top: 350px !important; padding-bottom: 350px !important; }
     .page-title h1 { margin-top: -50px; }
     .hero-tools {
@@ -114,121 +121,118 @@
       <div id="hero-copy-tooltip" style="position:fixed; display:none; background:rgba(105,108,100,0.9); color:#ffffff; font-family:'Coustard',serif; font-size:0.85rem; padding:6px 12px; border-radius:4px; pointer-events:none; z-index:9999; white-space:nowrap;">클립보드에 복사되었습니다.</div>
     </section>
 
-    <section class="category-grid">
+    <section class="category-grid" style="display:flex; flex-direction:row; align-items:flex-start; gap:16px; column-count:unset;" id="main-grid">
 
-      <!-- col1 시작 -->
-      <a href="works/202699_Sanctuary/index.html" class="category-card" style="height:250px;">
-        <div class="card-thumb">
-          <img src="works/202699_Sanctuary/thumb.jpg" alt="Sanctuary" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Sanctuary</span>
-            <span class="card-label-date">~</span>
+      <!-- 1열 -->
+      <div class="grid-col" style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:0;">
+        <a href="works/202699_Sanctuary/index.html" class="category-card" style="height:250px;">
+          <div class="card-thumb">
+            <img src="works/202699_Sanctuary/thumb.jpg" alt="Sanctuary" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Sanctuary</span>
+              <span class="card-label-date">~</span>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+        <a href="works/202605_Carriage/index.html" class="category-card" style="height:520px;">
+          <div class="card-thumb">
+            <img src="works/202605_Carriage/thumb.jpg" alt="Carriage" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Carriage</span>
+              <span class="card-label-date">2026.05</span>
+            </div>
+          </div>
+        </a>
+        <a href="works/202601_CashRegister/index.html" class="category-card" style="height:450px;">
+          <div class="card-thumb">
+            <img src="works/202601_CashRegister/thumb.jpg" alt="Cash Register" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Cash Register</span>
+              <span class="card-label-date">2026.01</span>
+            </div>
+          </div>
+        </a>
+        <a href="works/202402_Sci-fiCorridor/index.html" class="category-card" style="height:510px;">
+          <div class="card-thumb">
+            <img src="works/202402_Sci-fiCorridor/thumb.jpg" alt="Sci-fi Corridor" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Sci-fi Corridor</span>
+              <span class="card-label-date">2024.02</span>
+            </div>
+          </div>
+        </a>
+      </div>
 
-      <!-- col2 강제 시작 -->
-      <a href="works/202610_Crusher/index.html" class="category-card" style="height:480px; -webkit-column-break-before:always; break-before:column;">
-        <div class="card-thumb">
-          <img src="works/202610_Crusher/thumb.jpg" alt="Crusher" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Crusher</span>
-            <span class="card-label-date">2026.10</span>
+      <!-- 2열 -->
+      <div class="grid-col" style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:0;">
+        <a href="works/202610_Crusher/index.html" class="category-card" style="height:480px;">
+          <div class="card-thumb">
+            <img src="works/202610_Crusher/thumb.jpg" alt="Crusher" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Crusher</span>
+              <span class="card-label-date">2026.10</span>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+        <a href="works/202603_HandDrill/index.html" class="category-card" style="height:460px;">
+          <div class="card-thumb">
+            <img src="works/202603_HandDrill/thumb.jpg" alt="Hand Drill" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Hand Drill</span>
+              <span class="card-label-date">2026.03</span>
+            </div>
+          </div>
+        </a>
+        <a href="works/202511_ZbrushStudy/index.html" class="category-card" style="height:630px;">
+          <div class="card-thumb">
+            <img src="works/202511_ZbrushStudy/thumb.jpg" alt="Zbrush Study" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Zbrush Study</span>
+              <span class="card-label-date">2025.11</span>
+            </div>
+          </div>
+        </a>
+        <a href="works/202311_Tavern/index.html" class="category-card" style="height:390px;">
+          <div class="card-thumb">
+            <img src="works/202311_Tavern/thumb.jpg" alt="Tavern" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Tavern</span>
+              <span class="card-label-date">2023.11</span>
+            </div>
+          </div>
+        </a>
+      </div>
 
-      <!-- col3 강제 시작 -->
-      <a href="works/202606_HandDrill2/index.html" class="category-card" style="height:550px; -webkit-column-break-before:always; break-before:column;">
-        <div class="card-thumb">
-          <img src="works/202606_HandDrill2/thumb.jpg" alt="Hand Drill 2" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Hand Drill 2</span>
-            <span class="card-label-date">2026.06</span>
+      <!-- 3열 -->
+      <div class="grid-col" style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:0;">
+        <a href="works/202606_HandDrill2/index.html" class="category-card" style="height:550px;">
+          <div class="card-thumb">
+            <img src="works/202606_HandDrill2/thumb.jpg" alt="Hand Drill 2" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Hand Drill 2</span>
+              <span class="card-label-date">2026.06</span>
+            </div>
           </div>
-        </div>
-      </a>
-
-      <!-- 이후 col1 → col2 → col3 순으로 -->
-      <a href="works/202605_Carriage/index.html" class="category-card" style="height:520px;">
-        <div class="card-thumb">
-          <img src="works/202605_Carriage/thumb.jpg" alt="Carriage" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Carriage</span>
-            <span class="card-label-date">2026.05</span>
+        </a>
+        <a href="works/202601_Fireplace/index.html" class="category-card" style="height:314px;">
+          <div class="card-thumb">
+            <img src="works/202601_Fireplace/thumb.jpg" alt="Fireplace" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Fireplace</span>
+              <span class="card-label-date">2026.01</span>
+            </div>
           </div>
-        </div>
-      </a>
-
-      <a href="works/202603_HandDrill/index.html" class="category-card" style="height:460px;">
-        <div class="card-thumb">
-          <img src="works/202603_HandDrill/thumb.jpg" alt="Hand Drill" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Hand Drill</span>
-            <span class="card-label-date">2026.03</span>
+        </a>
+        <a href="works/202402_zChildRoom/index.html" class="category-card" style="height:347px;">
+          <div class="card-thumb">
+            <img src="works/202402_zChildRoom/thumb.jpg" alt="Child Room" onerror="this.style.display='none'"/>
+            <div class="card-overlay">
+              <span class="card-label-title">Child Room</span>
+              <span class="card-label-date">2024.02</span>
+            </div>
           </div>
-        </div>
-      </a>
-
-      <a href="works/202601_Fireplace/index.html" class="category-card" style="height:314px;">
-        <div class="card-thumb">
-          <img src="works/202601_Fireplace/thumb.jpg" alt="Fireplace" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Fireplace</span>
-            <span class="card-label-date">2026.01</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202601_CashRegister/index.html" class="category-card" style="height:450px;">
-        <div class="card-thumb">
-          <img src="works/202601_CashRegister/thumb.jpg" alt="Cash Register" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Cash Register</span>
-            <span class="card-label-date">2026.01</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202511_ZbrushStudy/index.html" class="category-card" style="height:630px;">
-        <div class="card-thumb">
-          <img src="works/202511_ZbrushStudy/thumb.jpg" alt="Zbrush Study" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Zbrush Study</span>
-            <span class="card-label-date">2025.11</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202402_zChildRoom/index.html" class="category-card" style="height:347px;">
-        <div class="card-thumb">
-          <img src="works/202402_zChildRoom/thumb.jpg" alt="Child Room" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Child Room</span>
-            <span class="card-label-date">2024.02</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202402_Sci-fiCorridor/index.html" class="category-card" style="height:510px;">
-        <div class="card-thumb">
-          <img src="works/202402_Sci-fiCorridor/thumb.jpg" alt="Sci-fi Corridor" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Sci-fi Corridor</span>
-            <span class="card-label-date">2024.02</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="works/202311_Tavern/index.html" class="category-card" style="height:390px;">
-        <div class="card-thumb">
-          <img src="works/202311_Tavern/thumb.jpg" alt="Tavern" onerror="this.style.display='none'"/>
-          <div class="card-overlay">
-            <span class="card-label-title">Tavern</span>
-            <span class="card-label-date">2023.11</span>
-          </div>
-        </div>
-      </a>
+        </a>
+      </div>
 
     </section>
 
